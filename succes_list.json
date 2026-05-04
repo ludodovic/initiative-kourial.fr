@@ -1,0 +1,570 @@
+[
+  {
+    "catName": "Harcèlement moral",
+    "icon": "dofawa.png",
+    "catValue": 20,
+    "catDesc": "Obtenir tous les succès liés aux membres de l'Assemblée",
+    "catList": [
+      {
+        "name": "Et ça fait bim bam boum",
+        "icon": "dofawa.png",
+        "desc": "Passer un petit moment avec Boomeur au Zaap de Brâkmar",
+        "value": 1,
+        "id": 2
+      },
+      {
+        "name": "Décalage horaire",
+        "icon": "dofawa.png",
+        "desc": "Se lever avant que Paqenw soit couché",
+        "value": 10,
+        "id": 3
+      },
+      {
+        "name": "La hateuse originelle",
+        "icon": "dofawa.png",
+        "desc": "Effectuer une mission Expédition avec Naemis",
+        "value": 10,
+        "id": 4
+      },
+      {
+        "name": "Zone d'inconfort",
+        "icon": "dofawa.png",
+        "desc": "Jouer avec Thanatithas, mais sans Askael, ni Elfresh",
+        "value": 10,
+        "id": 5
+      },
+      {
+        "name": "L'inventeur",
+        "icon": "dofawa.png",
+        "desc": "Obtenir un succès de la liste en compagnie de Uomuom",
+        "value": 10,
+        "id": 6
+      },
+      {
+        "name": "Petit ange parti trop tôt",
+        "icon": "dofawa.png",
+        "desc": "Être témoin de la mort d'Angelynk pendant une mission de guilde, sans influence extérieure",
+        "value": 10,
+        "id": 7
+      },
+      {
+        "name": "Ils sont trop nombreux",
+        "icon": "dofawa.png",
+        "desc": "Participer à une mission de guilde avec au moins 2 Michel en même temps",
+        "value": 10,
+        "id": 8
+      },
+      {
+        "name": "Droit dans le mur",
+        "icon": "dofawa.png",
+        "desc": "Vaincre le Comte Harebourg du premier coup malgré la présence d'Eox dans l'équipe",
+        "value": 10,
+        "id": 9
+      }
+    ],
+    "id": 1
+  },
+  {
+    "catName": "Pokédex complet",
+    "icon": "dofus_ocre.png",
+    "catValue": 25,
+    "catDesc": "Obtenir tous les succès liés aux membres du Conseil",
+    "catList": [
+      {
+        "name": "Il court vite le coquin",
+        "icon": "dofus_ocre.png",
+        "desc": "Comptabiliser une moyenne de PM dépensés par tour supérieure à celle de Ludzu alors qu'il a équipé sa Rattrapry",
+        "value": 20,
+        "id": 11
+      },
+      {
+        "name": "C'est qui çui-là ?",
+        "icon": "dofus_ocre.png",
+        "desc": "Jouer avec Zonthem",
+        "value": 20,
+        "id": 12
+      },
+      {
+        "name": "Petite joueuse",
+        "icon": "dofus_ocre.png",
+        "desc": "Infliger plus de dégâts que Mynni lors d'un combat pendant une mission de type Régulation",
+        "value": 20,
+        "id": 13
+      },
+      {
+        "name": "Il est timide",
+        "icon": "dofus_ocre.png",
+        "desc": "Parler avec Gale en vocal sur Discord plus de 15 minutes sans qu'il parte, se mute ou qu'il arrête totalement d'interagir",
+        "value": 20,
+        "id": 14
+      },
+      {
+        "name": "Il a peut-être trop mangé ?",
+        "icon": "dofus_ocre.png",
+        "desc": "Prendre l'initiative sur Askael dans un combat",
+        "value": 20,
+        "id": 15
+      },
+      {
+        "name": "Il fait un peu frais là non ?",
+        "icon": "dofus_ocre.png",
+        "desc": "Donner tort à Elfresh dans un post du forum stuffs",
+        "value": 20,
+        "id": 16
+      },
+      {
+        "name": "Quitte ou double",
+        "icon": "dofus_ocre.png",
+        "desc": "Participer à un combat ou Scorpia inflige 0 de dégâts",
+        "value": 20,
+        "id": 17
+      },
+      {
+        "name": "Plus là le bambou",
+        "icon": "dofus_ocre.png",
+        "desc": "Ruiner la Bambouseraie de Xullop",
+        "value": 20,
+        "id": 18
+      }
+    ],
+    "id": 10
+  },
+  {
+    "catName": "Accro aux réseaux sociaux",
+    "icon": "dofus_kaliptus.png",
+    "catValue": 15,
+    "catDesc": "Obtenir tous les succès liés aux réseaux sociaux",
+    "catList": [
+      {
+        "name": "100% de présence",
+        "icon": "dofus_kaliptus.png",
+        "desc": "Convaincre un joueur avec le rôle \"Pitié rejoignez discord\" de rejoindre le Discord, ou un joueur de s'inscrire à un event",
+        "value": 5,
+        "id": 20
+      },
+      {
+        "name": "Célébrité",
+        "icon": "dofus_kaliptus.png",
+        "desc": "Être mentionné dans le journal hebdomadaire (sauf passage Assemblée)",
+        "value": 25,
+        "id": 21
+      },
+      {
+        "name": "First !",
+        "icon": "dofus_kaliptus.png",
+        "desc": "Être le premier à envoyer un message dans le fil d'un évènement sur Discord",
+        "value": 5,
+        "id": 22
+      },
+      {
+        "name": "Je sais ce que je veux",
+        "icon": "dofus_kaliptus.png",
+        "desc": "Voter dans les 5 minutes après que l'Assemblée soit convoquée",
+        "value": 5,
+        "id": 23
+      }
+    ],
+    "id": 19
+  },
+  {
+    "catName": "Amasseur de guildatons",
+    "icon": "dofus_vulbis.png",
+    "catValue": 20,
+    "catDesc": "Obtenir tous les succès liés aux guildatons",
+    "catList": [
+      {
+        "name": "Missionné",
+        "icon": "dofus_vulbis.png",
+        "desc": "Obtenir 250 guildatons en une semaine",
+        "value": 1,
+        "id": 25
+      },
+      {
+        "name": "Onzième position du Kamasutra",
+        "icon": "dofus_vulbis.png",
+        "desc": "Obtenir 250 guildatons en une semaine, 5 fois",
+        "value": 10,
+        "id": 26
+      },
+      {
+        "name": "Il y a toujours un plus gros poisson",
+        "icon": "dofus_vulbis.png",
+        "desc": "Nouveau : Obtenir 250 guildatons en effectuant seulement 2 missions et sa contribution",
+        "value": 15,
+        "id": 27
+      },
+      {
+        "name": "Speedrunner",
+        "icon": "dofus_vulbis.png",
+        "desc": "Obtenir 250 guildatons dans les 24 premières heures après un reset hebdomadaire",
+        "value": 15,
+        "id": 28
+      },
+      {
+        "name": "Une fine équipe",
+        "icon": "dofus_vulbis.png",
+        "desc": "Obtenir 200 guildatons ou plus en compagnie du même membre de la guilde",
+        "value": 15,
+        "id": 29
+      }
+    ],
+    "id": 24
+  },
+  {
+    "catName": "Chamailleries",
+    "icon": "dofus_ivoire.png",
+    "catValue": 20,
+    "catDesc": "Obtenir tous les succès plus (ou moins...) liés au PvP",
+    "catList": [
+      {
+        "name": "Compétition amicale",
+        "icon": "dofus_ivoire.png",
+        "desc": "Gagner un combat de Kolizéum, de Percepteur ou d'AvA contre un membre de la guilde",
+        "value": 10,
+        "id": 31
+      },
+      {
+        "name": "Tu l'as bien mérité",
+        "icon": "dofus_ivoire.png",
+        "desc": "Achever un membre de la guilde dans l'équipe adverse lors d'un combat de Kolizéum, de Percepteur ou d'AvA",
+        "value": 10,
+        "id": 32
+      },
+      {
+        "name": "Long live the King",
+        "icon": "dofus_ivoire.png",
+        "desc": "Tuer un membre du Conseil lors d'une mission de guilde sans l'aide d'autres membres",
+        "value": 10,
+        "id": 33
+      },
+      {
+        "name": "Humiliation",
+        "icon": "dofus_ivoire.png",
+        "desc": "Achever un membre de la guilde avec le sort Libération pendant une mission de guilde",
+        "value": 10,
+        "id": 34
+      },
+      {
+        "name": "Mutinerie",
+        "icon": "dofus_ivoire.png",
+        "desc": "S'associer pour tuer plusieurs membres du Conseil en un seul combat",
+        "value": 20,
+        "id": 35
+      },
+      {
+        "name": "Pardon j'ai cru que c'était un bot",
+        "icon": "dofus_ivoire.png",
+        "desc": "Tuer un membre de la guilde alors qu'il a un stuff tank équipé (Cire Momore ou 47+% dans au moins 4 éléments)",
+        "value": 5,
+        "id": 36
+      }
+    ],
+    "id": 30
+  },
+  {
+    "catName": "L'important c'est de participer",
+    "icon": "dofus_des_glaces.png",
+    "catValue": 20,
+    "catDesc": "Obtenir tous les succès de participation aux activités",
+    "catList": [
+      {
+        "name": "C'est la fête",
+        "icon": "dofus_des_glaces.png",
+        "desc": "Participer à un évènement",
+        "value": 5,
+        "id": 38
+      },
+      {
+        "name": "Jure c'est pas des bots ?",
+        "icon": "dofus_des_glaces.png",
+        "desc": "Effectuer une mission de guilde à 8",
+        "value": 5,
+        "id": 39
+      },
+      {
+        "name": "De très bons amis",
+        "icon": "dofus_des_glaces.png",
+        "desc": "Effectuer 5 missions de guilde à 8",
+        "value": 25,
+        "id": 40
+      },
+      {
+        "name": "Généreux",
+        "icon": "dofus_des_glaces.png",
+        "desc": "Participer bénévolement au cash-prize participatif d'un évènement",
+        "value": 15,
+        "id": 41
+      },
+      {
+        "name": "Ça existe ce truc ?",
+        "icon": "dofus_des_glaces.png",
+        "desc": "Participer à une mission de guilde avec un Ouginak",
+        "value": 5,
+        "id": 42
+      },
+      {
+        "name": "Un engrais de qualité",
+        "icon": "dofus_des_glaces.png",
+        "desc": "Participer à une mission de guilde avec 4 membres de SCTV ou 4 ex Moons Light ou 6 en combinaison",
+        "value": 5,
+        "id": 43
+      },
+      {
+        "name": "Le grand remplacement",
+        "icon": "dofus_des_glaces.png",
+        "desc": "Participer à une mission de guilde avec au moins 4 Clônes et/ou Jumeaux Maléfiques",
+        "value": 10,
+        "id": 44
+      }
+    ],
+    "id": 37
+  },
+  {
+    "catName": "Membre exemplaire",
+    "icon": "dofus_pourpre.png",
+    "catValue": 20,
+    "catDesc": "Prouver que vous êtes un modèle au sein de la guilde",
+    "catList": [
+      {
+        "name": "Membre productif",
+        "icon": "dofus_pourpre.png",
+        "desc": "Payer 50 000 kamas d'impôts en une semaine",
+        "value": 1,
+        "id": 46
+      },
+      {
+        "name": "Heures supp'",
+        "icon": "dofus_pourpre.png",
+        "desc": "Terminer les 12 missions de guilde de la semaine",
+        "value": 10,
+        "id": 47
+      },
+      {
+        "name": "Membre actif",
+        "icon": "dofus_pourpre.png",
+        "desc": "Obtenir le rang Assemblée",
+        "value": 5,
+        "id": 48
+      },
+      {
+        "name": "Recruteur",
+        "icon": "dofus_pourpre.png",
+        "desc": "Recruter un joueur dans la guilde sans qu'il parte dans les 7 premiers jours",
+        "value": 15,
+        "id": 49
+      },
+      {
+        "name": "Ça enchaîne !",
+        "icon": "dofus_pourpre.png",
+        "desc": "Faire 3 missions de guilde d'affilée",
+        "value": 10,
+        "id": 50
+      },
+      {
+        "name": "PGM",
+        "icon": "dofus_pourpre.png",
+        "desc": "Remporter un évènement",
+        "value": 15,
+        "id": 51
+      }
+    ],
+    "id": 45
+  },
+  {
+    "catName": "Complètement dérangés",
+    "icon": "dofus_tachete.png",
+    "catValue": 20,
+    "catDesc": "Obtenir tous les succès un peu chelous",
+    "catList": [
+      {
+        "name": "Les naturistes",
+        "icon": "dofus_tachete.png",
+        "desc": "Vaincre un boss de donjon de niveau 70 ou plus à 4 ou plus, sans équipements ni compagnons",
+        "value": 15,
+        "id": 53
+      },
+      {
+        "name": "Justiciers gantés",
+        "icon": "dofus_tachete.png",
+        "desc": "Nouveau : Vaincre un avis de recherche de niveau 170 ou plus sans qu'un seul membre de l'équipe n'inflige le moindre dégât direct",
+        "value": 15,
+        "id": 54
+      },
+      {
+        "name": "Tema la taille du rat",
+        "icon": "dofus_tachete.png",
+        "desc": "Négocier un craft gratuit à un artisan de niveau 200 hors de la guilde",
+        "value": 5,
+        "id": 55
+      },
+      {
+        "name": "Talon d'Achille",
+        "icon": "dofus_tachete.png",
+        "desc": "Abuser de la faiblesse principale d'un membre du Conseil",
+        "value": 10,
+        "id": 56
+      },
+      {
+        "name": "Je sais pas qui c'est mais je prends les points",
+        "icon": "dofus_tachete.png",
+        "desc": "Se faire ping par Dahd sur Discord",
+        "value": 20,
+        "id": 57
+      }
+    ],
+    "id": 52
+  },
+  {
+    "catName": "Point faible : trop fort",
+    "icon": "dofus_turquoise.png",
+    "catValue": 20,
+    "catDesc": "Obtenir tous les succès où il faut être doué au jeu",
+    "catList": [
+      {
+        "name": "Apprenti soloteur",
+        "icon": "dofus_turquoise.png",
+        "desc": "Vaincre un boss de donjon de niveau 200 en solo (hors Nileza, Merkator, Dantinéa)",
+        "value": 5,
+        "id": 59
+      },
+      {
+        "name": "La meilleure défense, c'est l'attaque !",
+        "icon": "dofus_turquoise.png",
+        "desc": "Vaincre un boss de donjon de niveau 180 ou plus, ou une salle de songes Paradoxe 1/+, palier 4/+ en un seul tour",
+        "value": 10,
+        "id": 60
+      },
+      {
+        "name": "La prochaine sera meilleure",
+        "icon": "dofus_turquoise.png",
+        "desc": "Obtenir une légende (drop ou coffre)",
+        "value": 15,
+        "id": 61
+      },
+      {
+        "name": "Sacré duo",
+        "icon": "dofus_turquoise.png",
+        "desc": "Vaincre Servitude, Belladone, l'Éternel Conflit ou Bethel Akarna en duo avec un membre de la guilde",
+        "value": 15,
+        "id": 62
+      },
+      {
+        "name": "TGIF",
+        "icon": "dofus_turquoise.png",
+        "desc": "Drop un Feu Sacré de Gargandyas",
+        "value": 15,
+        "id": 63
+      }
+    ],
+    "id": 58
+  },
+  {
+    "catName": "Une simple formalité",
+    "icon": "dofus_ebene.png",
+    "catValue": 20,
+    "catDesc": "Obtenir tous les succès de missions avec un twist",
+    "catList": [
+      {
+        "name": "Les petits aussi",
+        "icon": "dofus_ebene.png",
+        "desc": "Effectuer une mission Donjon avec au moins un membre de niveau 199 ou moins (hors Clônes/Jumeaux Maléfiques)",
+        "value": 10,
+        "id": 65
+      },
+      {
+        "name": "Expédition Club Med",
+        "icon": "dofus_ebene.png",
+        "desc": "Comptabiliser une moyenne de PA dépensés par tour inférieure à 4 dans une Expédition sans éveiller les soupçons",
+        "value": 20,
+        "id": 66
+      },
+      {
+        "name": "Songe d'une nuit d'été",
+        "icon": "dofus_ebene.png",
+        "desc": "Effectuer une mission Songes Infinis rapportant 120 guildatons",
+        "value": 20,
+        "id": 67
+      },
+      {
+        "name": "Unique en son genre",
+        "icon": "dofus_ebene.png",
+        "desc": "Effectuer une mission de guilde à 8 en étant le seul représentant de sa classe",
+        "value": 5,
+        "id": 68
+      },
+      {
+        "name": "L'anomalie, c'est nous",
+        "icon": "dofus_ebene.png",
+        "desc": "Effectuer une mission de type \"Stabilisation de donjon\" sous élixir uchronique majeur à 8",
+        "value": 20,
+        "id": 69
+      }
+    ],
+    "id": 64
+  },
+  {
+    "catName": "Et tout le tralala",
+    "icon": "dofus_emeraude.png",
+    "catValue": 20,
+    "catDesc": "Obtenir tous les succès que le Conseil n'a pas su organiser dans une catégorie",
+    "catList": [
+      {
+        "name": "La chatte qu'il a !!!",
+        "icon": "dofus_emeraude.png",
+        "desc": "Drop un équipement de niveau 160 ou plus au cours d'une sortie avec des membres de la guilde",
+        "value": 10,
+        "id": 71
+      },
+      {
+        "name": "Drop \"rare\"",
+        "icon": "dofus_emeraude.png",
+        "desc": "Participer à un combat où un équipement de niveau 190 ou plus est droppé par un membre de la guilde",
+        "value": 20,
+        "id": 72
+      },
+      {
+        "name": "Plus que des camarades de guilde",
+        "icon": "dofus_emeraude.png",
+        "desc": "Jouer à des party games avec la guilde",
+        "value": 10,
+        "id": 73
+      },
+      {
+        "name": "J'apporte les œufs et toi le sucre",
+        "icon": "dofus_emeraude.png",
+        "desc": "Forgemager un item pour un membre de la guilde, ou se faire forgemager un item par un membre de la guilde",
+        "value": 5,
+        "id": 74
+      },
+      {
+        "name": "Il joue quelle classe celui là déjà ?",
+        "icon": "dofus_emeraude.png",
+        "desc": "Faire remarquer qu'un membre de la guilde a reroll avant que le Conseil ne l'ait vu",
+        "value": 5,
+        "id": 75
+      },
+      {
+        "name": "Flashmob",
+        "icon": "dofus_emeraude.png",
+        "desc": "Se réunir à 15 membres de la guilde ou plus sur la même carte",
+        "value": 10,
+        "id": 76
+      },
+      {
+        "name": "Une bonne petite communauté",
+        "icon": "dofus_emeraude.png",
+        "desc": "Participer à une discussion en /g ou dans #blabla",
+        "value": 1,
+        "id": 77
+      },
+      {
+        "name": "Grande famille",
+        "icon": "dofus_emeraude.png",
+        "desc": "Être connecté alors qu'au moins 50 membres sont connectés",
+        "value": 1,
+        "id": 78
+      }
+    ],
+    "id": 70
+  }
+]

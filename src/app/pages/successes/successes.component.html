@@ -1,0 +1,112 @@
+<main class="successes">
+  <header class="successes__hero">
+    <div>
+      <p class="successes__eyebrow">Progression de guilde</p>
+      <h1>Succes Initiative</h1>
+      <p>Les defis de la guilde, classes par categorie, avec leurs recompenses en points.</p>
+    </div>
+
+    <div class="successes__score" aria-label="Points debloques sur points disponibles">
+      <span>{{ unlockedPoints() }}/{{ availablePoints() }}</span>
+      points
+    </div>
+  </header>
+
+  <div class="view-toggle" aria-label="Mode d'affichage des succes">
+    <button
+      type="button"
+      [class.view-toggle__button--active]="viewMode() === 'large'"
+      (click)="setViewMode('large')"
+    >
+      Large
+    </button>
+    <button
+      type="button"
+      [class.view-toggle__button--active]="viewMode() === 'compact'"
+      (click)="setViewMode('compact')"
+    >
+      Compact
+    </button>
+  </div>
+
+  @if (isLoading()) {
+    <p class="successes__state">Chargement des succes...</p>
+  } @else if (error()) {
+    <p class="successes__state successes__state--error">{{ error() }}</p>
+  } @else {
+    <div class="category-list">
+      @for (category of categories(); track category.id) {
+        <section
+          class="category"
+          [class.category--compact]="viewMode() === 'compact'"
+          [class.category--collapsed]="isCollapsed(category.id)"
+          [attr.aria-labelledby]="'category-' + $index"
+        >
+          <header class="category__header">
+            <img
+              class="category__icon"
+              [src]="iconPath(category.icon)"
+              [alt]="category.catName"
+            >
+
+            <div class="category__content">
+              <p class="category__eyebrow">Categorie</p>
+              <h2 [id]="'category-' + $index">{{ category.catName }}</h2>
+              @if (!isCollapsed(category.id)) {
+                <p>{{ category.catDesc }}</p>
+              }
+            </div>
+
+            <div class="category__actions">
+              <div
+                class="category__points"
+                [class.category__points--locked]="!category.unlocked"
+              >
+                <span>{{ category.catValue }}</span>
+                points
+              </div>
+
+              <button
+                class="category__collapse"
+                type="button"
+                [attr.aria-expanded]="!isCollapsed(category.id)"
+                [attr.aria-controls]="'category-successes-' + $index"
+                [attr.aria-label]="isCollapsed(category.id) ? 'Afficher les succes' : 'Masquer les succes'"
+                (click)="toggleCategory(category.id)"
+              >
+                <span aria-hidden="true"></span>
+              </button>
+            </div>
+          </header>
+
+          @if (!isCollapsed(category.id)) {
+            <div class="success-grid" [id]="'category-successes-' + $index">
+              @for (success of category.catList; track success.id) {
+                <article class="success-card">
+                  <div class="success-card__topline">
+                    <img
+                      class="success-card__icon"
+                      [class.success-card__icon--locked]="!success.unlocked"
+                      [src]="iconPath(success.icon)"
+                      [alt]="success.name"
+                    >
+
+                    <span
+                      class="success-card__points"
+                      [class.success-card__points--unlocked]="success.unlocked"
+                    >
+                      {{ success.value }} pts
+                    </span>
+                  </div>
+
+                  <h3>{{ success.name }}</h3>
+                  <p>{{ success.desc }}</p>
+                </article>
+              }
+            </div>
+          }
+        </section>
+      }
+    </div>
+  }
+</main>

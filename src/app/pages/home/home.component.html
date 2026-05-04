@@ -1,0 +1,76 @@
+<main class="home">
+  <section class="guild-card" aria-labelledby="guild-title">
+    <div class="guild-card__emblem-frame">
+      <img
+        class="guild-card__emblem"
+        src="/assets/blason_initiative.png"
+        alt="Blason de la guilde Initiative"
+      >
+    </div>
+
+    <div class="guild-card__content">
+      <p class="guild-card__eyebrow">Guilde Dofus sur Kourial</p>
+      <h1 id="guild-title">Initiative</h1>
+      <p>{{ guildDescription }}</p>
+    </div>
+  </section>
+
+  <section class="home-grid" aria-label="Actualites de guilde">
+    <article class="panel calendar" aria-labelledby="calendar-title">
+      <div class="panel__header">
+        <p>Calendrier</p>
+        <h2 id="calendar-title">{{ calendarTitle() }}</h2>
+      </div>
+
+      <div class="calendar__weekdays" aria-hidden="true">
+        <span>L</span>
+        <span>M</span>
+        <span>M</span>
+        <span>J</span>
+        <span>V</span>
+        <span>S</span>
+        <span>D</span>
+      </div>
+
+      <div class="calendar__grid">
+        @for (day of calendarDays(); track $index) {
+          @if (day.day) {
+            <button
+              class="calendar__day"
+              [class.calendar__day--event]="day.event"
+              type="button"
+              [attr.aria-label]="day.event ? day.day + ' ' + calendarTitle() + ', ' + day.event.title : day.day + ' ' + calendarTitle()"
+            >
+              <span>{{ day.day }}</span>
+
+              @if (day.event) {
+                <span class="calendar__dot" aria-hidden="true"></span>
+                <span class="event-popover" role="tooltip">
+                  <strong>{{ day.event.title }}</strong>
+                  @if (day.event.time) {
+                    <small>{{ day.event.time }}</small>
+                  }
+                  {{ day.event.description }}
+                </span>
+              }
+            </button>
+          } @else {
+            <span class="calendar__empty" aria-hidden="true"></span>
+          }
+        }
+      </div>
+    </article>
+
+    <article class="panel newsletter" aria-labelledby="newsletter-title">
+      <div class="panel__header">
+        <p>Derniere newsletter</p>
+        <h2 id="newsletter-title">{{ newsletter().title }}</h2>
+      </div>
+
+      @if (newsletter().date) {
+        <time>{{ formatNewsletterDate(newsletter().date) }}</time>
+      }
+      <p>{{ newsletter().content }}</p>
+    </article>
+  </section>
+</main>

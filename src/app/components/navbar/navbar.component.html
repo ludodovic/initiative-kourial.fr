@@ -1,0 +1,24 @@
+<nav class="navbar" aria-label="Main navigation">
+  <a class="navbar__brand" routerLink="/">
+    <span class="navbar__crest" aria-hidden="true">
+      <img src="/assets/blason_initiative.png" alt="">
+    </span>
+    <span class="navbar__brand-text">
+      <span class="navbar__brand-name">{{ guildName }}</span>
+      <span class="navbar__brand-realm">Kourial</span>
+    </span>
+  </a>
+
+  <div class="navbar__links">
+    @for (item of items; track item.link) {
+      <a
+        class="navbar__link"
+        [routerLink]="item.link"
+        routerLinkActive="navbar__link--active"
+        [routerLinkActiveOptions]="{ exact: item.link === '/' }"
+      >
+        {{ item.name }}
+      </a>
+    }
+  </div>
+</nav>

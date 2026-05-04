@@ -1,0 +1,232 @@
+.home {
+  background:
+    linear-gradient(rgba(1, 22, 56, 0.68), rgba(1, 22, 56, 0.76)),
+    url('/assets/osavora_background.png') center / cover fixed;
+  color: #011638;
+  min-height: calc(100vh - 4rem);
+  padding: 2rem;
+}
+
+.guild-card,
+.panel {
+  border: 1px solid rgba(145, 46, 166, 0.18);
+  border-radius: 8px;
+  box-shadow: 0 22px 60px rgba(1, 22, 56, 0.26);
+}
+
+.guild-card {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.92);
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: auto minmax(0, 1fr);
+  margin: 0 auto;
+  max-width: 1120px;
+  padding: 2rem;
+}
+
+.guild-card__emblem-frame {
+  align-items: center;
+  display: flex;
+  height: 10rem;
+  justify-content: center;
+  width: 10rem;
+}
+
+.guild-card__emblem {
+  display: block;
+  height: 10rem;
+  object-fit: contain;
+  width: 10rem;
+}
+
+.guild-card__content {
+  max-width: 720px;
+}
+
+.guild-card__eyebrow,
+.panel__header p {
+  color: #912EA6;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  margin: 0 0 0.35rem;
+  text-transform: uppercase;
+}
+
+.guild-card h1 {
+  color: #011638;
+  font-size: 3rem;
+  line-height: 1;
+  margin: 0 0 1rem;
+}
+
+.guild-card p,
+.newsletter p {
+  font-size: 1rem;
+  line-height: 1.7;
+  margin: 0;
+}
+
+.home-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: minmax(19rem, 0.85fr) minmax(20rem, 1.15fr);
+  margin: 1.5rem auto 0;
+  max-width: 1120px;
+}
+
+.panel {
+  background: rgba(255, 255, 255, 0.94);
+  min-width: 0;
+  padding: 1.5rem;
+}
+
+.panel__header h2 {
+  color: #011638;
+  font-size: 1.35rem;
+  margin: 0;
+}
+
+.calendar__weekdays,
+.calendar__grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.calendar__weekdays {
+  color: #4575A5;
+  font-size: 0.78rem;
+  font-weight: 800;
+  margin: 1.25rem 0 0.5rem;
+  text-align: center;
+}
+
+.calendar__grid {
+  gap: 0.35rem;
+}
+
+.calendar__day,
+.calendar__empty {
+  align-items: center;
+  aspect-ratio: 1;
+  border-radius: 6px;
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+}
+
+.calendar__day {
+  background: #f7f4f8;
+  border: 1px solid rgba(69, 117, 165, 0.18);
+  color: #011638;
+  cursor: default;
+  font: inherit;
+  font-weight: 700;
+  position: relative;
+}
+
+.calendar__empty {
+  background: rgba(255, 255, 255, 0.36);
+}
+
+.calendar__day--event {
+  background: rgba(212, 153, 185, 0.42);
+  border-color: rgba(145, 46, 166, 0.42);
+  cursor: pointer;
+}
+
+.calendar__day--event:hover,
+.calendar__day--event:focus-visible {
+  background: #D499B9;
+  outline: 3px solid rgba(69, 117, 165, 0.34);
+}
+
+.calendar__dot {
+  background: #912EA6;
+  border-radius: 999px;
+  bottom: 0.35rem;
+  height: 0.34rem;
+  position: absolute;
+  width: 0.34rem;
+}
+
+.event-popover {
+  background: #011638;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  bottom: calc(100% + 0.6rem);
+  box-shadow: 0 16px 36px rgba(1, 22, 56, 0.3);
+  color: #fff;
+  display: grid;
+  font-size: 0.84rem;
+  font-weight: 500;
+  gap: 0.25rem;
+  left: 50%;
+  line-height: 1.45;
+  opacity: 0;
+  padding: 0.85rem;
+  pointer-events: none;
+  position: absolute;
+  text-align: left;
+  transform: translate(-50%, 0.35rem);
+  transition: opacity 160ms ease, transform 160ms ease;
+  width: min(16rem, 70vw);
+  z-index: 2;
+}
+
+.event-popover strong {
+  color: #D499B9;
+}
+
+.event-popover small {
+  color: #B1863F;
+  font-weight: 800;
+}
+
+.calendar__day--event:hover .event-popover,
+.calendar__day--event:focus-visible .event-popover {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.newsletter {
+  border-top: 5px solid #B1863F;
+}
+
+.newsletter time {
+  color: #4575A5;
+  display: block;
+  font-weight: 800;
+  margin: 1rem 0;
+}
+
+@media (max-width: 780px) {
+  .home {
+    background-attachment: scroll;
+    padding: 1rem;
+  }
+
+  .guild-card,
+  .home-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .guild-card {
+    justify-items: start;
+  }
+
+  .guild-card__emblem-frame {
+    height: 9rem;
+    width: 9rem;
+  }
+
+  .guild-card__emblem {
+    height: 7rem;
+    width: 7rem;
+  }
+
+  .guild-card h1 {
+    font-size: 2.25rem;
+  }
+}
