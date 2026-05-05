@@ -47,7 +47,7 @@ export class SuccessesComponent implements OnInit {
   readonly error = signal('');
   readonly viewMode = signal<'compact' | 'large'>('large');
   readonly unlockedPoints = signal(0);
-  readonly availablePoints = signal(780);
+  readonly availablePoints = signal(1000);
 
   async ngOnInit(): Promise<void> {
     try {

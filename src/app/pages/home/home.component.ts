@@ -25,7 +25,7 @@ export class HomeComponent implements OnInit {
   private readonly calendarDate = new Date(2026, 4, 1);
 
   readonly guildDescription =
-    'Initiative rassemble des aventuriers de Kourial qui aiment avancer ensemble: sorties donjons, entraide metiers, chasses au tresor et bonne humeur entre deux combats tendus.';
+    'Initiative rassemble des aventuriers de Kourial qui aiment avancer ensemble : sorties donjons, missions de guilde, songes infinis et tout le tralala. Et bien sûr, bonne humeur entre deux combats tendus.';
 
   readonly newsletter = signal<NewsletterMessage>({
     title: 'Actualites de guilde',
