@@ -28,6 +28,18 @@ export interface SuccessUnlockResponse {
   totalPoints: number;
 }
 
+export interface SuccessClaimRequest {
+  success: SuccessItem;
+  description: string;
+  images: File[];
+}
+
+export interface SuccessClaimResponse {
+  ok: boolean;
+  claimId?: string;
+  message?: string;
+}
+
 export interface NewsCalendarEvent {
   date: string;
   title: string;
@@ -51,6 +63,21 @@ export class ApiService {
 
   getUnlockedSuccesses(): Promise<SuccessUnlockResponse> {
     return firstValueFrom(this.http.get<SuccessUnlockResponse>('/api/succes/unlock'));
+  }
+
+  submitSuccessClaim(request: SuccessClaimRequest): Promise<SuccessClaimResponse> {
+    const formData = new FormData();
+
+    formData.append('successId', String(request.success.id));
+    formData.append('successName', request.success.name);
+    formData.append('successDescription', request.success.desc);
+    formData.append('description', request.description);
+
+    for (const image of request.images) {
+      formData.append('images', image, image.name);
+    }
+
+    return firstValueFrom(this.http.post<SuccessClaimResponse>('/api/succes/claim', formData));
   }
 
   getCalendarEvents(): Promise<NewsCalendarEvent[]> {

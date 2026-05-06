@@ -101,12 +101,137 @@
 
                   <h3>{{ success.name }}</h3>
                   <p>{{ success.desc }}</p>
+
+                  @if (!success.unlocked) {
+                    <button
+                      class="success-card__validate"
+                      type="button"
+                      (click)="openClaimForm(success)"
+                    >
+                      Valider
+                    </button>
+                  }
                 </article>
               }
             </div>
           }
         </section>
       }
+    </div>
+  }
+
+  @if (selectedSuccess(); as success) {
+    <div class="claim-modal" role="dialog" aria-modal="true" aria-labelledby="claim-title">
+      <div class="claim-modal__backdrop" (click)="closeClaimForm()" aria-hidden="true"></div>
+
+      <section class="claim-modal__panel">
+        <button
+          class="claim-modal__close"
+          type="button"
+          aria-label="Fermer la demande de validation"
+          (click)="closeClaimForm()"
+        >
+          <span aria-hidden="true"></span>
+        </button>
+
+        <header class="claim-modal__header">
+          <img [src]="iconPath(success.icon)" [alt]="success.name">
+          <div>
+            <p>Demande de validation</p>
+            <h2 id="claim-title">{{ success.name }}</h2>
+            <span>{{ success.desc }}</span>
+          </div>
+        </header>
+
+        @if (claimSuccess()) {
+          <div class="claim-modal__success">
+            <strong>{{ claimSuccess() }}</strong>
+            <button type="button" (click)="closeClaimForm()">Fermer</button>
+          </div>
+        } @else {
+          <div
+            class="claim-dropzone"
+            tabindex="0"
+            (paste)="onClaimPaste($event)"
+            aria-label="Coller ou importer des images de preuve"
+          >
+            <div>
+              <strong>Images de preuve</strong>
+              <p>Collez des captures ici ou importez un ou plusieurs fichiers PNG/JPG.</p>
+            </div>
+
+            <label class="claim-dropzone__upload">
+              Importer
+              <input
+                type="file"
+                accept="image/png,image/jpeg"
+                multiple
+                (change)="onClaimFilesSelected($event)"
+              >
+            </label>
+          </div>
+
+          @if (claimImages().length) {
+            <div class="claim-preview-list" aria-label="Images ajoutees">
+              @for (image of claimImages(); track image.previewUrl; let index = $index) {
+                <figure class="claim-preview">
+                  <img [src]="image.previewUrl" [alt]="'Preuve ' + (index + 1)">
+                  <button
+                    type="button"
+                    [attr.aria-label]="'Retirer l image ' + (index + 1)"
+                    (click)="removeClaimImage(index)"
+                  >
+                    Retirer
+                  </button>
+                </figure>
+              }
+            </div>
+          }
+
+          <label class="claim-description">
+            <span>Description</span>
+            <textarea
+              rows="4"
+              placeholder="Seulement si necessaire"
+              [value]="claimDescription()"
+              (input)="onClaimDescriptionInput($event)"
+            ></textarea>
+          </label>
+
+          @if (claimError()) {
+            <p class="claim-modal__error">{{ claimError() }}</p>
+          }
+
+          @if (isConfirmingClaim()) {
+            <div class="claim-confirmation">
+              <p>Confirmer l'envoi de cette demande de validation ?</p>
+              <div>
+                <button type="button" (click)="cancelClaimConfirmation()">Annuler</button>
+                <button
+                  class="claim-confirmation__send"
+                  type="button"
+                  [disabled]="isSubmittingClaim()"
+                  (click)="submitClaim()"
+                >
+                  {{ isSubmittingClaim() ? 'Envoi...' : 'Confirmer et envoyer' }}
+                </button>
+              </div>
+            </div>
+          } @else {
+            <div class="claim-modal__actions">
+              <button type="button" (click)="closeClaimForm()">Annuler</button>
+              <button
+                class="claim-modal__send"
+                type="button"
+                [disabled]="!claimImages().length || isSubmittingClaim()"
+                (click)="requestClaimConfirmation()"
+              >
+                Envoyer
+              </button>
+            </div>
+          }
+        }
+      </section>
     </div>
   }
 </main>

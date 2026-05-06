@@ -16,49 +16,32 @@
   </section>
 
   <section class="home-grid" aria-label="Actualites de guilde">
-    <article class="panel calendar" aria-labelledby="calendar-title">
+    <article class="panel successes-panel" aria-labelledby="successes-title">
       <div class="panel__header">
-        <p>Calendrier</p>
-        <h2 id="calendar-title">{{ calendarTitle() }}</h2>
+        <p>Progression</p>
+        <h2 id="successes-title">Mes succès</h2>
       </div>
 
-      <div class="calendar__weekdays" aria-hidden="true">
-        <span>L</span>
-        <span>M</span>
-        <span>M</span>
-        <span>J</span>
-        <span>V</span>
-        <span>S</span>
-        <span>D</span>
-      </div>
-
-      <div class="calendar__grid">
-        @for (day of calendarDays(); track $index) {
-          @if (day.day) {
-            <button
-              class="calendar__day"
-              [class.calendar__day--event]="day.event"
-              type="button"
-              [attr.aria-label]="day.event ? day.day + ' ' + calendarTitle() + ', ' + day.event.title : day.day + ' ' + calendarTitle()"
+      @if (successBadgesLoading()) {
+        <p class="successes-panel__state">Chargement des succès...</p>
+      } @else if (successBadges().length) {
+        <div class="badge-list" aria-label="Succès acquis">
+          @for (success of successBadges(); track success.id) {
+            <a
+              class="badge-link"
+              [href]="iconPath(success.icon)"
+              target="_blank"
+              rel="noopener"
+              [attr.aria-label]="'Ouvrir le badge ' + success.name"
             >
-              <span>{{ day.day }}</span>
-
-              @if (day.event) {
-                <span class="calendar__dot" aria-hidden="true"></span>
-                <span class="event-popover" role="tooltip">
-                  <strong>{{ day.event.title }}</strong>
-                  @if (day.event.time) {
-                    <small>{{ day.event.time }}</small>
-                  }
-                  {{ day.event.description }}
-                </span>
-              }
-            </button>
-          } @else {
-            <span class="calendar__empty" aria-hidden="true"></span>
+              <img [src]="iconPath(success.icon)" [alt]="success.name">
+              <span class="badge-popover" role="tooltip">{{ success.name }}</span>
+            </a>
           }
-        }
-      </div>
+        </div>
+      } @else {
+        <p class="successes-panel__state">Aucun succès débloqué pour le moment.</p>
+      }
     </article>
 
     <article class="panel newsletter" aria-labelledby="newsletter-title">
