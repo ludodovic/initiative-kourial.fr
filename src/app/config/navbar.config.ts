@@ -10,6 +10,6 @@ export const NAVBAR_ITEMS: NavbarItem[] = [
   },
   {
     name: 'Succès',
-    link: '/succès'
+    link: '/succes'
   }
 ];

@@ -2,6 +2,27 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 
+export interface SuccessItem {
+  id: number;
+  name: string;
+  icon: string;
+  desc: string;
+  value: number;
+  unlocked?: boolean;
+}
+
+export interface SuccessCategorySource {
+  id: number;
+  catName: string;
+  icon: string;
+  catValue?: number;
+  CatValue?: number;
+  catDesc?: string;
+  CatDesc?: string;
+  unlocked?: boolean;
+  catList: SuccessItem[];
+}
+
 export interface SuccessUnlockResponse {
   unlockedList: Array<number | string>;
   totalPoints: number;
@@ -23,6 +44,10 @@ export interface NewsletterMessage {
 @Injectable({ providedIn: 'root' })
 export class ApiService {
   private readonly http = inject(HttpClient);
+
+  getSuccesses(): Promise<SuccessCategorySource[]> {
+    return firstValueFrom(this.http.get<SuccessCategorySource[]>('/api/succes'));
+  }
 
   getUnlockedSuccesses(): Promise<SuccessUnlockResponse> {
     return firstValueFrom(this.http.get<SuccessUnlockResponse>('/api/succes/unlock'));

@@ -1,27 +1,11 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 
-import { ApiService, SuccessUnlockResponse } from '../../services/api.service';
-
-interface SuccessItem {
-  id: number;
-  name: string;
-  icon: string;
-  desc: string;
-  value: number;
-  unlocked?: boolean;
-}
-
-interface SuccessCategorySource {
-  id: number;
-  catName: string;
-  icon: string;
-  catValue?: number;
-  CatValue?: number;
-  catDesc?: string;
-  CatDesc?: string;
-  unlocked?: boolean;
-  catList: SuccessItem[];
-}
+import {
+  ApiService,
+  SuccessCategorySource,
+  SuccessItem,
+  SuccessUnlockResponse
+} from '../../services/api.service';
 
 interface SuccessCategory {
   id: number;
@@ -51,16 +35,10 @@ export class SuccessesComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     try {
-      const [response, unlocks] = await Promise.all([
-        fetch('/succes_list.json'),
+      const [source, unlocks] = await Promise.all([
+        this.apiService.getSuccesses(),
         this.loadUnlockedSuccesses()
       ]);
-
-      if (!response.ok) {
-        throw new Error(`Unable to load successes (${response.status})`);
-      }
-
-      const source = (await response.json()) as SuccessCategorySource[];
       const unlockedSuccesses = new Set(unlocks.unlockedList);
 
       this.unlockedPoints.set(unlocks.totalPoints);
