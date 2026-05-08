@@ -1,0 +1,246 @@
+.library {
+  background:
+    linear-gradient(rgba(1, 22, 56, 0.68), rgba(1, 22, 56, 0.76)),
+    url('/assets/osavora_background.png') center / cover fixed;
+  color: #011638;
+  min-height: calc(100vh - 4rem);
+  padding: 2rem;
+}
+
+.library__hero,
+.library__panel,
+.library__state {
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(145, 46, 166, 0.16);
+  border-radius: 8px;
+  box-shadow: 0 18px 48px rgba(1, 22, 56, 0.16);
+  margin: 0 auto;
+  max-width: 1200px;
+}
+
+.library__hero {
+  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+}
+
+.library__eyebrow {
+  color: #912EA6;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  margin: 0 0 0.35rem;
+  text-transform: uppercase;
+}
+
+.library__hero h1 {
+  font-size: 2.4rem;
+  line-height: 1;
+  margin: 0 0 0.75rem;
+}
+
+.library__hero p {
+  line-height: 1.6;
+  margin: 0;
+}
+
+.library__panel {
+  display: grid;
+  gap: 1.25rem;
+  padding: 1.25rem;
+}
+
+.library-breadcrumbs {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.library-breadcrumbs a,
+.library-breadcrumbs span {
+  border-radius: 999px;
+  font-weight: 800;
+  padding: 0.45rem 0.7rem;
+}
+
+.library-breadcrumbs a {
+  background: rgba(69, 117, 165, 0.14);
+  color: #011638;
+  text-decoration: none;
+}
+
+.library-breadcrumbs span {
+  background: #912EA6;
+  color: #fff;
+}
+
+.library-section h2 {
+  font-size: 1.25rem;
+  margin: 0 0 0.9rem;
+}
+
+.folder-grid,
+.media-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+}
+
+.folder-card,
+.media-card {
+  background: #f7f4f8;
+  border: 1px solid rgba(69, 117, 165, 0.18);
+  border-radius: 8px;
+  box-shadow: 0 12px 28px rgba(1, 22, 56, 0.08);
+  color: #011638;
+  display: grid;
+  gap: 0.65rem;
+  min-width: 0;
+  padding: 0.8rem;
+  text-align: left;
+  text-decoration: none;
+}
+
+.media-card {
+  cursor: pointer;
+  font: inherit;
+}
+
+.folder-card:hover,
+.folder-card:focus-visible,
+.media-card:hover,
+.media-card:focus-visible {
+  border-color: rgba(145, 46, 166, 0.42);
+  box-shadow: 0 18px 40px rgba(1, 22, 56, 0.14);
+  outline: 3px solid rgba(69, 117, 165, 0.2);
+  transform: translateY(-2px);
+}
+
+.folder-card img,
+.media-card img {
+  aspect-ratio: 16 / 10;
+  background: rgba(255, 255, 255, 0.72);
+  border-radius: 6px;
+  display: block;
+  object-fit: cover;
+  width: 100%;
+}
+
+.folder-card span,
+.media-card span {
+  font-weight: 800;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.folder-card small {
+  color: #4575A5;
+  font-weight: 800;
+}
+
+.library__state,
+.library__empty,
+.library__inline-error {
+  padding: 1rem;
+}
+
+.library__state--error,
+.library__inline-error {
+  color: #912EA6;
+  font-weight: 800;
+}
+
+.library__empty {
+  color: #4575A5;
+  font-weight: 800;
+  margin: 0;
+}
+
+.library-modal {
+  inset: 0;
+  position: fixed;
+  z-index: 40;
+}
+
+.library-modal__backdrop {
+  background: rgba(1, 22, 56, 0.78);
+  inset: 0;
+  position: absolute;
+}
+
+.library-modal__panel {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 28px 90px rgba(1, 22, 56, 0.36);
+  display: grid;
+  gap: 1rem;
+  left: 50%;
+  max-height: calc(100vh - 2rem);
+  padding: 1rem;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(78rem, calc(100vw - 2rem));
+}
+
+.library-modal__header {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.library-modal__header h2 {
+  font-size: 1rem;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.library-modal__header div {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.library-modal__download,
+.library-modal__header button {
+  background: #912EA6;
+  border: 0;
+  border-radius: 6px;
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 800;
+  padding: 0.65rem 0.85rem;
+  text-decoration: none;
+}
+
+.library-modal__header button {
+  background: #011638;
+}
+
+.library-modal__panel > img {
+  border-radius: 6px;
+  display: block;
+  max-height: calc(100vh - 8rem);
+  object-fit: contain;
+  width: 100%;
+}
+
+@media (max-width: 720px) {
+  .library {
+    background-attachment: scroll;
+    padding: 1rem;
+  }
+
+  .library-modal__header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .library-modal__header div {
+    flex-direction: column;
+  }
+}

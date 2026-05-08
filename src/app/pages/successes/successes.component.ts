@@ -65,7 +65,7 @@ export class SuccessesComponent implements OnInit {
   }
 
   iconPath(icon: string): string {
-    return `/assets/${icon}`;
+    return `/assets/succes_icons/${icon}`;
   }
 
   setViewMode(mode: 'compact' | 'large'): void {

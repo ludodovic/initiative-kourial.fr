@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "scripts": {
     "ng": "ng",
+    "generate:library": "node scripts/generate-library-manifest.js",
+    "prestart": "npm run generate:library",
     "start": "ng serve",
+    "prebuild": "npm run generate:library",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"

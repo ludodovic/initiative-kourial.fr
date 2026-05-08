@@ -3,7 +3,7 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { ApiService, SuccessLeaderboardEntry } from '../../services/api.service';
 
 interface LeaderboardRow extends SuccessLeaderboardEntry {
-  className: string;
+  displayClassName: string;
   classIcon: string;
 }
 
@@ -34,18 +34,18 @@ export class LeaderboardComponent implements OnInit {
   onClassIconError(event: Event): void {
     const image = event.target as HTMLImageElement;
 
-    if (!image.src.endsWith('/assets/NoClass.png')) {
-      image.src = '/assets/NoClass.png';
+    if (!image.src.endsWith('/assets/class_icons/NoClass.png')) {
+      image.src = '/assets/class_icons/NoClass.png';
     }
   }
 
   private toLeaderboardRow(entry: SuccessLeaderboardEntry): LeaderboardRow {
-    const className = normalizeClassName(entry.class);
+    const displayClassName = normalizeClassName(entry.class ?? entry.className ?? entry.class_name);
 
     return {
       ...entry,
-      className,
-      classIcon: `/assets/${className}.png`
+      displayClassName,
+      classIcon: `/assets/class_icons/${displayClassName}.png`
     };
   }
 }

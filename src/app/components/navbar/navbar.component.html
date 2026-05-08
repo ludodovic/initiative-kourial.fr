@@ -11,15 +11,46 @@
 
   <div class="navbar__right">
     <div class="navbar__links">
-      @for (item of items; track item.link) {
-        <a
-          class="navbar__link"
-          [routerLink]="item.link"
-          routerLinkActive="navbar__link--active"
-          [routerLinkActiveOptions]="{ exact: item.link === '/' }"
-        >
-          {{ item.name }}
-        </a>
+      @for (item of items; track item.name) {
+        @if (item.children?.length) {
+          <div class="navbar-menu">
+            <button
+              class="navbar__link navbar-menu__trigger"
+              type="button"
+              [class.navbar__link--active]="isNavGroupActive(item.children!.map(child => child.link))"
+              [attr.aria-expanded]="openNavMenu() === item.name"
+              aria-haspopup="menu"
+              (click)="toggleNavMenu(item.name)"
+            >
+              {{ item.name }}
+            </button>
+
+            @if (openNavMenu() === item.name) {
+              <div class="navbar-menu__panel" role="menu" [attr.aria-label]="item.name">
+                @for (child of item.children; track child.link) {
+                  <a
+                    class="navbar-menu__item"
+                    role="menuitem"
+                    [routerLink]="child.link"
+                    routerLinkActive="navbar-menu__item--active"
+                    (click)="closeNavMenu()"
+                  >
+                    {{ child.name }}
+                  </a>
+                }
+              </div>
+            }
+          </div>
+        } @else if (item.link) {
+          <a
+            class="navbar__link"
+            [routerLink]="item.link"
+            routerLinkActive="navbar__link--active"
+            [routerLinkActiveOptions]="{ exact: item.link === '/' }"
+          >
+            {{ item.name }}
+          </a>
+        }
       }
     </div>
 

@@ -1,6 +1,10 @@
 export interface NavbarItem {
   name: string;
-  link: string;
+  link?: string;
+  children?: Array<{
+    name: string;
+    link: string;
+  }>;
 }
 
 export const NAVBAR_ITEMS: NavbarItem[] = [
@@ -10,10 +14,19 @@ export const NAVBAR_ITEMS: NavbarItem[] = [
   },
   {
     name: 'Succes',
-    link: '/succes'
+    children: [
+      {
+        name: 'Liste',
+        link: '/succes'
+      },
+      {
+        name: 'Classement',
+        link: '/classement'
+      }
+    ]
   },
   {
-    name: 'Classement',
-    link: '/classement'
+    name: 'Bibliotheque',
+    link: '/library'
   }
 ];

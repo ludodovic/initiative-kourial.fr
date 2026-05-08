@@ -65,6 +65,8 @@ export interface SuccessLeaderboardEntry {
   totalPoints: number;
   successCount: number;
   class?: string;
+  className?: string;
+  class_name?: string;
 }
 
 @Injectable({ providedIn: 'root' })

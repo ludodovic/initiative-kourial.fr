@@ -20,9 +20,9 @@ export class HomeComponent implements OnInit {
     'Initiative rassemble des aventuriers de Kourial qui aiment avancer ensemble : sorties donjons, missions de guilde, songes infinis et tout le tralala. Et bien sur, bonne humeur entre deux combats tendus.';
 
   readonly newsletter = signal<NewsletterMessage>({
-    title: 'Actualites de guilde',
+    title: 'Infos pratiques',
     date: '',
-    content: 'Aucune newsletter disponible pour le moment.'
+    content: "\nSi vous n'êtes pas connecté, rendez-vous sur le channel #site-web-initiative sur notre serveur Discord. Vous y trouverez toutes les infos necessaires."
   });
   readonly successBadges = signal<SuccessBadge[]>([]);
   readonly successBadgesLoading = signal(true);
@@ -32,7 +32,7 @@ export class HomeComponent implements OnInit {
   }
 
   iconPath(icon: string): string {
-    return `/assets/${icon}`;
+    return `/assets/succes_icons/${icon}`;
   }
 
   formatNewsletterDate(date: string): string {
@@ -76,9 +76,9 @@ export class HomeComponent implements OnInit {
       this.newsletter.set(await this.apiService.getNewsletter());
     } catch {
       this.newsletter.set({
-        title: 'Actualites de guilde',
+        title: 'Infos pratiques',
         date: '',
-        content: 'Aucune newsletter disponible pour le moment.'
+        content: "\nSi vous n'êtes pas connecté, rendez-vous sur le channel #site-web-initiative sur notre serveur Discord. Vous y trouverez toutes les infos necessaires."
       });
     }
   }

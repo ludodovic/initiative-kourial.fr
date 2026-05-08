@@ -46,14 +46,17 @@
 
     <article class="panel newsletter" aria-labelledby="newsletter-title">
       <div class="panel__header">
-        <p>Derniere newsletter</p>
+        <p>What's up ?</p>
         <h2 id="newsletter-title">{{ newsletter().title }}</h2>
       </div>
 
       @if (newsletter().date) {
         <time>{{ formatNewsletterDate(newsletter().date) }}</time>
       }
+      <br>
       <p>{{ newsletter().content }}</p>
+      <br>
+      <p style="font-weight: bold;">NB: N'oubliez pas de renseigner votre classe en cliquant sur votre pseudo.</p>
     </article>
   </section>
 </main>

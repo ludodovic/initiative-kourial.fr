@@ -1,9 +1,9 @@
 <main class="leaderboard">
   <header class="leaderboard__hero">
     <div>
-      <p class="leaderboard__eyebrow">Progression de guilde</p>
-      <h1>Classement des succes</h1>
-      <p>Les membres les plus avances, classes par points puis par nombre de succes.</p>
+      <p class="leaderboard__eyebrow">Leaderboard</p>
+      <h1>Classement des succés</h1>
+      <p>Les membres d'initiative, classés par points de succés puis par nombre de succés accomplis.</p>
     </div>
   </header>
 
@@ -16,12 +16,12 @@
       <h2 id="leaderboard-title">Tableau des scores</h2>
 
       @if (rows().length) {
-        <div class="leaderboard-table" role="table" aria-label="Classement des succes">
+        <div class="leaderboard-table" role="table" aria-label="Classement des succés">
           <div class="leaderboard-table__head" role="row">
             <span role="columnheader">Classe</span>
             <span role="columnheader">Pseudo</span>
-            <span role="columnheader">Points de succes</span>
-            <span role="columnheader">Nombre de succes</span>
+            <span role="columnheader">Points de succés</span>
+            <span role="columnheader">Nombre de succés</span>
           </div>
 
           @for (row of rows(); track row.dofus_username; let rank = $index) {
@@ -30,7 +30,7 @@
                 <span class="leaderboard-table__rank">{{ rank + 1 }}</span>
                 <img
                   [src]="row.classIcon"
-                  [alt]="row.className === 'NoClass' ? 'Classe inconnue' : row.className"
+                  [alt]="row.displayClassName === 'NoClass' ? 'Classe inconnue' : row.displayClassName"
                   (error)="onClassIconError($event)"
                 >
               </span>

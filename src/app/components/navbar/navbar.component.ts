@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit, inject, signal } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 
 import { NAVBAR_ITEMS } from '../../config/navbar.config';
 import { ApiService, UserProfile } from '../../services/api.service';
@@ -30,7 +30,7 @@ const DOFUS_CLASSES: DofusClassOption[] = [
   'Eni',
   'Ougi',
   'Osa'
-].map((name) => ({ name, icon: `/assets/${name}.png` }));
+].map((name) => ({ name, icon: `/assets/class_icons/${name}.png` }));
 
 @Component({
   selector: 'app-navbar',
@@ -41,6 +41,7 @@ const DOFUS_CLASSES: DofusClassOption[] = [
 export class NavbarComponent implements OnInit {
   private readonly apiService = inject(ApiService);
   private readonly authTokenService = inject(AuthTokenService);
+  private readonly router = inject(Router);
 
   readonly guildName = 'Initiative';
   readonly items = NAVBAR_ITEMS;
@@ -48,6 +49,7 @@ export class NavbarComponent implements OnInit {
   readonly user = signal<UserProfile | null>(null);
   readonly selectedClass = signal<DofusClassOption | null>(null);
   readonly isClassMenuOpen = signal(false);
+  readonly openNavMenu = signal<string | null>(null);
   readonly isUpdatingClass = signal(false);
 
   async ngOnInit(): Promise<void> {
@@ -66,14 +68,34 @@ export class NavbarComponent implements OnInit {
   @HostListener('document:keydown.escape')
   closeOnEscape(): void {
     this.isClassMenuOpen.set(false);
+    this.openNavMenu.set(null);
   }
 
   classIconPath(className: string): string {
-    return `/assets/${className}.png`;
+    return `/assets/class_icons/${className}.png`;
   }
 
   toggleClassMenu(): void {
     this.isClassMenuOpen.update((isOpen) => !isOpen);
+    this.openNavMenu.set(null);
+  }
+
+  toggleNavMenu(name: string): void {
+    this.openNavMenu.update((openName) => (openName === name ? null : name));
+    this.isClassMenuOpen.set(false);
+  }
+
+  closeNavMenu(): void {
+    this.openNavMenu.set(null);
+  }
+
+  isNavGroupActive(links: string[]): boolean {
+    return links.some((link) => this.router.isActive(link, {
+      paths: 'exact',
+      queryParams: 'ignored',
+      fragment: 'ignored',
+      matrixParams: 'ignored'
+    }));
   }
 
   async selectClass(option: DofusClassOption): Promise<void> {

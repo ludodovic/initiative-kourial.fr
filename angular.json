@@ -26,11 +26,6 @@
                 "input": "public"
               },
               {
-                "glob": "succes_list.json",
-                "input": ".",
-                "output": "."
-              },
-              {
                 "glob": "**/*",
                 "input": "assets",
                 "output": "assets"
@@ -94,11 +89,6 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              },
-              {
-                "glob": "succes_list.json",
-                "input": ".",
-                "output": "."
               },
               {
                 "glob": "**/*",

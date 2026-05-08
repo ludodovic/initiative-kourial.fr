@@ -1,4 +1,14 @@
-import { Routes } from '@angular/router';
+import { Routes, UrlMatchResult, UrlSegment } from '@angular/router';
+
+export function libraryRouteMatcher(segments: UrlSegment[]): UrlMatchResult | null {
+  if (segments[0]?.path !== 'library') {
+    return null;
+  }
+
+  return {
+    consumed: segments
+  };
+}
 
 export const routes: Routes = [
   {
@@ -18,6 +28,13 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/leaderboard/leaderboard.component').then(
         (component) => component.LeaderboardComponent
+      )
+  },
+  {
+    matcher: libraryRouteMatcher,
+    loadComponent: () =>
+      import('./pages/library/library.component').then(
+        (component) => component.LibraryComponent
       )
   },
   {
