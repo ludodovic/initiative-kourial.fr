@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 
+import { environment } from '../../environments/environment';
+
 export interface SuccessItem {
   id: number;
   name: string;
@@ -53,16 +55,34 @@ export interface NewsletterMessage {
   content: string;
 }
 
+export interface UserProfile {
+  dofus_username: string;
+  class: string;
+}
+
+export interface SuccessLeaderboardEntry {
+  dofus_username: string;
+  totalPoints: number;
+  successCount: number;
+  class?: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class ApiService {
   private readonly http = inject(HttpClient);
 
   getSuccesses(): Promise<SuccessCategorySource[]> {
-    return firstValueFrom(this.http.get<SuccessCategorySource[]>('/api/succes'));
+    return firstValueFrom(this.http.get<SuccessCategorySource[]>(apiUrl('/api/succes')));
   }
 
   getUnlockedSuccesses(): Promise<SuccessUnlockResponse> {
-    return firstValueFrom(this.http.get<SuccessUnlockResponse>('/api/succes/unlock'));
+    return firstValueFrom(this.http.get<SuccessUnlockResponse>(apiUrl('/api/succes/unlock')));
+  }
+
+  getSuccessLeaderboard(): Promise<SuccessLeaderboardEntry[]> {
+    return firstValueFrom(
+      this.http.get<SuccessLeaderboardEntry[]>(apiUrl('/api/succes/leaderboard'))
+    );
   }
 
   submitSuccessClaim(request: SuccessClaimRequest): Promise<SuccessClaimResponse> {
@@ -77,14 +97,30 @@ export class ApiService {
       formData.append('images', image, image.name);
     }
 
-    return firstValueFrom(this.http.post<SuccessClaimResponse>('/api/succes/claim', formData));
+    return firstValueFrom(
+      this.http.post<SuccessClaimResponse>(apiUrl('/api/succes/claim'), formData)
+    );
   }
 
   getCalendarEvents(): Promise<NewsCalendarEvent[]> {
-    return firstValueFrom(this.http.get<NewsCalendarEvent[]>('/api/news/calendar'));
+    return firstValueFrom(this.http.get<NewsCalendarEvent[]>(apiUrl('/api/news/calendar')));
   }
 
   getNewsletter(): Promise<NewsletterMessage> {
-    return firstValueFrom(this.http.get<NewsletterMessage>('/api/news/letter'));
+    return firstValueFrom(this.http.get<NewsletterMessage>(apiUrl('/api/news/letter')));
   }
+
+  getUser(): Promise<UserProfile> {
+    return firstValueFrom(this.http.get<UserProfile>(apiUrl('/api/user')));
+  }
+
+  updateUserClass(className: string): Promise<UserProfile> {
+    return firstValueFrom(
+      this.http.post<UserProfile>(apiUrl('/api/user/class'), { class: className })
+    );
+  }
+}
+
+function apiUrl(path: string): string {
+  return `${environment.apiBaseUrl}${path}`;
 }

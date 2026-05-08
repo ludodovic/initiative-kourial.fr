@@ -9,16 +9,53 @@
     </span>
   </a>
 
-  <div class="navbar__links">
-    @for (item of items; track item.link) {
-      <a
-        class="navbar__link"
-        [routerLink]="item.link"
-        routerLinkActive="navbar__link--active"
-        [routerLinkActiveOptions]="{ exact: item.link === '/' }"
-      >
-        {{ item.name }}
-      </a>
+  <div class="navbar__right">
+    <div class="navbar__links">
+      @for (item of items; track item.link) {
+        <a
+          class="navbar__link"
+          [routerLink]="item.link"
+          routerLinkActive="navbar__link--active"
+          [routerLinkActiveOptions]="{ exact: item.link === '/' }"
+        >
+          {{ item.name }}
+        </a>
+      }
+    </div>
+
+    @if (user(); as currentUser) {
+      <div class="navbar-user">
+        <button
+          class="navbar-user__trigger"
+          type="button"
+          [attr.aria-expanded]="isClassMenuOpen()"
+          aria-haspopup="menu"
+          (click)="toggleClassMenu()"
+        >
+          @if (selectedClass(); as currentClass) {
+            <img [src]="currentClass.icon" [alt]="currentClass.name">
+          }
+          <span>{{ currentUser.dofus_username }}</span>
+        </button>
+
+        @if (isClassMenuOpen()) {
+          <div class="navbar-user__menu" role="menu" aria-label="Choisir une classe Dofus">
+            @for (option of classOptions; track option.name) {
+              <button
+                class="navbar-user__class"
+                type="button"
+                role="menuitem"
+                [class.navbar-user__class--active]="selectedClass()?.name === option.name"
+                [disabled]="isUpdatingClass()"
+                (click)="selectClass(option)"
+              >
+                <img [src]="option.icon" [alt]="option.name">
+                <span>{{ option.name }}</span>
+              </button>
+            }
+          </div>
+        }
+      </div>
     }
   </div>
 </nav>

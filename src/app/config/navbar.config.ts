@@ -9,7 +9,11 @@ export const NAVBAR_ITEMS: NavbarItem[] = [
     link: '/'
   },
   {
-    name: 'Succès',
+    name: 'Succes',
     link: '/succes'
+  },
+  {
+    name: 'Classement',
+    link: '/classement'
   }
 ];

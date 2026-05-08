@@ -14,6 +14,13 @@ export const routes: Routes = [
       )
   },
   {
+    path: 'classement',
+    loadComponent: () =>
+      import('./pages/leaderboard/leaderboard.component').then(
+        (component) => component.LeaderboardComponent
+      )
+  },
+  {
     path: '**',
     redirectTo: ''
   }
