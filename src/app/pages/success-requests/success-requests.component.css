@@ -1,0 +1,171 @@
+.requests {
+  background:
+    linear-gradient(rgba(247, 244, 248, 0.9), rgba(247, 244, 248, 0.95)),
+    url('/assets/osavora_background.png') center / cover fixed;
+  color: #011638;
+  min-height: calc(100vh - 4rem);
+  padding: 2rem;
+}
+
+.requests__hero,
+.requests__state,
+.request-section {
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(145, 46, 166, 0.16);
+  border-radius: 8px;
+  box-shadow: 0 18px 48px rgba(1, 22, 56, 0.14);
+  margin: 0 auto;
+  max-width: 1120px;
+}
+
+.requests__hero {
+  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+}
+
+.requests__eyebrow,
+.request-section__count {
+  color: #912EA6;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  margin: 0 0 0.35rem;
+  text-transform: uppercase;
+}
+
+.requests__hero h1 {
+  font-size: 2.4rem;
+  line-height: 1;
+  margin: 0 0 0.75rem;
+}
+
+.requests__hero p {
+  line-height: 1.6;
+  margin: 0;
+}
+
+.requests__sections {
+  display: grid;
+  gap: 1rem;
+  margin: 0 auto;
+  max-width: 1120px;
+}
+
+.request-section {
+  border-left: 5px solid #4575A5;
+  overflow: hidden;
+  padding: 1.25rem;
+}
+
+.request-section--pending {
+  border-left-color: #B1863F;
+}
+
+.request-section--approved {
+  border-left-color: #4575A5;
+}
+
+.request-section--refused {
+  border-left-color: #912EA6;
+}
+
+.request-section__header h2 {
+  font-size: 1.35rem;
+  margin: 0;
+}
+
+.request-list {
+  display: grid;
+  gap: 0.65rem;
+  margin-top: 1rem;
+}
+
+.request-card {
+  align-items: center;
+  background: #f7f4f8;
+  border: 1px solid rgba(69, 117, 165, 0.16);
+  border-radius: 8px;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr) auto;
+  padding: 0.85rem 1rem;
+}
+
+.request-card__main {
+  min-width: 0;
+}
+
+.request-card__id {
+  color: #4575A5;
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 800;
+  margin-bottom: 0.25rem;
+}
+
+.request-card h3 {
+  font-size: 1rem;
+  margin: 0 0 0.3rem;
+}
+
+.request-card p,
+.request-card time,
+.request-section__empty {
+  color: rgba(1, 22, 56, 0.72);
+  line-height: 1.45;
+  margin: 0;
+}
+
+.request-card__meta {
+  align-items: flex-end;
+  display: grid;
+  gap: 0.4rem;
+  justify-items: end;
+}
+
+.request-card__status {
+  background: #011638;
+  border-radius: 999px;
+  color: #fff;
+  font-size: 0.76rem;
+  font-weight: 800;
+  padding: 0.35rem 0.55rem;
+}
+
+.request-section--pending .request-card__status {
+  background: #B1863F;
+}
+
+.request-section--approved .request-card__status {
+  background: #4575A5;
+}
+
+.request-section--refused .request-card__status {
+  background: #912EA6;
+}
+
+.request-section__empty,
+.requests__state {
+  padding: 1rem;
+}
+
+.requests__state--error {
+  color: #912EA6;
+  font-weight: 800;
+}
+
+@media (max-width: 700px) {
+  .requests {
+    background-attachment: scroll;
+    padding: 1rem;
+  }
+
+  .request-card {
+    align-items: start;
+    grid-template-columns: 1fr;
+  }
+
+  .request-card__meta {
+    justify-items: start;
+  }
+}

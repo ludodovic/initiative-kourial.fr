@@ -24,6 +24,13 @@ export const routes: Routes = [
       )
   },
   {
+    path: 'succes/demandes',
+    loadComponent: () =>
+      import('./pages/success-requests/success-requests.component').then(
+        (component) => component.SuccessRequestsComponent
+      )
+  },
+  {
     path: 'classement',
     loadComponent: () =>
       import('./pages/leaderboard/leaderboard.component').then(

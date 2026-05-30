@@ -22,6 +22,10 @@ export const NAVBAR_ITEMS: NavbarItem[] = [
       {
         name: 'Classement',
         link: '/classement'
+      },
+      {
+        name: 'Mes demandes',
+        link: '/succes/demandes'
       }
     ]
   },

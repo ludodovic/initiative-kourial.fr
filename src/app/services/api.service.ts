@@ -42,6 +42,22 @@ export interface SuccessClaimResponse {
   message?: string;
 }
 
+export type SuccessValidationStatus = 'pending' | 'approved' | 'refused';
+
+export interface SuccessValidationRequest {
+  succes_id: number;
+  succes_name: string;
+  submited_at: string;
+  requester_discord_username: string;
+  status: SuccessValidationStatus;
+}
+
+export interface SuccessValidationsResponse {
+  pending: SuccessValidationRequest[];
+  approved: SuccessValidationRequest[];
+  refused: SuccessValidationRequest[];
+}
+
 export interface NewsCalendarEvent {
   date: string;
   title: string;
@@ -84,6 +100,12 @@ export class ApiService {
   getSuccessLeaderboard(): Promise<SuccessLeaderboardEntry[]> {
     return firstValueFrom(
       this.http.get<SuccessLeaderboardEntry[]>(apiUrl('/api/succes/leaderboard'))
+    );
+  }
+
+  getSuccessValidations(): Promise<SuccessValidationsResponse> {
+    return firstValueFrom(
+      this.http.get<SuccessValidationsResponse>(apiUrl('/api/succes/validations'))
     );
   }
 
