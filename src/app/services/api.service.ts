@@ -47,7 +47,8 @@ export type SuccessValidationStatus = 'pending' | 'approved' | 'refused';
 export interface SuccessValidationRequest {
   succes_id: number;
   succes_name: string;
-  submited_at: string;
+  submitted_at: string;
+  submited_at?: string;
   requester_discord_username: string;
   status: SuccessValidationStatus;
 }

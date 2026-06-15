@@ -34,19 +34,19 @@ export class SuccessRequestsComponent implements OnInit {
           status: 'pending',
           title: 'Demandes en attente',
           emptyText: 'Aucune demande en attente.',
-          requests: validations.pending
+          requests: validations.pending.map((request) => this.normalizeRequest(request))
         },
         {
           status: 'approved',
           title: 'Demandes validees',
           emptyText: 'Aucune demande validee.',
-          requests: validations.approved
+          requests: validations.approved.map((request) => this.normalizeRequest(request))
         },
         {
           status: 'refused',
           title: 'Demandes refusees',
           emptyText: 'Aucune demande refusee.',
-          requests: validations.refused
+          requests: validations.refused.map((request) => this.normalizeRequest(request))
         }
       ]);
     } catch {
@@ -57,10 +57,16 @@ export class SuccessRequestsComponent implements OnInit {
   }
 
   formatDate(value: string): string {
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) {
+      return 'Date inconnue';
+    }
+
     return new Intl.DateTimeFormat('fr-FR', {
       dateStyle: 'medium',
       timeStyle: 'short'
-    }).format(new Date(value));
+    }).format(date);
   }
 
   statusLabel(status: SuccessValidationStatus): string {
@@ -71,5 +77,12 @@ export class SuccessRequestsComponent implements OnInit {
     };
 
     return labels[status];
+  }
+
+  private normalizeRequest(request: SuccessValidationRequest): SuccessValidationRequest {
+    return {
+      ...request,
+      submitted_at: request.submitted_at ?? request.submited_at ?? ''
+    };
   }
 }

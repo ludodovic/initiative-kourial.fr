@@ -30,7 +30,7 @@
 
           @if (section.requests.length) {
             <div class="request-list">
-              @for (request of section.requests; track request.succes_id + '-' + request.submited_at) {
+              @for (request of section.requests; track request.succes_id + '-' + request.submitted_at) {
                 <article class="request-card">
                   <div class="request-card__main">
                     <span class="request-card__id">#{{ request.succes_id }}</span>
@@ -40,8 +40,8 @@
 
                   <div class="request-card__meta">
                     <span class="request-card__status">{{ statusLabel(request.status) }}</span>
-                    <time [attr.datetime]="request.submited_at">
-                      {{ formatDate(request.submited_at) }}
+                    <time [attr.datetime]="request.submitted_at">
+                      {{ formatDate(request.submitted_at) }}
                     </time>
                   </div>
                 </article>
