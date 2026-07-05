@@ -1,0 +1,263 @@
+<main class="success-season-2">
+  <header class="success-season-2__hero">
+    <div>
+      <p class="success-season-2__eyebrow">Progression de guilde - Saison 2</p>
+      <h1>Succès saison 2</h1>
+      <p>Les défis de donjons, classés par niveau. <strong>Les succès ne sont pas rétroactifs !</strong></p>
+    </div>
+
+    <div class="success-season-2__score" aria-label="Tickets débloqués sur tickets disponibles">
+      <span>{{ ticketCount() }}/{{ getTotalPossibleTickets() }}</span>
+      tickets
+    </div>
+  </header>
+
+  <!-- Filtres et recherche -->
+  <div class="success-season-2__filters">
+    <div class="success-season-2__search">
+      <input
+        type="text"
+        placeholder="Rechercher un succès..."
+        [ngModel]="searchQuery()"
+        (ngModelChange)="setSearchQuery($event)"
+      >
+    </div>
+
+    <div class="success-season-2__filter-group">
+      <div class="success-season-2__filter">
+        <label>Difficulté:</label>
+        <select
+          [ngModel]="selectedDifficulty()"
+          (ngModelChange)="setDifficultyFilter($event)"
+        >
+          <option [ngValue]="null">Toutes</option>
+          @for (diff of availableDifficulties(); track diff) {
+            <option [ngValue]="diff">{{ diff }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="success-season-2__filter">
+        <label>Catégorie:</label>
+        <select
+          [ngModel]="selectedCategory()"
+          (ngModelChange)="setCategoryFilter($event)"
+        >
+          <option [ngValue]="null">Toutes</option>
+          @for (category of categories(); track category.id) {
+            <option [ngValue]="category.id">{{ category.name }}</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    <div class="view-toggle" aria-label="Mode d'affichage des succès">
+      <button
+        type="button"
+        [class.view-toggle__button--active]="viewMode() === 'large'"
+        (click)="setViewMode('large')"
+      >
+        Large
+      </button>
+      <button
+        type="button"
+        [class.view-toggle__button--active]="viewMode() === 'compact'"
+        (click)="setViewMode('compact')"
+      >
+        Compact
+      </button>
+    </div>
+  </div>
+
+  @if (isLoading()) {
+    <p class="success-season-2__state">Chargement des succès...</p>
+  } @else if (error()) {
+    <p class="success-season-2__state success-season-2__state--error">{{ error() }}</p>
+  } @else if (filteredCategories().length === 0) {
+    <p class="success-season-2__state">Aucun succès trouvé.</p>
+  } @else {
+    <div class="category-list">
+      @for (category of filteredCategories(); track category.id) {
+        <section
+          class="category"
+          [class.category--compact]="viewMode() === 'compact'"
+        >
+          <header class="category__header">
+            <div class="category__content">
+              <p class="category__eyebrow">Catégorie</p>
+              <h2>{{ category.name }}</h2>
+            </div>
+          </header>
+
+          <div class="success-grid">
+            @for (success of category.successes; track success.id) {
+              <article
+                class="success-card"
+                [class.success-card--unlocked]="success.unlocked"
+              >
+                <div class="success-card__topline">
+                  @if (success.imgs.length > 0) {
+                    <div class="success-card__images">
+                      @for (img of success.imgs; track img) {
+                        <img class="success-card__img" [src]="img" [alt]="success.nom">
+                      }
+                    </div>
+                  } @else {
+                    <div class="success-card__img-placeholder"></div>
+                  }
+
+                  <span
+                    class="success-card__points"
+                    [class.success-card__points--unlocked]="success.unlocked"
+                  >
+                    {{ success.difficulte }}
+                  </span>
+                </div>
+
+                <div class="success-card__body">
+                  <p class="success-card__donjon">{{ success.donjon }}</p>
+                  <h3>{{ success.nom }}</h3>
+                  <p>{{ success.description }}</p>
+                </div>
+
+                @if (!success.unlocked) {
+                  <button
+                    class="success-card__validate"
+                    type="button"
+                    (click)="openClaimForm(success)"
+                  >
+                    Valider
+                  </button>
+                } @else {
+                  <span class="success-card__unlocked-badge">Validé</span>
+                }
+              </article>
+            }
+          </div>
+        </section>
+      }
+    </div>
+  }
+
+  @if (selectedSuccess(); as success) {
+    <div class="claim-modal" role="dialog" aria-modal="true" aria-labelledby="claim-title">
+      <div class="claim-modal__backdrop" (click)="closeClaimForm()" aria-hidden="true"></div>
+
+      <section class="claim-modal__panel">
+        <button
+          class="claim-modal__close"
+          type="button"
+          aria-label="Fermer la demande de validation"
+          (click)="closeClaimForm()"
+        >
+          <span aria-hidden="true"></span>
+        </button>
+
+        <header class="claim-modal__header">
+          @if (success.imgs.length > 0) {
+            <div class="claim-modal__images">
+              @for (img of success.imgs; track img) {
+                <img [src]="img" [alt]="success.nom">
+              }
+            </div>
+          }
+          <div>
+            <p>Demande de validation</p>
+            <h2 id="claim-title">{{ success.nom }}</h2>
+            <p class="claim-modal__donjon">{{ success.donjon }}</p>
+            <span>{{ success.description }}</span>
+          </div>
+        </header>
+
+        @if (claimSuccess()) {
+          <div class="claim-modal__success">
+            <strong>{{ claimSuccess() }}</strong>
+            <button type="button" (click)="closeClaimForm()">Fermer</button>
+          </div>
+        } @else {
+          <div
+            class="claim-dropzone"
+            tabindex="0"
+            (paste)="onClaimPaste($event)"
+            aria-label="Coller ou importer des images de preuve"
+          >
+            <div>
+              <strong>Images de preuve</strong>
+              <p>Collez des captures ici ou importez un ou plusieurs fichiers PNG/JPG. <em>Optionnel</em></p>
+            </div>
+
+            <label class="claim-dropzone__upload">
+              Importer
+              <input
+                type="file"
+                accept="image/png,image/jpeg"
+                multiple
+                (change)="onClaimFilesSelected($event)"
+              >
+            </label>
+          </div>
+
+          @if (claimImages().length) {
+            <div class="claim-preview-list" aria-label="Images ajoutées">
+              @for (image of claimImages(); track image.previewUrl; let index = $index) {
+                <figure class="claim-preview">
+                  <img [src]="image.previewUrl" [alt]="'Preuve ' + (index + 1)">
+                  <button
+                    type="button"
+                    [attr.aria-label]="'Retirer l image ' + (index + 1)"
+                    (click)="removeClaimImage(index)"
+                  >
+                    Retirer
+                  </button>
+                </figure>
+              }
+            </div>
+          }
+
+          <label class="claim-description">
+            <span>Description</span>
+            <textarea
+              rows="4"
+              placeholder="Seulement si nécessaire"
+              [value]="claimDescription()"
+              (input)="onClaimDescriptionInput($event)"
+            ></textarea>
+          </label>
+
+          @if (claimError()) {
+            <p class="claim-modal__error">{{ claimError() }}</p>
+          }
+
+          @if (isConfirmingClaim()) {
+            <div class="claim-confirmation">
+              <p>Confirmer l'envoi de cette demande de validation ?</p>
+              <div>
+                <button type="button" (click)="cancelClaimConfirmation()">Annuler</button>
+                <button
+                  class="claim-confirmation__send"
+                  type="button"
+                  [disabled]="isSubmittingClaim()"
+                  (click)="submitClaim()"
+                >
+                  {{ isSubmittingClaim() ? 'Envoi...' : 'Confirmer et envoyer' }}
+                </button>
+              </div>
+            </div>
+          } @else {
+            <div class="claim-modal__actions">
+              <button type="button" (click)="closeClaimForm()">Annuler</button>
+              <button
+                class="claim-modal__send"
+                type="button"
+                [disabled]="isSubmittingClaim()"
+                (click)="requestClaimConfirmation()"
+              >
+                {{ isSubmittingClaim() ? 'Envoi...' : 'Envoyer' }}
+              </button>
+            </div>
+          }
+        }
+      </section>
+    </div>
+  }
+</main>

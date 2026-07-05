@@ -1,0 +1,18 @@
+<main class="devblog-post">
+  @if (isLoading()) {
+    <p class="devblog-post__state">Chargement de l'article...</p>
+  } @else if (error()) {
+    <p class="devblog-post__state devblog-post__state--error">{{ error() }}</p>
+  } @else if (!blog()) {
+    <p class="devblog-post__state">Article non trouvé.</p>
+  } @else {
+    <header class="devblog-post__hero">
+      <div>
+        <p class="devblog-post__eyebrow">Le Mynni Blog</p>
+        <h1>{{ blog()!.content }}</h1>
+      </div>
+    </header>
+
+    <article class="devblog-post__content" [innerHTML]="htmlContent()"></article>
+  }
+</main>

@@ -26,8 +26,16 @@ export const NAVBAR_ITEMS: NavbarItem[] = [
       {
         name: 'Mes demandes',
         link: '/succes/demandes'
+      },
+      {
+        name: 'Saison 2',
+        link: '/succes_saison-2'
       }
     ]
+  },
+  {
+    name: 'Le Mynni Blog',
+    link: '/devblog'
   },
   {
     name: 'Bibliotheque',

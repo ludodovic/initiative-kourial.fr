@@ -77,6 +77,34 @@ export interface UserProfile {
   class: string;
 }
 
+export interface Season2Success {
+  donjon: string;
+  nom: string;
+  description: string;
+  difficulte: string;
+  id: number;
+  imgs: string[];
+  minLevel: number;
+}
+
+export interface Season2UnlockResponse {
+  unlockedList2: number[];
+  ticket_count: number;
+}
+
+export interface Season2SuccessClaimRequest {
+  successId: number;
+  successName: string;
+  description: string;
+  images?: File[];
+}
+
+export interface Season2SuccessClaimResponse {
+  ok: boolean;
+  claimId?: string;
+  message?: string;
+}
+
 export interface SuccessLeaderboardEntry {
   dofus_username: string;
   totalPoints: number;
@@ -142,6 +170,32 @@ export class ApiService {
   updateUserClass(className: string): Promise<UserProfile> {
     return firstValueFrom(
       this.http.post<UserProfile>(apiUrl('/api/user/class'), { class: className })
+    );
+  }
+
+  getSeason2Successes(): Promise<Season2Success[]> {
+    return firstValueFrom(this.http.get<Season2Success[]>(apiUrl('/api/succes2')));
+  }
+
+  getSeason2Unlocks(): Promise<Season2UnlockResponse> {
+    return firstValueFrom(this.http.get<Season2UnlockResponse>(apiUrl('/api/succes/unlock')));
+  }
+
+  submitSeason2SuccessClaim(request: Season2SuccessClaimRequest): Promise<Season2SuccessClaimResponse> {
+    const formData = new FormData();
+
+    formData.append('successId', String(request.successId));
+    formData.append('successName', request.successName);
+    formData.append('description', request.description);
+
+    if (request.images) {
+      for (const image of request.images) {
+        formData.append('images', image, image.name);
+      }
+    }
+
+    return firstValueFrom(
+      this.http.post<Season2SuccessClaimResponse>(apiUrl('/api/succes2/claim'), formData)
     );
   }
 }

@@ -1,0 +1,99 @@
+.devblog {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.devblog__hero {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.devblog__eyebrow {
+  color: #666;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+}
+
+.devblog__hero h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.devblog__hero p {
+  color: #666;
+  font-size: 1.125rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.devblog__state {
+  text-align: center;
+  color: #666;
+  padding: 2rem;
+}
+
+.devblog__state--error {
+  color: #d32f2f;
+}
+
+.devblog__list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.devblog__item {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.devblog__item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.devblog__link {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  width: 100%;
+}
+
+.devblog__title {
+  font-size: 1.25rem;
+  color: #333;
+  margin: 0;
+}
+
+.devblog__arrow {
+  color: #666;
+  font-size: 1.5rem;
+  transition: transform 0.2s ease;
+}
+
+.devblog__link:hover .devblog__arrow {
+  transform: translateX(4px);
+}
+
+@media (max-width: 768px) {
+  .devblog {
+    padding: 1rem;
+  }
+
+  .devblog__hero h1 {
+    font-size: 2rem;
+  }
+
+  .devblog__title {
+    font-size: 1.125rem;
+  }
+}

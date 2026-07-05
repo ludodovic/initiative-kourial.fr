@@ -45,6 +45,27 @@ export const routes: Routes = [
       )
   },
   {
+    path: 'devblog',
+    loadComponent: () =>
+      import('./pages/devblog/devblog.component').then(
+        (component) => component.DevblogComponent
+      )
+  },
+  {
+    path: 'devblog/:id',
+    loadComponent: () =>
+      import('./pages/devblog-post/devblog-post.component').then(
+        (component) => component.DevblogPostComponent
+      )
+  },
+  {
+    path: 'succes_saison-2',
+    loadComponent: () =>
+      import('./pages/success-season-2/success-season-2.component').then(
+        (component) => component.SuccessSeason2Component
+      )
+  },
+  {
     path: '**',
     redirectTo: ''
   }
