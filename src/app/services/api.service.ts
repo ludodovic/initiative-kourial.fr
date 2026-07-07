@@ -195,7 +195,7 @@ export class ApiService {
     }
 
     return firstValueFrom(
-      this.http.post<Season2SuccessClaimResponse>(apiUrl('/api/succes2/claim'), formData)
+      this.http.post<Season2SuccessClaimResponse>(apiUrl('/api/succes/claim'), formData)
     );
   }
 }

@@ -16,8 +16,12 @@ export const NAVBAR_ITEMS: NavbarItem[] = [
     name: 'Succes',
     children: [
       {
-        name: 'Liste',
+        name: 'Saison 1',
         link: '/succes'
+      },
+      {
+        name: 'Saison 2',
+        link: '/succes_saison-2'
       },
       {
         name: 'Classement',
@@ -26,10 +30,6 @@ export const NAVBAR_ITEMS: NavbarItem[] = [
       {
         name: 'Mes demandes',
         link: '/succes/demandes'
-      },
-      {
-        name: 'Saison 2',
-        link: '/succes_saison-2'
       }
     ]
   },
