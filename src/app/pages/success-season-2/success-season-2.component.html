@@ -1,4 +1,10 @@
 <main class="success-season-2">
+  <!-- Falling tickets animation based on ticketCount -->
+  <div class="falling-tickets-container">
+    @for (data of getFallingTickets(); track data.pos + data.delay) {
+      <img src="assets/lottery_ticket.png" alt="Falling ticket" class="falling-ticket" [style.left]="data.pos" [style.animation-delay]="data.delay">
+    }
+  </div>
   <header class="success-season-2__hero">
     <div>
       <p class="success-season-2__eyebrow">Progression de guilde - Saison 2</p>
@@ -8,7 +14,7 @@
 
     <div class="success-season-2__score" aria-label="Tickets débloqués sur tickets disponibles">
       <span>{{ ticketCount() }}/{{ getTotalPossibleTickets() }}</span>
-      tickets
+      <img src="assets/lottery_ticket.png" alt="Ticket" class="success-season-2__ticket-icon">
     </div>
   </header>
 

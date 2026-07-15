@@ -45,6 +45,8 @@ export class SuccessSeason2Component implements OnInit {
   readonly claimError = signal('');
   readonly claimSuccess = signal('');
 
+
+
   // Catégories basées sur minLevel
   readonly categories = computed<SuccessCategory[]>(() => {
     const successes = this.allSuccesses();
@@ -224,6 +226,12 @@ export class SuccessSeason2Component implements OnInit {
       return;
     }
 
+    // Validation côté client
+    if (!success.description) {
+      this.claimError.set('Les informations du succès sont incomplètes. Veuillez actualiser la page.');
+      return;
+    }
+
     this.isSubmittingClaim.set(true);
     this.claimError.set('');
 
@@ -231,6 +239,7 @@ export class SuccessSeason2Component implements OnInit {
       const request: Season2SuccessClaimRequest = {
         successId: success.id,
         successName: success.nom,
+        successDescription: success.description,
         description: this.claimDescription().trim(),
         images: this.claimImages().map(img => img.file)
       };
@@ -244,8 +253,17 @@ export class SuccessSeason2Component implements OnInit {
       this.claimSuccess.set('Demande envoyée.');
       this.isConfirmingClaim.set(false);
       this.loadUnlocks(); // Recharger pour mettre à jour les succès déverrouillés
-    } catch {
-      this.claimError.set('Impossible d\'envoyer la demande pour le moment.');
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Erreur inconnue';
+      
+      // Gestion des messages d'erreur plus spécifiques
+      if (errorMessage.includes('successDescription') || errorMessage.includes('Field required')) {
+        this.claimError.set('La description du succès est manquante. Veuillez réessayer.');
+      } else if (errorMessage.includes('description')) {
+        this.claimError.set('Veuillez fournir une description pour votre demande.');
+      } else {
+        this.claimError.set('Impossible d\'envoyer la demande pour le moment.');
+      }
     } finally {
       this.isSubmittingClaim.set(false);
     }
@@ -300,5 +318,21 @@ export class SuccessSeason2Component implements OnInit {
       }
     }
     return total;
+  }
+
+  // Falling tickets animation data
+  getFallingTickets(): {pos: string; delay: string}[] {
+    const count = this.ticketCount();
+    if (count <= 0) return [];
+    
+    return Array.from({length: Math.min(count, 20)}, (_, i) => {
+      const side = Math.random() > 0.5 ? 'left' : 'right';
+      const distance = Math.random() * 30 + 10;
+      const delay = (Math.random() * 2).toFixed(1);
+      return {
+        pos: side === 'left' ? distance + '%' : 'calc(100% - ' + distance + '%)',
+        delay: delay + 's'
+      };
+    });
   }
 }

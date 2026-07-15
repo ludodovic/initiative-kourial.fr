@@ -95,6 +95,7 @@ export interface Season2UnlockResponse {
 export interface Season2SuccessClaimRequest {
   successId: number;
   successName: string;
+  successDescription: string;
   description: string;
   images?: File[];
 }
@@ -186,6 +187,7 @@ export class ApiService {
 
     formData.append('successId', String(request.successId));
     formData.append('successName', request.successName);
+    formData.append('successDescription', request.successDescription);
     formData.append('description', request.description);
 
     if (request.images) {
