@@ -1,0 +1,156 @@
+<div class="dungeon-wheel-page">
+  <h1>Roue des Donjons</h1>
+
+  <div *ngIf="isLoading()" class="loading">Chargement des donjons...</div>
+  <div *ngIf="error()" class="error">{{ error() }}</div>
+
+  <div class="wheel-container">
+    <!-- Left: Wheel -->
+    <div class="wheel-section">
+      <div class="wheel-wrapper">
+        <div 
+          class="wheel"
+          [style.transform]="'rotate(' + rotation() + 'deg)'"
+          (click)="spinWheel()"
+          [class.spinning]="isSpinning()"
+          [class.can-spin]="canSpin()"
+          [style.background]="getWheelBackground()"
+        ></div>
+        <div class="wheel-indicator">
+          <div class="indicator-arrow"></div>
+        </div>
+      </div>
+
+      <!-- Selected dungeon result -->
+      <div *ngIf="finalSelectedDungeon()" class="selected-result">
+        <h3>Donjon sélectionné : {{ finalSelectedDungeon()!.dungeon.name }}</h3>
+        <div class="boss-images">
+          <img 
+            *ngFor="let img of finalSelectedDungeon()!.dungeon.imgs"
+            [src]="getImageUrl(img)"
+            alt="Boss"
+            class="boss-img"
+          />
+        </div>
+      </div>
+      <div *ngIf="!finalSelectedDungeon() && selectedDungeons().length > 0" class="spin-hint">
+        Cliquez sur la roue pour la faire tourner !
+      </div>
+      <div *ngIf="selectedDungeons().length === 0" class="spin-hint">
+        Ajoutez des donjons pour commencer.
+      </div>
+    </div>
+
+    <!-- Right: Controls -->
+    <div class="controls-section">
+      <!-- Selected dungeons list -->
+      <div class="selected-dungeons">
+        <h3>Donjons sélectionnés</h3>
+        <div *ngIf="selectedDungeons().length === 0" class="empty-list">
+          Aucun donjon sélectionné.
+        </div>
+        <ul class="selected-list">
+          <li *ngFor="let sd of selectedDungeons()" class="selected-item">
+            <div class="item-content">
+              <div class="item-images">
+                <img 
+                  *ngFor="let img of sd.dungeon.imgs"
+                  [src]="getImageUrl(img)"
+                  alt="Boss"
+                  class="boss-img-small"
+                />
+              </div>
+              <span class="item-name">{{ sd.dungeon.name }}</span>
+              <span class="item-weight">x{{ sd.weight }}</span>
+            </div>
+            <button class="remove-btn" (click)="removeSelectedDungeon(sd.dungeon.name)">
+              &times;
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Dungeon picker -->
+      <div class="dungeon-picker">
+        <h3>Ajouter un donjon</h3>
+        
+        <div class="picker-input-wrapper">
+          <div class="dropdown-container">
+            <div 
+              class="dropdown-header"
+              (click)="toggleDropdown()"
+            >
+              <span *ngIf="!selectedDungeonForInput()">Sélectionner un donjon...</span>
+              <span *ngIf="selectedDungeonForInput()">
+                <div class="selected-dungeon-preview">
+                  <div class="preview-images">
+                    <img 
+                      *ngFor="let img of selectedDungeonForInput()!.imgs"
+                      [src]="getImageUrl(img)"
+                      alt="Boss"
+                      class="boss-img-small"
+                    />
+                  </div>
+                  {{ selectedDungeonForInput()!.name }}
+                </div>
+              </span>
+              <span class="dropdown-arrow">{{ dropdownOpen() ? '▲' : '▼' }}</span>
+            </div>
+            
+            <div 
+              class="dropdown-list"
+              [class.open]="dropdownOpen()"
+            >
+              <div class="dropdown-search">
+                <input 
+                  type="text"
+                  placeholder="Rechercher un donjon..."
+                  [ngModel]="searchQuery()"
+                  (ngModelChange)="setSearchQuery($event)"
+                  (focus)="dropdownOpen.set(true)"
+                />
+              </div>
+              <div class="dropdown-options">
+                <div 
+                  *ngFor="let dungeon of filteredDungeons()"
+                  class="dropdown-option"
+                  (click)="selectDungeonForInput(dungeon)"
+                >
+                  <div class="option-images">
+                    <img 
+                      *ngFor="let img of dungeon.imgs"
+                      [src]="getImageUrl(img)"
+                      alt="Boss"
+                      class="boss-img-small"
+                    />
+                  </div>
+                  <span class="option-name">{{ dungeon.name }}</span>
+                </div>
+                <div *ngIf="filteredDungeons().length === 0" class="no-results">
+                  Aucun donjon trouvé.
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <input 
+            type="number"
+            class="weight-input"
+            placeholder="Poids"
+            min="1"
+            [ngModel]="weightInput()"
+            (ngModelChange)="setWeightInput($event)"
+          />
+          
+          <button 
+            class="add-btn"
+            (click)="addDungeon()"
+            [disabled]="!selectedDungeonForInput() || !weightInput().trim()"
+          >
+            Ajouter
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

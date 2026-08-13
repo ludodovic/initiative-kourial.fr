@@ -40,5 +40,14 @@ export const NAVBAR_ITEMS: NavbarItem[] = [
   {
     name: 'Bibliotheque',
     link: '/library'
+  },
+  {
+    name: 'Outils',
+    children: [
+      {
+        name: 'Roue des donjons',
+        link: '/outils/roue-des-donjons'
+      }
+    ]
   }
 ];

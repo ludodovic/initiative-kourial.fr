@@ -1,0 +1,416 @@
+.dungeon-wheel-page {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.dungeon-wheel-page h1 {
+  color: #fff;
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 2rem;
+}
+
+.wheel-container {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.wheel-section {
+  flex: 1;
+  min-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.wheel-wrapper {
+  position: relative;
+  width: 400px;
+  height: 400px;
+  margin-bottom: 20px;
+}
+
+.wheel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 4px solid #333;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  background: #1a1a1a;
+  background-size: 100% 100%;
+}
+
+.wheel.spinning {
+  cursor: wait;
+}
+
+.wheel.can-spin:hover {
+  filter: brightness(1.1);
+}
+
+.wheel-indicator {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 40px;
+  z-index: 10;
+}
+
+.indicator-arrow {
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-top: 20px solid #ff0000;
+}
+
+.selected-result {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  min-width: 300px;
+  margin-top: 20px;
+}
+
+.selected-result h3 {
+  color: #fff;
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+}
+
+.boss-images {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.boss-img {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 2px solid #444;
+}
+
+.spin-hint {
+  color: #888;
+  text-align: center;
+  margin-top: 20px;
+  font-style: italic;
+}
+
+.controls-section {
+  flex: 1;
+  min-width: 350px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.selected-dungeons {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.selected-dungeons h3 {
+  color: #fff;
+  margin-bottom: 15px;
+  font-size: 1.1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 10px;
+}
+
+.empty-list {
+  color: #666;
+  text-align: center;
+  padding: 20px;
+  font-style: italic;
+}
+
+.selected-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.selected-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  margin-bottom: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.item-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.item-images {
+  display: flex;
+  gap: 5px;
+}
+
+.boss-img-small {
+  width: 30px;
+  height: 30px;
+  border-radius: 4px;
+  object-fit: cover;
+  border: 1px solid #444;
+}
+
+.item-name {
+  color: #fff;
+  font-size: 0.9rem;
+  flex: 1;
+}
+
+.item-weight {
+  color: #ffd700;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.remove-btn {
+  background: transparent;
+  border: none;
+  color: #ff4444;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0 5px;
+  line-height: 1;
+}
+
+.remove-btn:hover {
+  color: #ff0000;
+}
+
+.dungeon-picker {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.dungeon-picker h3 {
+  color: #fff;
+  margin-bottom: 15px;
+  font-size: 1.1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 10px;
+}
+
+.picker-input-wrapper {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.dropdown-container {
+  flex: 1;
+  position: relative;
+}
+
+.dropdown-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  cursor: pointer;
+  color: #fff;
+  min-height: 44px;
+}
+
+.dropdown-header:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.selected-dungeon-preview {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.preview-images {
+  display: flex;
+  gap: 5px;
+}
+
+.dropdown-arrow {
+  color: #888;
+  font-size: 0.8rem;
+}
+
+.dropdown-list {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  max-height: 300px;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, visibility 0.2s;
+  z-index: 100;
+}
+
+.dropdown-list.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.dropdown-search {
+  padding: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dropdown-search input {
+  width: 100%;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+.dropdown-search input:focus {
+  outline: none;
+  border-color: #ffd700;
+}
+
+.dropdown-search input::placeholder {
+  color: #666;
+}
+
+.dropdown-options {
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.dropdown-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  cursor: pointer;
+  color: #fff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.dropdown-option:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.dropdown-option .option-images {
+  display: flex;
+  gap: 5px;
+}
+
+.option-name {
+  font-size: 0.9rem;
+}
+
+.no-results {
+  padding: 15px;
+  color: #666;
+  text-align: center;
+  font-style: italic;
+}
+
+.weight-input {
+  width: 80px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.weight-input:focus {
+  outline: none;
+  border-color: #ffd700;
+}
+
+.weight-input::placeholder {
+  color: #666;
+}
+
+.add-btn {
+  padding: 10px 20px;
+  background: #ffd700;
+  border: none;
+  border-radius: 8px;
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+}
+
+.add-btn:hover:not(:disabled) {
+  background: #ffed4e;
+}
+
+.add-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.loading {
+  color: #ffd700;
+  text-align: center;
+  padding: 40px;
+  font-size: 1.2rem;
+}
+
+.error {
+  color: #ff4444;
+  text-align: center;
+  padding: 20px;
+  background: rgba(255, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}

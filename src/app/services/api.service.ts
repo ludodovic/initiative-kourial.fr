@@ -106,6 +106,11 @@ export interface Season2SuccessClaimResponse {
   message?: string;
 }
 
+export interface Dungeon {
+  name: string;
+  imgs: string[];
+}
+
 export interface SuccessLeaderboardEntry {
   dofus_username: string;
   totalPoints: number;
@@ -176,6 +181,23 @@ export class ApiService {
 
   getSeason2Successes(): Promise<Season2Success[]> {
     return firstValueFrom(this.http.get<Season2Success[]>(apiUrl('/api/succes2')));
+  }
+
+  async getDungeons(): Promise<Dungeon[]> {
+    const successes = await this.getSeason2Successes();
+    const dungeonMap = new Map<string, string[]>();
+    
+    for (const success of successes) {
+      if (!dungeonMap.has(success.donjon)) {
+        dungeonMap.set(success.donjon, []);
+      }
+      dungeonMap.get(success.donjon)!.push(...success.imgs);
+    }
+    
+    return Array.from(dungeonMap.entries()).map(([name, imgs]) => ({
+      name,
+      imgs: [...new Set(imgs)]
+    }));
   }
 
   getSeason2Unlocks(): Promise<Season2UnlockResponse> {

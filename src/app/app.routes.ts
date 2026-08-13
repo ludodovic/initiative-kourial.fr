@@ -66,6 +66,13 @@ export const routes: Routes = [
       )
   },
   {
+    path: 'outils/roue-des-donjons',
+    loadComponent: () =>
+      import('./pages/dungeon-wheel/dungeon-wheel.component').then(
+        (component) => component.DungeonWheelComponent
+      )
+  },
+  {
     path: '**',
     redirectTo: ''
   }
