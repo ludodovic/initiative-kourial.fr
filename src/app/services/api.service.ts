@@ -194,8 +194,8 @@ export class ApiService {
       dungeonMap.get(success.donjon)!.push(...success.imgs);
     }
     
-    return Array.from(dungeonMap.entries()).map(([name, imgs]) => ({
-      name,
+    return Array.from(dungeonMap.entries()).map(([donjon, imgs]) => ({
+      name: donjon,
       imgs: [...new Set(imgs)]
     }));
   }
