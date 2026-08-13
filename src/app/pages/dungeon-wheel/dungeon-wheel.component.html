@@ -16,6 +16,15 @@
           [class.can-spin]="canSpin()"
           [style.background]="getWheelBackground()"
         ></div>
+        <!-- Segment images -->
+        <div class="wheel-labels" [style.transform]="'rotate(' + rotation() + 'deg)'">
+          <div *ngFor="let segment of wheelSegments()" class="segment-label" [ngStyle]="getSegmentLabelStyle(segment)">
+            <img [src]="getImageUrl(segment.dungeon.imgs[0])" 
+                 alt="Boss" 
+                 class="segment-img" 
+                 *ngIf="segment.dungeon.imgs.length > 0" />
+          </div>
+        </div>
         <div class="wheel-indicator">
           <div class="indicator-arrow"></div>
         </div>
@@ -145,7 +154,7 @@
           <button 
             class="add-btn"
             (click)="addDungeon()"
-            [disabled]="!selectedDungeonForInput() || !weightInput().trim()"
+            [disabled]="!selectedDungeonForInput() || !((weightInput() || '') + '').trim()"
           >
             Ajouter
           </button>

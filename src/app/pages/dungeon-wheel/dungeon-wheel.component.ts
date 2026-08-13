@@ -1,5 +1,6 @@
 import { Component, OnInit, inject, signal, computed, effect } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { ApiService, Dungeon } from '../../services/api.service';
 
 interface SelectedDungeon {
@@ -18,7 +19,7 @@ interface WheelSegment {
 @Component({
   selector: 'app-dungeon-wheel',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './dungeon-wheel.component.html',
   styleUrl: './dungeon-wheel.component.css'
 })
@@ -130,13 +131,13 @@ export class DungeonWheelComponent implements OnInit {
     this.searchQuery.set(query);
   }
 
-  setWeightInput(value: string): void {
-    this.weightInput.set(value);
+  setWeightInput(value: string | number): void {
+    this.weightInput.set(String(value));
   }
 
   addDungeon(): void {
     const dungeon = this.selectedDungeonForInput();
-    const weightStr = this.weightInput().trim();
+    const weightStr = String(this.weightInput() || '').trim();
     
     if (!dungeon) return;
     
@@ -258,5 +259,16 @@ export class DungeonWheelComponent implements OnInit {
     ).join(', ');
     
     return `conic-gradient(from 0deg, ${colorStops})`;
+  }
+
+  // Get segment label style for displaying dungeon names on wheel
+  getSegmentLabelStyle(segment: WheelSegment): any {
+    const radius = 120; // Distance from center for labels
+    const midAngle = (segment.startAngle + segment.endAngle) / 2;
+    
+    // Rotate to face the segment direction, move outward, then unrotate to keep text horizontal
+    return {
+      transform: `rotate(${midAngle}deg) translateY(${-radius}px) rotate(${-midAngle}deg)`
+    };
   }
 }
