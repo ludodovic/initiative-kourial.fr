@@ -1,4 +1,5 @@
 import { Routes, UrlMatchResult, UrlSegment } from '@angular/router';
+import { companionDraftAccessGuard } from './guards/companion-draft-access.guard';
 
 export function libraryRouteMatcher(segments: UrlSegment[]): UrlMatchResult | null {
   if (segments[0]?.path !== 'library') {
@@ -70,6 +71,14 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/dungeon-wheel/dungeon-wheel.component').then(
         (component) => component.DungeonWheelComponent
+      )
+  },
+  {
+    path: 'outils/draft-compagnons',
+    canActivate: [companionDraftAccessGuard],
+    loadComponent: () =>
+      import('./pages/companion-draft/companion-draft.component').then(
+        (component) => component.CompanionDraftComponent
       )
   },
   {

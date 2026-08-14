@@ -2,7 +2,7 @@ import { Component, HostListener, OnInit, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 
 import { NAVBAR_ITEMS } from '../../config/navbar.config';
-import { ApiService, UserProfile } from '../../services/api.service';
+import { ApiService, CompanionDraftAccess, UserProfile } from '../../services/api.service';
 import { AuthTokenService } from '../../services/auth-token.service';
 
 interface DofusClassOption {
@@ -47,6 +47,7 @@ export class NavbarComponent implements OnInit {
   readonly items = NAVBAR_ITEMS;
   readonly classOptions = DOFUS_CLASSES;
   readonly user = signal<UserProfile | null>(null);
+  readonly companionDraftAccess = signal<CompanionDraftAccess | null>(null);
   readonly selectedClass = signal<DofusClassOption | null>(null);
   readonly isClassMenuOpen = signal(false);
   readonly openNavMenu = signal<string | null>(null);
@@ -59,9 +60,11 @@ export class NavbarComponent implements OnInit {
 
     try {
       this.setUser(await this.apiService.getUser());
+      this.companionDraftAccess.set(await this.apiService.getCompanionDraftAccess());
     } catch {
       this.user.set(null);
       this.selectedClass.set(null);
+      this.companionDraftAccess.set(null);
     }
   }
 
@@ -98,6 +101,13 @@ export class NavbarComponent implements OnInit {
     }));
   }
 
+  canShowItem(adminOnly: boolean | undefined, draftAccess = false): boolean {
+    if (draftAccess) {
+      return this.companionDraftAccess()?.canAccessPage === true;
+    }
+    return !adminOnly || this.companionDraftAccess()?.isAdmin === true;
+  }
+
   async selectClass(option: DofusClassOption): Promise<void> {
     if (this.isUpdatingClass()) {
       return;
@@ -113,6 +123,15 @@ export class NavbarComponent implements OnInit {
     } finally {
       this.isUpdatingClass.set(false);
     }
+  }
+
+  async logout(): Promise<void> {
+    this.authTokenService.clearToken();
+    this.user.set(null);
+    this.selectedClass.set(null);
+    this.companionDraftAccess.set(null);
+    this.isClassMenuOpen.set(false);
+    await this.router.navigateByUrl('/');
   }
 
   private setUser(user: UserProfile): void {
