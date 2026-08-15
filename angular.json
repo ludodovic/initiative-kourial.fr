@@ -67,6 +67,11 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
+          "options": {
+            "allowedHosts": [
+              "initiative-kourial.fr"
+            ]
+          },
           "configurations": {
             "production": {
               "buildTarget": "initiative-kourial:build:production"
