@@ -135,6 +135,7 @@ export interface CompanionDraftUser {
 
 export interface CompanionDraftTeam {
   id: string;
+  tournamentTeamId?: string;
   name: string;
   users: CompanionDraftUser[];
 }
@@ -150,6 +151,13 @@ export interface CompanionDraftCompanion {
   teamId?: string;
 }
 
+export interface CompanionDraftAction {
+  sequence: number;
+  type: CompanionDraftActionType;
+  teamId: string;
+  companionId: number;
+}
+
 export interface CompanionDraftState {
   id: string;
   status: string;
@@ -158,6 +166,7 @@ export interface CompanionDraftState {
   currentTeam: string | null;
   teams: CompanionDraftTeam[];
   companions: CompanionDraftCompanion[];
+  actions: CompanionDraftAction[];
   currentTurnLabel: string;
   coinToss: string | null;
   canCoinToss: boolean;

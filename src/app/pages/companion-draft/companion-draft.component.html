@@ -1,5 +1,15 @@
 <main class="draft-page">
-  <header class="draft-header"><div><span>Outils de guilde</span><h1>Tournoi compagnons</h1></div></header>
+  <header class="draft-header" [class.draft-header--active]="selectedTournament()?.status === 'active'">
+    <div><span>Outils de guilde</span><h1>Tournoi compagnons</h1>@if (selectedTournament(); as tournament) { @if (tournament.status === 'active') { <small>{{ tournament.name }}</small> } }</div>
+    @if (selectedTournament()?.status === 'active') { @if (activeDraft(); as draft) {
+      <strong class="draft-header__turn" aria-live="polite">{{ draft.currentTurnLabel }}</strong>
+      <div class="draft-header__actions">
+        @if (draft.coinToss) { <span class="coin-result">Tirage: {{ draft.coinToss }}</span> }
+        @else { <button class="button button--gold" type="button" [disabled]="!draft.canCoinToss || isSubmitting()" (click)="tossCoin()">Lancer la pièce</button> }
+        @if (isAdmin()) { <button class="button button--outline" type="button" [disabled]="isSubmitting()" (click)="resetTournament()">Retour aux équipes</button><button class="button button--outline" type="button" [disabled]="isSubmitting()" (click)="resetDraft()">Réinitialiser</button> }
+      </div>
+    } }
+  </header>
 
   @if (isLoading()) {
     <section class="draft-state">Chargement des tournois...</section>
@@ -7,10 +17,9 @@
     <section class="draft-state draft-state--error" role="alert">{{ message }}</section>
   } @else if (selectedTournament(); as tournament) {
     <section class="tournament-shell">
-      <div class="tournament-summary">
-        <div><span class="draft-status">{{ tournament.status === 'registration' ? 'Étape 1 · Inscriptions' : tournament.status === 'team_building' ? 'Étape 2 · Équipes' : tournament.status === 'active' ? 'Étape 3 · Matchs' : 'Terminé' }}</span><h2>{{ tournament.name }}</h2></div>
-        @if (isAdmin() && tournament.status === 'active') { <div class="tournament-summary__actions"><button class="button button--outline" type="button" [disabled]="isSubmitting()" (click)="resetTournament()">Retour aux équipes</button></div> }
-      </div>
+      @if (tournament.status !== 'active') { <div class="tournament-summary">
+        <div><span class="draft-status">{{ tournament.status === 'registration' ? 'Étape 1 · Inscriptions' : tournament.status === 'team_building' ? 'Étape 2 · Équipes' : 'Terminé' }}</span><h2>{{ tournament.name }}</h2></div>
+      </div> }
       @if (actionError(); as message) { <p class="action-error" role="alert">{{ message }}</p> }
 
       @if (tournament.status === 'registration') {
@@ -36,12 +45,8 @@
         @if (!isDraftInProgress()) {
           <section class="bracket" aria-label="Arbre du tournoi">@for (round of tournament.rounds; track round.number) { <div class="bracket-round"><h3>{{ round.number === tournament.rounds.length ? 'Finale' : round.number === 1 ? 'Premier tour' : 'Demi-finales' }}</h3><div class="bracket-round__matches">@for (match of round.matches; track match.matchId) { <article class="bracket-match" [class.bracket-match--active]="currentMatch()?.matchId === match.matchId" [class.bracket-match--complete]="match.resultStatus === 'complete' || match.resultStatus === 'bye'">@for (teamId of match.teamIds; track $index) { <span [class.bracket-match__winner]="match.winnerTeamId === teamId">{{ teamNameForId(teamId) }}</span> }<small>{{ match.resultStatus === 'bye' ? 'Exempt' : match.resultStatus === 'complete' ? 'Terminé' : match.draft?.currentTurnLabel || 'En attente' }}</small></article> }</div></div> }</section>
         }
-        @if (isDraftInProgress() && activeDraft(); as draft) {
-          <section class="draft-arena"><div class="draft-toolbar"><div><span class="draft-status">Match actif</span><h2>{{ draft.currentTurnLabel }}</h2></div><div class="draft-toolbar__actions">@if (draft.coinToss) { <span class="coin-result">Tirage: {{ draft.coinToss }}</span> } @else { <button class="button button--gold" type="button" [disabled]="!draft.canCoinToss || isSubmitting()" (click)="tossCoin()">Lancer la pièce</button> } @if (isAdmin()) { <button class="button button--outline" type="button" [disabled]="isSubmitting()" (click)="resetDraft()">Réinitialiser</button> }</div></div>
-            <section class="draft-timeline">@for (step of [{ id: 'coin_toss', label: 'Tirage' }, { id: 'ban', label: 'Bannissements' }, { id: 'pick', label: 'Choix' }, { id: 'result', label: 'Résultat' }]; track step.id) { <div class="timeline-step" [ngClass]="'timeline-step--' + phaseState($any(step.id))"><span>{{ phaseState($any(step.id)) === 'done' ? '✓' : $index + 1 }}</span><strong>{{ step.label }}</strong></div> }</section>
-            <div class="timeline-teams">@for (team of draft.teams; track team.id) { <article class="team-panel" [class.team-panel--active]="draft.currentTeam === team.id"><span class="team-panel__label">{{ team.name }}</span><div class="team-panel__players">@for (player of team.users; track player.id) { <span>{{ player.dofus_username }}</span> }</div><div class="pick-slots">@for (companion of draft.companions; track companion.id) { @if (companion.teamId === team.id) { <span>{{ companion.name }}</span> } }</div></article> }</div>
-            <input class="search-field companion-search" type="search" placeholder="Rechercher un compagnon" [value]="companionSearch()" (input)="setCompanionSearch($any($event.target).value)"><section class="companion-board">@for (companion of visibleCompanions(); track companion.id) { <article class="companion-card" [ngClass]="'companion-card--' + companion.status"><div class="companion-card__portrait">@if (cardImage(companion); as image) { <img [src]="image" [alt]="companion.name" (error)="markImageFailed(companion.id)"> } @else { <span>{{ companion.name.slice(0, 1) }}</span> }</div><div class="companion-card__body"><h3>{{ companion.name }}</h3><span>{{ companion.status === 'available' ? 'Disponible' : companion.status === 'banned' ? 'Banni' : 'Choisi' }}</span></div>@if (companion.status === 'available' && draft.canAct) { <button class="card-action" [class.card-action--ban]="draft.phase === 'ban'" type="button" [disabled]="isSubmitting()" (click)="performAction(companion, $any(draft.phase))">{{ draft.phase === 'ban' ? 'Bannir' : 'Choisir' }}</button> }</article> } @empty { <p>Aucun compagnon correspondant.</p> }</section>
-          </section>
+        @if (activeDraft(); as draft) {
+          <app-draft-arena [draft]="draft" [search]="companionSearch()" [isSubmitting]="isSubmitting()" (searchChange)="setCompanionSearch($event)" (action)="performAction($event.companion, $event.action)" />
         }
         @if (currentMatch(); as match) { @if (!isDraftInProgress() && match.resultStatus === 'ready' && isAdmin()) { <section class="winner-panel"><h3>Enregistrer le vainqueur</h3><div>@for (teamId of match.teamIds; track teamId) { @if (teamId) { <button class="button button--create" type="button" (click)="recordWinner(teamId)">{{ teamNameForId(teamId) }}</button> } }</div></section> } }
       }

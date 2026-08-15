@@ -1,16 +1,16 @@
 import { Component, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { NgClass } from '@angular/common';
 
 import {
   ApiService, CompanionDraftAccess, CompanionDraftActionType, CompanionDraftCompanion,
   CompanionDraftState, CompanionDraftUser, CompanionTournamentFormat,
   CompanionTournamentMatch, CompanionTournamentState,
 } from '../../services/api.service';
+import { DraftArenaComponent } from './draft-arena.component';
 
 @Component({
   selector: 'app-companion-draft',
-  imports: [NgClass],
+  imports: [DraftArenaComponent],
   templateUrl: './companion-draft.component.html',
   styleUrl: './companion-draft.component.css'
 })
@@ -30,7 +30,6 @@ export class CompanionDraftComponent implements OnInit, OnDestroy {
   readonly teamParticipantIds = signal<number[]>([]);
   readonly userSearch = signal('');
   readonly companionSearch = signal('');
-  readonly failedImages = signal<Set<number>>(new Set());
   readonly isLoading = signal(true);
   readonly isSubmitting = signal(false);
   readonly error = signal<string | null>(null);
@@ -67,9 +66,6 @@ export class CompanionDraftComponent implements OnInit, OnDestroy {
     return tournament.teams.length >= (tournament.format === 'single_match' ? 2 : 4)
       && tournament.teams.length * tournament.teamSize === tournament.registeredParticipants.length;
   });
-  readonly visibleCompanions = computed(() => this.activeDraft()?.companions.filter(
-    (companion) => this.normalize(companion.name).includes(this.normalize(this.companionSearch()))
-  ) ?? []);
   readonly canSaveTeam = computed(() => this.teamName().trim().length > 0 && this.teamParticipantIds().length === this.selectedTournament()?.teamSize);
 
   async ngOnInit(): Promise<void> {
@@ -179,18 +175,7 @@ export class CompanionDraftComponent implements OnInit, OnDestroy {
     await this.runTournamentMutation(() => this.apiService.recordCompanionTournamentWinner(tournament.id, match.matchId, teamId, tournament.version));
   }
 
-  cardImage(companion: CompanionDraftCompanion): string | null { return this.failedImages().has(companion.id) ? null : companion.image?.trim() || null; }
-  markImageFailed(id: number): void { this.failedImages.update((failed) => new Set(failed).add(id)); }
   isTeamParticipant(userId: number): boolean { return this.teamParticipantIds().includes(userId); }
-
-  phaseState(step: 'coin_toss' | 'ban' | 'pick' | 'result'): 'done' | 'current' | 'future' {
-    const draft = this.activeDraft(); const match = this.currentMatch();
-    if (!draft || !match) return 'future';
-    if (step === 'coin_toss') return draft.phase === 'coin_toss' ? 'current' : 'done';
-    if (step === 'ban') return draft.phase === 'coin_toss' ? 'future' : draft.phase === 'ban' ? 'current' : 'done';
-    if (step === 'pick') return draft.phase === 'coin_toss' || draft.phase === 'ban' ? 'future' : draft.phase === 'pick' ? 'current' : 'done';
-    return match.resultStatus === 'complete' ? 'done' : draft.phase === 'complete' ? 'current' : 'future';
-  }
 
   teamNameForId(teamId: string | null): string { return this.selectedTournament()?.teams.find((team) => team.teamId === teamId)?.name ?? 'À déterminer'; }
 
@@ -225,7 +210,11 @@ export class CompanionDraftComponent implements OnInit, OnDestroy {
 
   private async updateDraft(request: () => Promise<CompanionDraftState>): Promise<void> {
     this.stateEpoch += 1; this.isSubmitting.set(true); this.actionError.set(null);
-    try { await request(); await this.refreshAfterMutation(); } catch (error: unknown) { this.actionError.set(this.errorMessage(error, 'Action refusée par le serveur.')); } finally { this.isSubmitting.set(false); }
+    try {
+      this.replaceDraft(await request());
+      await this.refreshAfterMutation();
+    } catch (error: unknown) { this.actionError.set(this.errorMessage(error, 'Action refusée par le serveur.')); }
+    finally { this.isSubmitting.set(false); }
   }
 
   private async runTournamentMutation(request: () => Promise<CompanionTournamentState>, selectNew = false, clearTeam = false): Promise<void> {
@@ -240,7 +229,16 @@ export class CompanionDraftComponent implements OnInit, OnDestroy {
   }
 
   private clearTeamDraft(): void { this.teamName.set(''); this.teamParticipantIds.set([]); }
-  private clearPhaseState(): void { this.clearTeamDraft(); this.userSearch.set(''); this.companionSearch.set(''); this.failedImages.set(new Set()); this.actionError.set(null); }
+  private replaceDraft(draft: CompanionDraftState): void {
+    this.tournaments.update((tournaments) => tournaments.map((tournament) => ({
+      ...tournament,
+      rounds: tournament.rounds.map((round) => ({
+        ...round,
+        matches: round.matches.map((match) => match.draft?.id === draft.id ? { ...match, draft } : match),
+      })),
+    })));
+  }
+  private clearPhaseState(): void { this.clearTeamDraft(); this.userSearch.set(''); this.companionSearch.set(''); this.actionError.set(null); }
   private scheduleRefresh(): void {
     if (!this.pollTimer) this.pollTimer = setTimeout(() => { this.pollTimer = null; void this.refresh(); }, 4_000);
   }
