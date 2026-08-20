@@ -1,0 +1,42 @@
+<section class="draft-arena">
+  <div class="draft-stage" [class.draft-stage--team-b-turn]="draft().currentTeam === 'B'">
+    @for (team of draft().teams; track team.id) {
+      <aside class="draft-team" [class.draft-team--active]="draft().currentTeam === team.id" [class.draft-team--right]="team.id === 'B'">
+        <header><span>{{ team.id === 'A' ? 'Côté bleu' : 'Côté violet' }}</span><h3>{{ team.name }}</h3></header>
+        <div class="draft-team__players">@for (player of team.users; track player.id) { <span>{{ player.dofus_username }}</span> }</div>
+        <section class="team-collection"><h4>Choix</h4><div class="team-cards">@for (companion of actionsFor(team, 'pick'); track companion.id) { <div class="team-card"><img [src]="cardImage(companion)" [alt]="companion.name" (error)="markImageFailed(companion.id)"><span>{{ companion.name }}</span></div> } @for (slot of [0, 1]; track slot) { @if (actionsFor(team, 'pick').length <= slot) { <div class="team-card team-card--empty">?</div> } }</div></section>
+        <section class="team-collection"><h4>Bannissements</h4><div class="team-cards">@for (companion of actionsFor(team, 'ban'); track companion.id) { <div class="team-card team-card--ban"><img [src]="cardImage(companion)" [alt]="companion.name" (error)="markImageFailed(companion.id)"><b aria-hidden="true">×</b><span>{{ companion.name }}</span></div> } @for (slot of [0, 1]; track slot) { @if (actionsFor(team, 'ban').length <= slot) { <div class="team-card team-card--empty">?</div> } }</div></section>
+      </aside>
+    }
+
+    <section class="companion-pool" aria-label="Choix des compagnons">
+      <label class="companion-search"><span>Rechercher un compagnon</span><input class="search-field" type="search" placeholder="Nom du compagnon" [value]="search()" (input)="onSearch($any($event.target).value)"></label>
+      <p class="pool-count">{{ visibleCompanions().length }} compagnon{{ visibleCompanions().length > 1 ? 's' : '' }}</p>
+      <div class="companion-board">
+        @for (companion of visibleCompanions(); track companion.id) {
+          <article class="companion-card" [ngClass]="'companion-card--' + companion.status">
+            <div class="companion-card__portrait">
+              @if (cardImage(companion); as image) { <img [src]="image" [alt]="companion.name" loading="lazy" decoding="async" (error)="markImageFailed(companion.id)"> }
+              @else { <span>{{ companion.name.slice(0, 1) }}</span> }
+              @if (companion.status === 'banned') { <b class="companion-card__mark" aria-hidden="true">×</b> }
+              @if (companion.status !== 'available') { <strong class="companion-card__state">{{ companion.status === 'banned' ? 'Banni' : 'Choisi' }}</strong> }
+            </div>
+            <div class="companion-card__body"><h3>{{ companion.name }}</h3><span>{{ companion.status === 'available' ? 'Disponible' : companion.status === 'banned' ? 'Banni' : 'Choisi' }}</span></div>
+            @if (companion.status === 'available' && draft().canAct && (draft().phase === 'ban' || draft().phase === 'pick')) { <button class="card-action" [class.card-action--ban]="draft().phase === 'ban'" type="button" [disabled]="isSubmitting()" (click)="emitAction(companion)">{{ actionLabel($any(draft().phase)) }}</button> }
+          </article>
+        } @empty { <p class="pool-empty">Aucun compagnon correspondant.</p> }
+      </div>
+    </section>
+
+    @if (reveal(); as event) {
+      <div class="draft-reveal" aria-live="polite" aria-atomic="true">
+        <div class="draft-reveal__card" [class.draft-reveal__card--ban]="event.action.type === 'ban'">
+          <span>{{ event.action.type === 'ban' ? 'Bannissement' : 'Choix' }} · {{ teamName(event.action.teamId) }}</span>
+          <img [src]="cardImage(event.companion)" [alt]="event.companion.name">
+          @if (event.action.type === 'ban') { <b aria-hidden="true">×</b> }
+          <strong>{{ event.companion.name }}</strong>
+        </div>
+      </div>
+    }
+  </div>
+</section>

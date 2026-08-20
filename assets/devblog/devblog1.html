@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8" />
+    <title>
+    </title>
+    <style>
+        body {
+            line-height: 115%;
+            font-family: Arial;
+            font-size: 11pt
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        p {
+            margin: 0pt
+        }
+
+        h1 {
+            margin-top: 20pt;
+            margin-bottom: 6pt;
+            page-break-before: auto;
+            page-break-inside: avoid;
+            page-break-after: avoid;
+            line-height: 115%;
+            font-family: Arial;
+            font-size: 20pt;
+            font-weight: normal;
+            color: #000000
+        }
+
+        h2 {
+            margin-top: 18pt;
+            margin-bottom: 6pt;
+            page-break-before: auto;
+            page-break-inside: avoid;
+            page-break-after: avoid;
+            line-height: 115%;
+            font-family: Arial;
+            font-size: 16pt;
+            font-weight: normal;
+            color: #000000
+        }
+
+        h3 {
+            margin-top: 16pt;
+            margin-bottom: 4pt;
+            page-break-before: auto;
+            page-break-inside: avoid;
+            page-break-after: avoid;
+            line-height: 115%;
+            font-family: Arial;
+            font-size: 14pt;
+            font-weight: normal;
+            color: #434343
+        }
+
+        h4 {
+            margin-top: 14pt;
+            margin-bottom: 4pt;
+            page-break-before: auto;
+            page-break-inside: avoid;
+            page-break-after: avoid;
+            line-height: 115%;
+            font-family: Arial;
+            font-size: 12pt;
+            font-weight: normal;
+            font-style: normal;
+            color: #666666
+        }
+
+        h5 {
+            margin-top: 12pt;
+            margin-bottom: 4pt;
+            page-break-before: auto;
+            page-break-inside: avoid;
+            page-break-after: avoid;
+            line-height: 115%;
+            font-family: Arial;
+            font-size: 11pt;
+            font-weight: normal;
+            color: #666666
+        }
+
+        h6 {
+            margin-top: 12pt;
+            margin-bottom: 4pt;
+            page-break-before: auto;
+            page-break-inside: avoid;
+            page-break-after: avoid;
+            line-height: 115%;
+            font-family: Arial;
+            font-size: 11pt;
+            font-weight: normal;
+            font-style: italic;
+            color: #666666
+        }
+
+        .Subtitle {
+            margin-top: 0pt;
+            margin-bottom: 16pt;
+            page-break-before: auto;
+            page-break-inside: avoid;
+            page-break-after: avoid;
+            line-height: 115%;
+            font-family: Arial;
+            font-size: 15pt;
+            font-style: normal;
+            color: #666666
+        }
+
+        .Title {
+            margin-top: 0pt;
+            margin-bottom: 3pt;
+            page-break-before: auto;
+            page-break-inside: avoid;
+            page-break-after: avoid;
+            line-height: 115%;
+            font-size: 26pt
+        }
+
+        @media (max-width: 900px) {
+            img {
+                max-width: 100%;
+                height: auto;
+            }
+
+            .table-container {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+            td,
+            th {
+                padding: 8px;
+                text-align: left;
+                border: 1px solid #ddd;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <p style="line-height:115%; font-size:17pt">
+        <strong><span style="color:#a535bd">Succès Initiative - Saison 2</span></strong>
+    </p>
+    <p>
+        &#xa0;
+    </p>
+    <p>
+        Bonjour à tous ! Premier Devblog qu'on vous propose sur le site, il vous donnera un max de détails sur la saison
+        2 des succès. On va commencer par une date de sortie : le mardi 7 juillet 2026, à l'ouverture des serveurs ! Le
+        calendrier d'Initiative s'accorde au mieux possible avec le calendrier de l'année de célébration Ankama. Et on
+        suit, comme on le peut, la guideline de la saison Ocre : la mémoire. On vous propose donc de vous remémorer le
+        contenu qui a fait l'âme du jeu : <span style="text-decoration:line-through">les quêtes d'alignement</span>
+        <strong><span style="color:#a535bd">les Donjons</span></strong>. Ces succès se rajouteront à une nouvelle liste
+        de succès classiques, qui, elle, n'a pas encore été définie. À l'heure actuelle, la feature côté donjons est
+        quasiment entièrement préparée, et n'a presque besoin que d'être implémentée sur le site.
+    </p>
+    <p>
+        &#xa0;
+    </p>
+    <p>
+        Si vous aimez lire, ou que vous voulez un max de détails sur les infos, je vous invite à lire la suite. Pour les
+        analphabètes et les feignasses, un (joli ?) visuel est disponible en page d'accueil du site et dans le canal
+        #évènements du Discord.
+    </p>
+    <p>
+        &#xa0;
+    </p>
+    <p style="line-height:115%; font-size:14pt">
+        <u><span style="color:#a535bd">Partie 1 - Les succès de donjons</span></u>
+    </p>
+    <p>
+        &#xa0;
+    </p>
+    <p>
+        Si vous êtes un peu comme moi (et que vous avez vécu la MàJ qui a supprimé les idoles du jeu), vous avez été
+        hypés par la sortie des succès de type <u>[Spécial]</u> sur les donjons. Notre focus se fera donc sur notre
+        façon de revisiter les succès spéciaux. Ainsi, pour chaque donjon - (remarquez que j'utilise un tiret et pas un
+        em-dash parce que je suis une feignasse mais qu'au moins on voit que je rédige pas avec une IA) oui oui, chaque
+        donjon, de Kardorim jusqu'à Cire Momore - en jeu, nous vous proposons un nouveau succès unique, <strong><span
+                style="color:#a535bd">soit 121 nouveaux succès</span></strong>. Mais contrairement aux succès en jeu,
+        qui sont adaptés au niveau du donjon, les succès sont, autant que possible, échelonnés pour des joueurs de
+        niveau 200. Ils ont tous été évalués sur une échelle allant de 1 à 5 étoiles de difficulté, allant du
+        quasi-trivial pour 1 étoile, à la nécessité de theorycraft de zinzin pour 5 étoiles.
+    </p>
+    <p>
+        &#xa0;
+    </p>
+    <p>
+        Pour les créer, nous nous sommes, le plus possible, appuyés sur les mécaniques proposées par chaque donjon. Les
+        joueurs contournent trop une mécanique (coucou Servitude) ? On force à l'utiliser. Un boss a un effet déclenché
+        surpuissant ? On force à l'activer. Globalement, le but est de rendre chaque combat plus difficile. Quoi de
+        mieux que des exemples pour illustrer ? En voici quelques uns :
+    </p>
+    <p>
+        - <u>Ben oué sinon ils rejouent en fait</u> : Les ennemis dans l'état "Même heure" doivent être dans l'état
+        Nécronyx avant d'être achevés (<span style="color:#9900ff">★★★★★</span>)
+    </p>
+    <p>
+        - <u>Royautélémentaire</u> : Les alliés ne peuvent infliger que des dégâts dans l'élément du Blop Royal
+        affronté. Les ennemis ne doivent pas subir de dommages de poussée (<span style="color:#9900ff">★★</span>)
+    </p>
+    <p>
+        - <u>Mars atticks</u> : Les alliés ne doivent ni infliger de dégâts indirects, ni attaquer les invocations du
+        Pounicheur (<span style="color:#9900ff">★★★</span>)
+    </p>
+    <p>
+        &#xa0;
+    </p>
+    <p>
+        Parlons de la première question qui va vous venir en tête.
+    </p>
+    <p>
+        &#xa0;
+    </p>
+    <p style="line-height:115%; font-size:14pt">
+        <u><span style="color:#a535bd">Partie 2 - La vérification</span></u>
+    </p>
+    <p>
+        &#xa0;
+    </p>
+    <p>
+        Si vous avez un peu imaginé à quoi ressemblent les combats, vous remarquez directement qu'un simple screen
+        suffira rarement à vérifier que vous avez respecté les règles pendant toute la durée du combat. C'est pourquoi
+        on vous propose deux façons de vérifier que votre combat est valide. La première, la plus chiante techniquement,
+        sera de filmer votre combat en entier. Je me chargerai moi-même de review, dans un délai raisonnable, chaque
+        demande de cette façon. Mais on se le cache pas, c'est pas très pratique. La deuxième solution sera, la plupart
+        du temps, bien plus appropriée : un système d'assesseurs. Nous dresserons une liste de <strong><span
+                style="color:#9900ff">volontaires</span></strong> en qui nous avons confiance. Vous pourrez valider un
+        succès si un de ces volontaires <strong><span style="color:#9900ff">participe au combat, le suit en mode
+                spectateur, ou le regarde en stream Discord</span></strong>.
+    </p>
+    <p>
+        &#xa0;
+    </p>
+    <p>
+        Ces assesseurs auront bien entendu l'obligation d'être honnête, et toute <strong><span
+                style="color:#9900ff">fraude volontaire</span></strong> (on saura reconnaître une erreur honnête d'une
+        tentative de baise) sera bien entendu sanctionnée. N'hésitez pas à glisser dans les MP d'un membre du Conseil si
+        vous êtes intéressé par le rôle d'assesseur (rôle Assemblée nécessaire pour candidater) ! Mais d'ailleurs,
+        pourquoi devenir assesseur ?
+    </p>
+    <p>
+        &#xa0;
+    </p>
+    <p style="line-height:115%; font-size:14pt">
+        <u><span style="color:#a535bd">Partie 3 - La tombola</span></u>
+    </p>
+    <p>
+        &#xa0;
+    </p>
+    <p>
+        Ben ouais, Ankama propose une grande tombola à chaque fin de saison. Alors, au moins pour la saison Ocre, nous
+        aussi. Et là, il y a pas mal de choses à dire. Commençons par parler lots ! Le Conseil propose, de sa propre
+        <strong><em><span style="color:#9900ff">Initiative™</span></em></strong>, quelques lots (liste à définir, mais
+        déjà, je vous garantis une Légende de Milles Lieues dans le tas). Chaque membre de la guilde peut, s'il le
+        souhaite, ajouter un ou plusieurs lots, en passant par les MP d'un membre du Conseil. Lors de la tombola, nous
+        tirerons autant de tickets qu'il y a de lots à gagner. Et tout le monde aura sa chance !
+    </p>
+    <p>
+        &#xa0;
+    </p>
+    <p>
+        Maintenant, vous vous demandez sûrement comment gagner des tickets. Si vous avez au moins quelques neurones,
+        vous vous en doutez, vous obtiendrez des tickets à chaque fois que vous validerez un succès. Et des tickets,
+        vous pouvez en obtenir beaucoup (vous voyez le tirage au sort dans Hunger Games, où certains gosses avaient
+        genre 10 tickets pour que leur famille ait plus de bouffe, ben là c'est pareil) !
+    </p>
+    <p>
+        Pour chaque succès réalisé, vous obtiendrez, à votre nom, autant de tickets que le nombre d'étoiles de
+        difficulté du succès. Et c'est pas tout ! La première équipe à réaliser un succès obtiendra 5 tickets bonus par
+        membre, la deuxième équipe en obtiendra 3, et la troisième équipe en obtiendra 1. À partir de la quatrième
+        équipe, il n'y aura plus de tickets bonus, que des tickets en fonction de la difficulté. À noter que les membres
+        du Conseil, connaissant à l'avance la liste des succès, ne seront pas éligibles aux tickets bonus.
+    </p>
+    <p>
+        &#xa0;
+    </p>
+    <p>
+        Dans l'état actuel des choses, je compte <strong><span style="color:#9900ff">371 tickets récupérables par
+                personne</span></strong>, sans compter les tickets bonus ! Pour ce qui est des succès classiques, ils ne
+        permettront pas (pour la plupart !) d'obtenir de tickets de tombola.
+    </p>
+    <p>
+        &#xa0;
+    </p>
+    <p>
+        &#xa0;
+    </p>
+    <p>
+        Voilà voilà, c’est tout pour aujourd’hui, j’espère que la feature vous plaira, qu’on passera de bons moments
+        ensemble à faire des donjons difficiles, et que vous gagnerez plein de jolis lots !
+    </p>
+    <p>
+        &#xa0;
+    </p>
+    <p style="margin-left:72pt; text-align:right; line-height:115%; font-size:12pt">
+        <em><span style="color:#9900ff">Mynni</span></em>
+    </p>
+    <p>
+        &#xa0;
+    </p>
+</body>
+
+</html>

@@ -1,0 +1,28 @@
+<main class="devblog">
+  <header class="devblog__hero">
+    <div>
+      <p class="devblog__eyebrow">Le Mynni Blog</p>
+      <h1>Articles du DevBlog</h1>
+      <p>Retrouvez tous les articles du DevBlog Initiative, rédigés par Mynni et l'équipe.</p>
+    </div>
+  </header>
+
+  @if (isLoading()) {
+    <p class="devblog__state">Chargement des articles...</p>
+  } @else if (error()) {
+    <p class="devblog__state devblog__state--error">{{ error() }}</p>
+  } @else if (devblogs().length === 0) {
+    <p class="devblog__state">Aucun article disponible pour le moment.</p>
+  } @else {
+    <div class="devblog__list">
+      @for (blog of devblogs(); track blog.id) {
+        <article class="devblog__item">
+          <a [routerLink]="'/devblog/' + blog.id" class="devblog__link">
+            <h2 class="devblog__title">{{ blog.content }}</h2>
+            <span class="devblog__arrow">→</span>
+          </a>
+        </article>
+      }
+    </div>
+  }
+</main>

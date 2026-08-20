@@ -1,0 +1,95 @@
+<nav class="navbar" aria-label="Main navigation">
+  <a class="navbar__brand" routerLink="/">
+    <span class="navbar__crest" aria-hidden="true">
+      <img src="/assets/blason_initiative.png" alt="">
+    </span>
+    <span class="navbar__brand-text">
+      <span class="navbar__brand-name">{{ guildName }}</span>
+      <span class="navbar__brand-realm">Kourial</span>
+    </span>
+  </a>
+
+  <div class="navbar__right">
+    <div class="navbar__links">
+      @for (item of items; track item.name) {
+        @if (canShowItem(item.adminOnly, item.draftAccess) && item.children?.length) {
+          <div class="navbar-menu">
+            <button
+              class="navbar__link navbar-menu__trigger"
+              type="button"
+              [class.navbar__link--active]="isNavGroupActive(item.children!.map(child => child.link))"
+              [attr.aria-expanded]="openNavMenu() === item.name"
+              aria-haspopup="menu"
+              (click)="toggleNavMenu(item.name)"
+            >
+              {{ item.name }}
+            </button>
+
+            @if (openNavMenu() === item.name) {
+              <div class="navbar-menu__panel" role="menu" [attr.aria-label]="item.name">
+                @for (child of item.children; track child.link) {
+                  @if (canShowItem(child.adminOnly, child.draftAccess)) {
+                    <a
+                      class="navbar-menu__item"
+                      role="menuitem"
+                      [routerLink]="child.link"
+                      routerLinkActive="navbar-menu__item--active"
+                      (click)="closeNavMenu()"
+                    >
+                      {{ child.name }}
+                    </a>
+                  }
+                }
+              </div>
+            }
+          </div>
+        } @else if (canShowItem(item.adminOnly, item.draftAccess) && item.link) {
+          <a
+            class="navbar__link"
+            [routerLink]="item.link"
+            routerLinkActive="navbar__link--active"
+            [routerLinkActiveOptions]="{ exact: item.link === '/' }"
+          >
+            {{ item.name }}
+          </a>
+        }
+      }
+    </div>
+
+    @if (user(); as currentUser) {
+      <div class="navbar-user">
+        <button
+          class="navbar-user__trigger"
+          type="button"
+          [attr.aria-expanded]="isClassMenuOpen()"
+          aria-haspopup="menu"
+          (click)="toggleClassMenu()"
+        >
+          @if (selectedClass(); as currentClass) {
+            <img [src]="currentClass.icon" [alt]="currentClass.name">
+          }
+          <span>{{ currentUser.dofus_username }}</span>
+        </button>
+
+        @if (isClassMenuOpen()) {
+          <div class="navbar-user__menu" role="menu" aria-label="Choisir une classe Dofus">
+            @for (option of classOptions; track option.name) {
+              <button
+                class="navbar-user__class"
+                type="button"
+                role="menuitem"
+                [class.navbar-user__class--active]="selectedClass()?.name === option.name"
+                [disabled]="isUpdatingClass()"
+                (click)="selectClass(option)"
+              >
+                <img [src]="option.icon" [alt]="option.name">
+                <span>{{ option.name }}</span>
+              </button>
+            }
+            <button class="navbar-user__class" type="button" role="menuitem" (click)="logout()">Se déconnecter</button>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</nav>

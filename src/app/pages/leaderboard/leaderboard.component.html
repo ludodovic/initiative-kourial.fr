@@ -1,0 +1,48 @@
+<main class="leaderboard">
+  <header class="leaderboard__hero">
+    <div>
+      <p class="leaderboard__eyebrow">Leaderboard</p>
+      <h1>Classement des succés</h1>
+      <p>Les membres d'initiative, classés par points de succés puis par nombre de succés accomplis.</p>
+    </div>
+  </header>
+
+  @if (isLoading()) {
+    <p class="leaderboard__state">Chargement du classement...</p>
+  } @else if (error()) {
+    <p class="leaderboard__state leaderboard__state--error">{{ error() }}</p>
+  } @else {
+    <section class="leaderboard__panel" aria-labelledby="leaderboard-title">
+      <h2 id="leaderboard-title">Tableau des scores</h2>
+
+      @if (rows().length) {
+        <div class="leaderboard-table" role="table" aria-label="Classement des succés">
+          <div class="leaderboard-table__head" role="row">
+            <span role="columnheader">Classe</span>
+            <span role="columnheader">Pseudo</span>
+            <span role="columnheader">Points de succés</span>
+            <span role="columnheader">Nombre de succés</span>
+          </div>
+
+          @for (row of rows(); track row.dofus_username; let rank = $index) {
+            <div class="leaderboard-table__row" role="row">
+              <span class="leaderboard-table__class" role="cell">
+                <span class="leaderboard-table__rank">{{ rank + 1 }}</span>
+                <img
+                  [src]="row.classIcon"
+                  [alt]="row.displayClassName === 'NoClass' ? 'Classe inconnue' : row.displayClassName"
+                  (error)="onClassIconError($event)"
+                >
+              </span>
+              <span class="leaderboard-table__name" role="cell">{{ row.dofus_username }}</span>
+              <span role="cell">{{ row.totalPoints }}</span>
+              <span role="cell">{{ row.successCount }}</span>
+            </div>
+          }
+        </div>
+      } @else {
+        <p class="leaderboard__empty">Aucun score disponible pour le moment.</p>
+      }
+    </section>
+  }
+</main>

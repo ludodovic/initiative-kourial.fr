@@ -1,0 +1,57 @@
+<main class="requests">
+  <header class="requests__hero">
+    <div>
+      <p class="requests__eyebrow">Succes</p>
+      <h1>Mes demandes</h1>
+      <p>Suivez vos demandes de validation, des succes en attente jusqu'aux reponses deja traitees.</p>
+    </div>
+  </header>
+
+  @if (isLoading()) {
+    <p class="requests__state">Chargement des demandes...</p>
+  } @else if (error()) {
+    <p class="requests__state requests__state--error">{{ error() }}</p>
+  } @else {
+    <div class="requests__sections">
+      @for (section of sections(); track section.status) {
+        <section
+          class="request-section"
+          [class.request-section--pending]="section.status === 'pending'"
+          [class.request-section--approved]="section.status === 'approved'"
+          [class.request-section--refused]="section.status === 'refused'"
+          [attr.aria-labelledby]="'requests-' + section.status"
+        >
+          <header class="request-section__header">
+            <div>
+              <p class="request-section__count">{{ section.requests.length }} demande(s)</p>
+              <h2 [id]="'requests-' + section.status">{{ section.title }}</h2>
+            </div>
+          </header>
+
+          @if (section.requests.length) {
+            <div class="request-list">
+              @for (request of section.requests; track request.succes_id + '-' + request.submitted_at) {
+                <article class="request-card">
+                  <div class="request-card__main">
+                    <span class="request-card__id">#{{ request.succes_id }}</span>
+                    <h3>{{ request.succes_name }}</h3>
+                    <p>Demande envoyee par {{ request.requester_discord_username }}</p>
+                  </div>
+
+                  <div class="request-card__meta">
+                    <span class="request-card__status">{{ statusLabel(request.status) }}</span>
+                    <time [attr.datetime]="request.submitted_at">
+                      {{ formatDate(request.submitted_at) }}
+                    </time>
+                  </div>
+                </article>
+              }
+            </div>
+          } @else {
+            <p class="request-section__empty">{{ section.emptyText }}</p>
+          }
+        </section>
+      }
+    </div>
+  }
+</main>

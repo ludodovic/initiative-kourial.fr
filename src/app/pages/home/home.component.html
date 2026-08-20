@@ -1,0 +1,62 @@
+<main class="home">
+  <section class="guild-card" aria-labelledby="guild-title">
+    <div class="guild-card__emblem-frame">
+      <img
+        class="guild-card__emblem"
+        src="/assets/blason_initiative.png"
+        alt="Blason de la guilde Initiative"
+      >
+    </div>
+
+    <div class="guild-card__content">
+      <p class="guild-card__eyebrow">Guilde Dofus sur Kourial</p>
+      <h1 id="guild-title">Initiative</h1>
+      <p>{{ guildDescription }}</p>
+    </div>
+  </section>
+
+  <section class="home-grid" aria-label="Actualites de guilde">
+    <article class="panel successes-panel" aria-labelledby="successes-title">
+      <div class="panel__header">
+        <p>Progression</p>
+        <h2 id="successes-title">Mes succès</h2>
+      </div>
+
+      @if (successBadgesLoading()) {
+        <p class="successes-panel__state">Chargement des succès...</p>
+      } @else if (successBadges().length) {
+        <div class="badge-list" aria-label="Succès acquis">
+          @for (success of successBadges(); track success.id) {
+            <a
+              class="badge-link"
+              [href]="iconPath(success.icon)"
+              target="_blank"
+              rel="noopener"
+              [attr.aria-label]="'Ouvrir le badge ' + success.name"
+            >
+              <img [src]="iconPath(success.icon)" [alt]="success.name">
+              <span class="badge-popover" role="tooltip">{{ success.name }}</span>
+            </a>
+          }
+        </div>
+      } @else {
+        <p class="successes-panel__state">Aucun succès débloqué pour le moment.</p>
+      }
+    </article>
+
+    <article class="panel newsletter" aria-labelledby="newsletter-title">
+      <div class="panel__header">
+        <p>What's up ?</p>
+        <h2 id="newsletter-title">{{ newsletter().title }}</h2>
+      </div>
+
+      @if (newsletter().date) {
+        <time>{{ formatNewsletterDate(newsletter().date) }}</time>
+      }
+      <br>
+      <p>{{ newsletter().content }}</p>
+      <br>
+      <p style="font-weight: bold;">NB: N'oubliez pas de renseigner votre classe en cliquant sur votre pseudo.</p>
+    </article>
+  </section>
+</main>

@@ -1,0 +1,84 @@
+<main class="library">
+  <header class="library__hero">
+    <div>
+      <p class="library__eyebrow">Archives de guilde</p>
+      <h1>Bibliothèque</h1>
+      <p>(Re)découvrez les temps forts de la guilde comme dans un explorateur de fichiers.</p>
+    </div>
+  </header>
+
+  @if (isLoading()) {
+    <p class="library__state">Chargement de la bibliothèque...</p>
+  } @else if (error() && !currentNode()) {
+    <p class="library__state library__state--error">{{ error() }}</p>
+  } @else if (currentNode(); as node) {
+    <section class="library__panel" aria-label="Explorateur de fichiers">
+      <nav class="library-breadcrumbs" aria-label="Chemin actuel">
+        @for (crumb of breadcrumbs(); track crumb.link.join('/'); let last = $last) {
+          @if (last) {
+            <span>{{ crumb.name }}</span>
+          } @else {
+            <a [routerLink]="crumb.link">{{ crumb.name }}</a>
+          }
+        }
+      </nav>
+
+      @if (error()) {
+        <p class="library__inline-error">{{ error() }}</p>
+      }
+
+      @if (node.folders.length) {
+        <section class="library-section" aria-labelledby="folders-title">
+          <h2 id="folders-title">Dossiers</h2>
+
+          <div class="folder-grid">
+            @for (folder of node.folders; track folder.path) {
+              <a class="folder-card" [routerLink]="folderLink(folder)">
+                <img [src]="folderPreviewUrl(folder)" [alt]="folder.name">
+                <span>{{ folder.name }}</span>
+                <small>{{ folder.folders.length }} dossier(s) · {{ folder.files.length }} fichier(s)</small>
+              </a>
+            }
+          </div>
+        </section>
+      }
+
+      @if (node.files.length) {
+        <section class="library-section" aria-labelledby="files-title">
+          <h2 id="files-title">Images</h2>
+
+          <div class="media-grid">
+            @for (file of node.files; track file.path) {
+              <button class="media-card" type="button" (click)="openFile(file)">
+                <img [src]="fileUrl(file)" [alt]="file.name">
+                <span>{{ file.name }}</span>
+              </button>
+            }
+          </div>
+        </section>
+      }
+
+      @if (!node.folders.length && !node.files.length) {
+        <p class="library__empty">Ce dossier est vide.</p>
+      }
+    </section>
+  }
+
+  @if (selectedFile(); as file) {
+    <div class="library-modal" role="dialog" aria-modal="true" aria-labelledby="library-modal-title">
+      <div class="library-modal__backdrop" (click)="closeFile()" aria-hidden="true"></div>
+
+      <section class="library-modal__panel">
+        <header class="library-modal__header">
+          <h2 id="library-modal-title">{{ file.name }}</h2>
+          <div>
+            <a class="library-modal__download" [href]="fileUrl(file)" [download]="file.name">Telecharger</a>
+            <button type="button" aria-label="Fermer l image" (click)="closeFile()">Fermer</button>
+          </div>
+        </header>
+
+        <img [src]="fileUrl(file)" [alt]="file.name">
+      </section>
+    </div>
+  }
+</main>

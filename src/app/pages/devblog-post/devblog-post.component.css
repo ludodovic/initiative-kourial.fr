@@ -1,0 +1,61 @@
+.devblog-post {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.devblog-post__hero {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.devblog-post__eyebrow {
+  color: #666;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+}
+
+.devblog-post__hero h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.devblog-post__state {
+  text-align: center;
+  color: #666;
+  padding: 2rem;
+}
+
+.devblog-post__state--error {
+  color: #d32f2f;
+}
+
+.devblog-post__content {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+}
+
+.devblog-post__content img {
+  max-width: 100%;
+  height: auto;
+  margin: 1rem 0;
+}
+
+@media (max-width: 768px) {
+  .devblog-post {
+    padding: 1rem;
+  }
+
+  .devblog-post__hero h1 {
+    font-size: 2rem;
+  }
+
+  .devblog-post__content {
+    padding: 1.5rem;
+  }
+}

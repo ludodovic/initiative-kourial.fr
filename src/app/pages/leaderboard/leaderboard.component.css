@@ -1,0 +1,154 @@
+.leaderboard {
+  background:
+    linear-gradient(rgba(1, 22, 56, 0.68), rgba(1, 22, 56, 0.76)),
+    url('/assets/osavora_background.png') center / cover fixed;
+  color: #011638;
+  min-height: calc(100vh - 4rem);
+  padding: 2rem;
+}
+
+.leaderboard__hero,
+.leaderboard__panel,
+.leaderboard__state {
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(145, 46, 166, 0.16);
+  border-radius: 8px;
+  box-shadow: 0 18px 48px rgba(1, 22, 56, 0.16);
+  margin: 0 auto;
+  max-width: 1120px;
+}
+
+.leaderboard__hero {
+  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+}
+
+.leaderboard__eyebrow {
+  color: #912EA6;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  margin: 0 0 0.35rem;
+  text-transform: uppercase;
+}
+
+.leaderboard__hero h1 {
+  font-size: 2.4rem;
+  line-height: 1;
+  margin: 0 0 0.75rem;
+}
+
+.leaderboard__hero p {
+  line-height: 1.6;
+  margin: 0;
+}
+
+.leaderboard__panel {
+  overflow: hidden;
+  padding: 1.25rem;
+}
+
+.leaderboard__panel h2 {
+  font-size: 1.25rem;
+  margin: 0 0 1rem;
+}
+
+.leaderboard-table {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.leaderboard-table__head,
+.leaderboard-table__row {
+  align-items: center;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(11rem, 1fr) minmax(10rem, 1.1fr) minmax(9rem, 0.75fr) minmax(9rem, 0.75fr);
+}
+
+.leaderboard-table__head {
+  color: #4575A5;
+  font-size: 0.78rem;
+  font-weight: 800;
+  padding: 0 0.85rem;
+  text-transform: uppercase;
+}
+
+.leaderboard-table__row {
+  background: #f7f4f8;
+  border: 1px solid rgba(69, 117, 165, 0.16);
+  border-radius: 8px;
+  font-weight: 800;
+  padding: 0.75rem 0.85rem;
+}
+
+.leaderboard-table__class {
+  align-items: center;
+  display: flex;
+  gap: 0.65rem;
+  min-width: 0;
+}
+
+.leaderboard-table__rank {
+  align-items: center;
+  background: #912EA6;
+  border-radius: 999px;
+  color: #fff;
+  display: inline-flex;
+  flex: 0 0 auto;
+  height: 1.85rem;
+  justify-content: center;
+  width: 1.85rem;
+}
+
+.leaderboard-table__class img {
+  display: block;
+  flex: 0 0 auto;
+  height: 2.2rem;
+  object-fit: contain;
+  width: 2.2rem;
+}
+
+.leaderboard-table__class span:last-child,
+.leaderboard-table__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.leaderboard__state,
+.leaderboard__empty {
+  padding: 1rem;
+}
+
+.leaderboard__state--error {
+  color: #912EA6;
+  font-weight: 800;
+}
+
+.leaderboard__empty {
+  color: #4575A5;
+  font-weight: 800;
+  margin: 0;
+}
+
+@media (max-width: 760px) {
+  .leaderboard {
+    background-attachment: scroll;
+    padding: 1rem;
+  }
+
+  .leaderboard-table__head {
+    display: none;
+  }
+
+  .leaderboard-table__row {
+    align-items: start;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .leaderboard-table__class,
+  .leaderboard-table__name {
+    grid-column: 1 / -1;
+  }
+}

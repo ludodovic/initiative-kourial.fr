@@ -1,0 +1,237 @@
+<main class="successes">
+  <header class="successes__hero">
+    <div>
+      <p class="successes__eyebrow">Progression de guilde</p>
+      <h1>Succès Initiative</h1>
+      <p>Les défis de la guilde, classés par catégorie, avec leurs récompenses en points. <strong>Les succès ne sont pas rétroactifs !</strong></p>
+    </div>
+
+    <div class="successes__score" aria-label="Points debloques sur points disponibles">
+      <span>{{ unlockedPoints() }}/{{ availablePoints() }}</span>
+      points
+    </div>
+  </header>
+
+  <div class="view-toggle" aria-label="Mode d'affichage des succes">
+    <button
+      type="button"
+      [class.view-toggle__button--active]="viewMode() === 'large'"
+      (click)="setViewMode('large')"
+    >
+      Large
+    </button>
+    <button
+      type="button"
+      [class.view-toggle__button--active]="viewMode() === 'compact'"
+      (click)="setViewMode('compact')"
+    >
+      Compact
+    </button>
+  </div>
+
+  @if (isLoading()) {
+    <p class="successes__state">Chargement des succes...</p>
+  } @else if (error()) {
+    <p class="successes__state successes__state--error">{{ error() }}</p>
+  } @else {
+    <div class="category-list">
+      @for (category of categories(); track category.id) {
+        <section
+          class="category"
+          [class.category--compact]="viewMode() === 'compact'"
+          [class.category--collapsed]="isCollapsed(category.id)"
+          [attr.aria-labelledby]="'category-' + $index"
+        >
+          <header class="category__header">
+            <img
+              class="category__icon"
+              [src]="iconPath(category.icon)"
+              [alt]="category.catName"
+            >
+
+            <div class="category__content">
+              <p class="category__eyebrow">Categorie</p>
+              <h2 [id]="'category-' + $index">{{ category.catName }}</h2>
+              @if (!isCollapsed(category.id)) {
+                <p>{{ category.catDesc }}</p>
+              }
+            </div>
+
+            <div class="category__actions">
+              <div
+                class="category__points"
+                [class.category__points--locked]="!category.unlocked"
+              >
+                <span>{{ category.catValue }}</span>
+                points
+              </div>
+
+              <button
+                class="category__collapse"
+                type="button"
+                [attr.aria-expanded]="!isCollapsed(category.id)"
+                [attr.aria-controls]="'category-successes-' + $index"
+                [attr.aria-label]="isCollapsed(category.id) ? 'Afficher les succes' : 'Masquer les succes'"
+                (click)="toggleCategory(category.id)"
+              >
+                <span aria-hidden="true"></span>
+              </button>
+            </div>
+          </header>
+
+          @if (!isCollapsed(category.id)) {
+            <div class="success-grid" [id]="'category-successes-' + $index">
+              @for (success of category.catList; track success.id) {
+                <article class="success-card">
+                  <div class="success-card__topline">
+                    <img
+                      class="success-card__icon"
+                      [class.success-card__icon--locked]="!success.unlocked"
+                      [src]="iconPath(success.icon)"
+                      [alt]="success.name"
+                    >
+
+                    <span
+                      class="success-card__points"
+                      [class.success-card__points--unlocked]="success.unlocked"
+                    >
+                      {{ success.value }} pts
+                    </span>
+                  </div>
+
+                  <h3>{{ success.name }}</h3>
+                  <p>{{ success.desc }}</p>
+
+                  @if (!success.unlocked) {
+                    <button
+                      class="success-card__validate"
+                      type="button"
+                      (click)="openClaimForm(success)"
+                    >
+                      Valider
+                    </button>
+                  }
+                </article>
+              }
+            </div>
+          }
+        </section>
+      }
+    </div>
+  }
+
+  @if (selectedSuccess(); as success) {
+    <div class="claim-modal" role="dialog" aria-modal="true" aria-labelledby="claim-title">
+      <div class="claim-modal__backdrop" (click)="closeClaimForm()" aria-hidden="true"></div>
+
+      <section class="claim-modal__panel">
+        <button
+          class="claim-modal__close"
+          type="button"
+          aria-label="Fermer la demande de validation"
+          (click)="closeClaimForm()"
+        >
+          <span aria-hidden="true"></span>
+        </button>
+
+        <header class="claim-modal__header">
+          <img [src]="iconPath(success.icon)" [alt]="success.name">
+          <div>
+            <p>Demande de validation</p>
+            <h2 id="claim-title">{{ success.name }}</h2>
+            <span>{{ success.desc }}</span>
+          </div>
+        </header>
+
+        @if (claimSuccess()) {
+          <div class="claim-modal__success">
+            <strong>{{ claimSuccess() }}</strong>
+            <button type="button" (click)="closeClaimForm()">Fermer</button>
+          </div>
+        } @else {
+          <div
+            class="claim-dropzone"
+            tabindex="0"
+            (paste)="onClaimPaste($event)"
+            aria-label="Coller ou importer des images de preuve"
+          >
+            <div>
+              <strong>Images de preuve</strong>
+              <p>Collez des captures ici ou importez un ou plusieurs fichiers PNG/JPG.</p>
+            </div>
+
+            <label class="claim-dropzone__upload">
+              Importer
+              <input
+                type="file"
+                accept="image/png,image/jpeg"
+                multiple
+                (change)="onClaimFilesSelected($event)"
+              >
+            </label>
+          </div>
+
+          @if (claimImages().length) {
+            <div class="claim-preview-list" aria-label="Images ajoutees">
+              @for (image of claimImages(); track image.previewUrl; let index = $index) {
+                <figure class="claim-preview">
+                  <img [src]="image.previewUrl" [alt]="'Preuve ' + (index + 1)">
+                  <button
+                    type="button"
+                    [attr.aria-label]="'Retirer l image ' + (index + 1)"
+                    (click)="removeClaimImage(index)"
+                  >
+                    Retirer
+                  </button>
+                </figure>
+              }
+            </div>
+          }
+
+          <label class="claim-description">
+            <span>Description</span>
+            <textarea
+              rows="4"
+              placeholder="Seulement si necessaire"
+              [value]="claimDescription()"
+              (input)="onClaimDescriptionInput($event)"
+            ></textarea>
+          </label>
+
+          @if (claimError()) {
+            <p class="claim-modal__error">{{ claimError() }}</p>
+          }
+
+          @if (isConfirmingClaim()) {
+            <div class="claim-confirmation">
+              <p>Confirmer l'envoi de cette demande de validation ?</p>
+              <div>
+                <button type="button" (click)="cancelClaimConfirmation()">Annuler</button>
+                <button
+                  class="claim-confirmation__send"
+                  type="button"
+                  [disabled]="isSubmittingClaim()"
+                  (click)="submitClaim()"
+                >
+                  {{ isSubmittingClaim() ? 'Envoi...' : 'Confirmer et envoyer' }}
+                </button>
+              </div>
+            </div>
+          } @else {
+            <div class="claim-modal__actions">
+              <button type="button" (click)="closeClaimForm()">Annuler</button>
+              <button
+                class="claim-modal__send"
+                type="button"
+                [disabled]="!claimImages().length || isSubmittingClaim()"
+                (click)="requestClaimConfirmation()"
+              >
+                Envoyer
+              </button>
+            </div>
+          }
+        }
+      </section>
+    </div>
+  }
+</main>
