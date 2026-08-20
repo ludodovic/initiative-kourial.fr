@@ -91,9 +91,9 @@ export class DungeonWheelComponent implements OnInit {
   // Animation
   private animationFrameId: number | null = null;
   private velocity = 0;
-  private friction = 0.985;
-  private thresholdFriction = 0.995;
-  private thresholdVelocity = 2;
+  private friction = 0.990;
+  private thresholdFriction = 0.997;
+  private thresholdVelocity = 3;
   private minVelocity = 0.1;
 
   async ngOnInit(): Promise<void> {
@@ -200,7 +200,7 @@ export class DungeonWheelComponent implements OnInit {
     // Update rotation
     this.rotation.update(rot => rot + this.velocity);
     let frictionToApply = this.friction;
-    if (this.velocity > this.thresholdVelocity) {
+    if (this.velocity < this.thresholdVelocity) {
       frictionToApply = this.thresholdFriction;
     }
     // Apply friction
