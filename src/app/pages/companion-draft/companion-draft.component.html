@@ -1,0 +1,57 @@
+<main class="draft-page">
+  <header class="draft-header" [class.draft-header--active]="selectedTournament()?.status === 'active'">
+    <div><span>Outils de guilde</span><h1>Tournoi compagnons</h1>@if (selectedTournament(); as tournament) { @if (tournament.status === 'active') { <small>{{ tournament.name }}</small> } }</div>
+    @if (selectedTournament()?.status === 'active') { @if (activeDraft(); as draft) {
+      <strong class="draft-header__turn" aria-live="polite">{{ draft.currentTurnLabel }}</strong>
+      <div class="draft-header__actions">
+        @if (draft.coinToss) { <span class="coin-result">Tirage: {{ draft.coinToss }}</span> }
+        @else { <button class="button button--gold" type="button" [disabled]="!draft.canCoinToss || isSubmitting()" (click)="tossCoin()">Lancer la pièce</button> }
+        @if (isAdmin()) { <button class="button button--outline" type="button" [disabled]="isSubmitting()" (click)="resetTournament()">Retour aux équipes</button><button class="button button--outline" type="button" [disabled]="isSubmitting()" (click)="resetDraft()">Réinitialiser</button> }
+      </div>
+    } }
+  </header>
+
+  @if (isLoading()) {
+    <section class="draft-state">Chargement des tournois...</section>
+  } @else if (error(); as message) {
+    <section class="draft-state draft-state--error" role="alert">{{ message }}</section>
+  } @else if (selectedTournament(); as tournament) {
+    <section class="tournament-shell">
+      @if (tournament.status !== 'active') { <div class="tournament-summary">
+        <div><span class="draft-status">{{ tournament.status === 'registration' ? 'Étape 1 · Inscriptions' : tournament.status === 'team_building' ? 'Étape 2 · Équipes' : 'Terminé' }}</span><h2>{{ tournament.name }}</h2></div>
+      </div> }
+      @if (actionError(); as message) { <p class="action-error" role="alert">{{ message }}</p> }
+
+      @if (tournament.status === 'registration') {
+        <section class="setup-panel">
+          <div class="setup-panel__heading"><div><span class="draft-status">Participants</span><h3>Préparer le roster</h3><p>Inscrivez les joueurs avant de verrouiller la composition.</p></div><span class="registration-count">{{ tournament.registeredParticipants.length }} inscrits</span></div>
+          <div class="registration-layout">
+            <section><h4>Disponibles</h4><input class="search-field" type="search" placeholder="Rechercher un joueur" [value]="userSearch()" (input)="setUserSearch($any($event.target).value)"><div class="participant-list">@for (user of unregisteredUsers(); track user.id) { <button type="button" class="player-option" [disabled]="!isAdmin() || isSubmitting()" (click)="registerParticipant(user.id)"><span>{{ user.dofus_username }}</span><small>{{ user.class }}</small></button> } @empty { <p>Aucun joueur correspondant.</p> }</div></section>
+            <section><h4>Inscrits</h4><div class="registered-list">@for (user of tournament.registeredParticipants; track user.id) { <span>{{ user.dofus_username }} @if (isAdmin()) { <button type="button" (click)="removeParticipant(user.id)">Retirer</button> }</span> } @empty { <p>Ajoutez les participants depuis la liste.</p> }</div></section>
+          </div>
+          @if (isAdmin()) { <button class="button button--create" type="button" [disabled]="isSubmitting() || tournament.registeredParticipants.length < tournament.teamSize * (tournament.format === 'single_match' ? 2 : 4)" (click)="lockRegistration()">Passer à la composition</button> }
+        </section>
+      } @else if (tournament.status === 'team_building') {
+        <section class="setup-panel">
+          <div class="setup-panel__heading"><div><span class="draft-status">Équipes</span><h3>Composer les équipes</h3><p>Chaque équipe doit comporter {{ tournament.teamSize }} joueur{{ tournament.teamSize > 1 ? 's' : '' }}.</p></div></div>
+          <div class="team-progress" aria-label="Progression des équipes"><span><strong>{{ tournament.teams.length }}</strong> équipes créées</span><span><strong>{{ remainingTeamUsers().length }}</strong> joueurs à placer</span><span><strong>{{ tournament.registeredParticipants.length }}</strong> inscrits</span></div>
+          <div class="team-building-layout">
+            @if (isAdmin()) { <section class="team-editor"><div class="team-editor__header"><span class="draft-status">Nouvelle équipe</span><strong>{{ teamParticipantIds().length }}/{{ tournament.teamSize }}</strong></div><input type="text" placeholder="Nom de l'équipe" [value]="teamName()" (input)="setTeamName($any($event.target).value)"><div class="selected-player-slots">@for (user of selectedTeamUsers(); track user.id) { <button type="button" class="selected-player" (click)="toggleTeamParticipant(user.id)"><span>{{ user.dofus_username }}</span><small>{{ user.class }} · Retirer</small></button> } @for (slot of emptyTeamSlots(); track $index) { <div class="selected-player selected-player--empty"><span>Choisir un joueur</span><small>Emplacement {{ $index + 1 }}</small></div> }</div><input class="search-field" type="search" placeholder="Rechercher parmi les inscrits" [value]="userSearch()" (input)="setUserSearch($any($event.target).value)"><div class="participant-list">@for (user of remainingTeamUsers(); track user.id) { <button type="button" class="player-option" [disabled]="isSubmitting()" (click)="toggleTeamParticipant(user.id)"><span>{{ user.dofus_username }}</span><small>{{ user.class }}</small></button> } @empty { <p>Aucun joueur correspondant.</p> }</div><button class="button button--create" type="button" [disabled]="!canSaveTeam() || isSubmitting()" (click)="saveTeam()">Créer l'équipe</button></section> }
+            <section class="saved-teams"><div class="saved-teams__header"><div><span class="draft-status">Composition</span><h4>Équipes prêtes</h4></div><span>{{ tournament.teams.length }}</span></div>@for (team of tournament.teams; track team.teamId) { <article class="team-slot"><div><h3>{{ team.name }}</h3><p>@for (player of team.participants; track player.id) { <span>{{ player.dofus_username }}<small>{{ player.class }}</small></span> }</p></div>@if (isAdmin()) { <button type="button" (click)="removeTeam(team.teamId)">Retirer</button> }</article> } @empty { <div class="empty-teams"><strong>Les équipes créées apparaîtront ici.</strong><span>Sélectionnez deux joueurs pour commencer.</span></div> }</section>
+          </div>
+          <div class="team-building-actions">@if (isAdmin()) { <button class="button button--gold" type="button" [disabled]="!canGenerateBracket() || isSubmitting()" (click)="generateBracket()">Générer l'arbre</button><button class="button button--outline" type="button" [disabled]="isSubmitting()" (click)="resetRegistration()">Recommencer les inscriptions</button> }</div>
+        </section>
+      } @else {
+        @if (!isDraftInProgress()) {
+          <section class="bracket" aria-label="Arbre du tournoi">@for (round of tournament.rounds; track round.number) { <div class="bracket-round"><h3>{{ round.number === tournament.rounds.length ? 'Finale' : round.number === 1 ? 'Premier tour' : 'Demi-finales' }}</h3><div class="bracket-round__matches">@for (match of round.matches; track match.matchId) { <article class="bracket-match" [class.bracket-match--active]="currentMatch()?.matchId === match.matchId" [class.bracket-match--complete]="match.resultStatus === 'complete' || match.resultStatus === 'bye'">@for (teamId of match.teamIds; track $index) { <span [class.bracket-match__winner]="match.winnerTeamId === teamId">{{ teamNameForId(teamId) }}</span> }<small>{{ match.resultStatus === 'bye' ? 'Exempt' : match.resultStatus === 'complete' ? 'Terminé' : match.draft?.currentTurnLabel || 'En attente' }}</small></article> }</div></div> }</section>
+        }
+        @if (activeDraft(); as draft) {
+          <app-draft-arena [draft]="draft" [search]="companionSearch()" [isSubmitting]="isSubmitting()" (searchChange)="setCompanionSearch($event)" (action)="performAction($event.companion, $event.action)" />
+        }
+        @if (currentMatch(); as match) { @if (!isDraftInProgress() && match.resultStatus === 'ready' && isAdmin()) { <section class="winner-panel"><h3>Enregistrer le vainqueur</h3><div>@for (teamId of match.teamIds; track teamId) { @if (teamId) { <button class="button button--create" type="button" (click)="recordWinner(teamId)">{{ teamNameForId(teamId) }}</button> } }</div></section> } }
+      }
+    </section>
+  } @else if (isAdmin()) {
+    <section class="creation-panel"><span class="draft-status">Administration</span><h2>Créer un tournoi 2v2</h2><p>Chaque équipe comporte exactement deux joueurs.</p><div class="creation-options"><label>Nom<input type="text" placeholder="Ex. Coupe du printemps" [value]="tournamentName()" (input)="setTournamentName($any($event.target).value)"></label><label>Mode<select (change)="setFormat($any($event.target).value)"><option value="single_match">Rencontre unique</option><option value="single_elimination">Tournoi</option></select></label></div><button class="button button--create" type="button" [disabled]="!tournamentName().trim() || isSubmitting()" (click)="createTournament()">Ouvrir les inscriptions</button></section>
+  } @else { <section class="draft-state">Aucun tournoi ne vous est attribué pour le moment.</section> }
+</main>

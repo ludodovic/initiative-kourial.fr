@@ -120,6 +120,114 @@ export interface SuccessLeaderboardEntry {
   class_name?: string;
 }
 
+export interface CompanionDraftAccess {
+  isAdmin: boolean;
+  activeDraftId: string | null;
+  activeTournamentId: string | null;
+  canAccessPage: boolean;
+}
+
+export interface CompanionDraftUser {
+  id: number;
+  dofus_username: string;
+  class?: string;
+}
+
+export interface CompanionDraftTeam {
+  id: string;
+  tournamentTeamId?: string;
+  name: string;
+  users: CompanionDraftUser[];
+}
+
+export type CompanionDraftCardStatus = 'available' | 'banned' | 'picked';
+export type CompanionDraftActionType = 'ban' | 'pick';
+
+export interface CompanionDraftCompanion {
+  id: number;
+  name: string;
+  image?: string;
+  status: CompanionDraftCardStatus;
+  teamId?: string;
+}
+
+export interface CompanionDraftAction {
+  sequence: number;
+  type: CompanionDraftActionType;
+  teamId: string;
+  companionId: number;
+}
+
+export interface CompanionDraftState {
+  id: string;
+  status: string;
+  phase: CompanionDraftActionType | 'coin_toss' | 'complete';
+  version: number;
+  currentTeam: string | null;
+  teams: CompanionDraftTeam[];
+  companions: CompanionDraftCompanion[];
+  actions: CompanionDraftAction[];
+  currentTurnLabel: string;
+  coinToss: string | null;
+  canCoinToss: boolean;
+  canAct: boolean;
+}
+
+export type CompanionTournamentFormat = 'single_match' | 'single_elimination';
+export type CompanionTournamentTeamSize = 2;
+
+export interface CompanionTournamentTeam {
+  teamId: string;
+  name: string;
+  participantIds: number[];
+  participants: CompanionDraftUser[];
+}
+
+export interface CompanionTournamentMatch {
+  matchId: string;
+  round: number;
+  position: number;
+  teamIds: Array<string | null>;
+  resultStatus: 'pending' | 'ready' | 'bye' | 'complete';
+  winnerTeamId: string | null;
+  draftId: string | null;
+  draft?: CompanionDraftState;
+}
+
+export interface CompanionTournamentRound {
+  number: number;
+  matches: CompanionTournamentMatch[];
+}
+
+export interface CompanionTournamentState {
+  id: string;
+  name: string;
+  format: CompanionTournamentFormat;
+  teamSize: CompanionTournamentTeamSize;
+  status: 'registration' | 'team_building' | 'active' | 'complete';
+  version: number;
+  teams: CompanionTournamentTeam[];
+  participants: CompanionDraftUser[];
+  registeredParticipants: CompanionDraftUser[];
+  rounds: CompanionTournamentRound[];
+}
+
+export interface CreateCompanionTournamentRequest {
+  name: string;
+  format: CompanionTournamentFormat;
+  teamSize: CompanionTournamentTeamSize;
+}
+
+export interface CompanionTournamentTeamRequest {
+  name: string;
+  participantIds: number[];
+}
+
+export interface CompanionDraftActionRequest {
+  companionId: number;
+  version: number;
+}
+
 @Injectable({ providedIn: 'root' })
 export class ApiService {
   private readonly http = inject(HttpClient);
@@ -177,6 +285,104 @@ export class ApiService {
     return firstValueFrom(
       this.http.post<UserProfile>(apiUrl('/api/user/class'), { class: className })
     );
+  }
+
+  getCompanionDraftAccess(): Promise<CompanionDraftAccess> {
+    return firstValueFrom(this.http.get<CompanionDraftAccess>(apiUrl('/api/companion-drafts/access')));
+  }
+
+  getCompanionDraftUsers(): Promise<CompanionDraftUser[]> {
+    return firstValueFrom(this.http.get<CompanionDraftUser[]>(apiUrl('/api/companion-drafts/roster')));
+  }
+
+  tossCompanionDraftCoin(id: string, version: number): Promise<CompanionDraftState> {
+    return firstValueFrom(
+      this.http.post<CompanionDraftState>(apiUrl(`/api/companion-drafts/${id}/coin-toss`), { version })
+    );
+  }
+
+  resetCompanionDraft(id: string, version: number): Promise<CompanionDraftState> {
+    return firstValueFrom(this.http.post<CompanionDraftState>(
+      apiUrl(`/api/companion-drafts/${id}/reset`), { version }
+    ));
+  }
+
+  performCompanionDraftAction(
+    id: string,
+    action: CompanionDraftActionType,
+    request: CompanionDraftActionRequest
+  ): Promise<CompanionDraftState> {
+    return firstValueFrom(
+      this.http.post<CompanionDraftState>(apiUrl(`/api/companion-drafts/${id}/${action}`), request)
+    );
+  }
+
+  getCompanionTournaments(): Promise<CompanionTournamentState[]> {
+    return firstValueFrom(this.http.get<CompanionTournamentState[]>(apiUrl('/api/companion-tournaments')));
+  }
+
+  createCompanionTournament(request: CreateCompanionTournamentRequest): Promise<CompanionTournamentState> {
+    return firstValueFrom(this.http.post<CompanionTournamentState>(apiUrl('/api/companion-tournaments'), request));
+  }
+
+  registerCompanionTournamentParticipant(tournamentId: string, userId: number): Promise<CompanionTournamentState> {
+    return firstValueFrom(this.http.post<CompanionTournamentState>(
+      apiUrl(`/api/companion-tournaments/${tournamentId}/participants`), { userId }
+    ));
+  }
+
+  removeCompanionTournamentParticipant(tournamentId: string, userId: number): Promise<CompanionTournamentState> {
+    return firstValueFrom(this.http.delete<CompanionTournamentState>(
+      apiUrl(`/api/companion-tournaments/${tournamentId}/participants/${userId}`)
+    ));
+  }
+
+  lockCompanionTournamentRegistration(tournamentId: string): Promise<CompanionTournamentState> {
+    return firstValueFrom(this.http.post<CompanionTournamentState>(
+      apiUrl(`/api/companion-tournaments/${tournamentId}/lock-registration`), {}
+    ));
+  }
+
+  addCompanionTournamentTeam(tournamentId: string, request: CompanionTournamentTeamRequest): Promise<CompanionTournamentState> {
+    return firstValueFrom(this.http.post<CompanionTournamentState>(
+      apiUrl(`/api/companion-tournaments/${tournamentId}/teams`), request
+    ));
+  }
+
+  removeCompanionTournamentTeam(tournamentId: string, teamId: string): Promise<CompanionTournamentState> {
+    return firstValueFrom(this.http.delete<CompanionTournamentState>(
+      apiUrl(`/api/companion-tournaments/${tournamentId}/teams/${teamId}`)
+    ));
+  }
+
+  generateCompanionTournamentBracket(tournamentId: string): Promise<CompanionTournamentState> {
+    return firstValueFrom(this.http.post<CompanionTournamentState>(
+      apiUrl(`/api/companion-tournaments/${tournamentId}/generate`), {}
+    ));
+  }
+
+  resetCompanionTournament(tournamentId: string, version: number): Promise<CompanionTournamentState> {
+    return firstValueFrom(this.http.post<CompanionTournamentState>(
+      apiUrl(`/api/companion-tournaments/${tournamentId}/reset`), { version }
+    ));
+  }
+
+  resetCompanionTournamentRegistration(tournamentId: string, version: number): Promise<CompanionTournamentState> {
+    return firstValueFrom(this.http.post<CompanionTournamentState>(
+      apiUrl(`/api/companion-tournaments/${tournamentId}/reset-registration`), { version }
+    ));
+  }
+
+  recordCompanionTournamentWinner(
+    tournamentId: string,
+    matchId: string,
+    winnerTeamId: string,
+    version: number
+  ): Promise<CompanionTournamentState> {
+    return firstValueFrom(this.http.post<CompanionTournamentState>(
+      apiUrl(`/api/companion-tournaments/${tournamentId}/matches/${matchId}/winner`),
+      { winnerTeamId, version }
+    ));
   }
 
   getSeason2Successes(): Promise<Season2Success[]> {
