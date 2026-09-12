@@ -1,7 +1,7 @@
 import { PublicPlayerProfile } from '../services/api.service';
 
 export interface ProfileRoleDisplay {
-  name: 'Initiateur' | 'Assemblée' | 'Conseiller';
+  name: 'Initiateur' | 'Assemblée' | 'Conseiller' | 'Conseillère';
   color: string;
   textColor: string;
 }
@@ -9,7 +9,8 @@ export interface ProfileRoleDisplay {
 const PROFILE_ROLES: ProfileRoleDisplay[] = [
   { name: 'Initiateur', color: '#9b59b6', textColor: '#ffffff' },
   { name: 'Assemblée', color: '#576bff', textColor: '#ffffff' },
-  { name: 'Conseiller', color: '#ffb7eb', textColor: '#011638' }
+  { name: 'Conseiller', color: '#ffb7eb', textColor: '#011638' },
+  { name: 'Conseillère', color: '#ffb7eb', textColor: '#011638' }
 ];
 
 export function highestProfileRole(roles: string[] | null | undefined): ProfileRoleDisplay {
