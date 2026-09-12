@@ -13,6 +13,14 @@ export const NAVBAR_ITEMS: NavbarItem[] = [
     link: '/'
   },
   {
+    name: 'Mon profil',
+    link: '/mon-profil'
+  },
+  {
+    name: 'Liste des profils',
+    link: '/liste-profil'
+  },
+  {
     name: 'Succes',
     children: [
       {

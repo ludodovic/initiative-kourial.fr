@@ -73,6 +73,32 @@ export const routes: Routes = [
       )
   },
   {
+    path: 'mon-profil',
+    loadComponent: () =>
+      import('./pages/my-profile/my-profile.component').then(
+        (component) => component.MyProfileComponent
+      )
+  },
+  {
+    path: 'liste-profil',
+    loadComponent: () =>
+      import('./pages/profile-list/profile-list.component').then(
+        (component) => component.ProfileListComponent
+      )
+  },
+  {
+    path: 'profil/:dofus_username',
+    loadComponent: () =>
+      import('./pages/profile/profile.component').then(
+        (component) => component.ProfileComponent
+      )
+  },
+  {
+    path: 'profil',
+    redirectTo: 'liste-profil',
+    pathMatch: 'full'
+  },
+  {
     path: '**',
     redirectTo: ''
   }
