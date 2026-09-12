@@ -53,10 +53,33 @@
       @if (newsletter().date) {
         <time>{{ formatNewsletterDate(newsletter().date) }}</time>
       }
-      <br>
-      <p>{{ newsletter().content }}</p>
-      <br>
-      <p style="font-weight: bold;">NB: N'oubliez pas de renseigner votre classe en cliquant sur votre pseudo.</p>
+
+      <div class="newsletter__content">
+        <p>{{ newsletter().content }}</p>
+
+        <div class="newsletter__notice-list">
+          <p class="newsletter__notice">
+            Vous pouvez éditer votre profil à tout moment en cliquant sur votre pseudo en haut à droite.
+          </p>
+
+          <div class="newsletter__notice newsletter__notice--discord">
+            <p>Vous n'êtes pas connecté ? Mettez une réaction à ce message sur notre Discord.</p>
+            <a
+              class="newsletter__discord-link"
+              [href]="discordConnectionMessageUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Lien vers le message
+            </a>
+            <small>Lien atteignable uniquement par les membres du Discord.</small>
+          </div>
+
+          <p class="newsletter__notice">
+            Le calendrier des événements sera bientôt disponible dans cet espace.
+          </p>
+        </div>
+      </div>
     </article>
   </section>
 </main>

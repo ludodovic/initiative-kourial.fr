@@ -1,6 +1,7 @@
 export interface NavbarItem {
   name: string;
   link?: string;
+  requiresAuthentication?: boolean;
   children?: Array<{
     name: string;
     link: string;
@@ -9,26 +10,19 @@ export interface NavbarItem {
 
 export const NAVBAR_ITEMS: NavbarItem[] = [
   {
-    name: 'Accueil',
-    link: '/'
-  },
-  {
-    name: 'Mon profil',
-    link: '/mon-profil'
-  },
-  {
-    name: 'Liste des profils',
+    name: 'Nos membres',
+    requiresAuthentication: true,
     link: '/liste-profil'
   },
   {
-    name: 'Succes',
+    name: 'Succès',
     children: [
       {
-        name: 'Saison 1',
+        name: 'Classiques',
         link: '/succes'
       },
       {
-        name: 'Saison 2',
+        name: 'Donjon',
         link: '/succes_saison-2'
       },
       {
@@ -42,14 +36,6 @@ export const NAVBAR_ITEMS: NavbarItem[] = [
     ]
   },
   {
-    name: 'Le Mynni Blog',
-    link: '/devblog'
-  },
-  {
-    name: 'Bibliotheque',
-    link: '/library'
-  },
-  {
     name: 'Outils',
     children: [
       {
@@ -57,5 +43,13 @@ export const NAVBAR_ITEMS: NavbarItem[] = [
         link: '/outils/roue-des-donjons'
       }
     ]
+  },
+  {
+    name: 'Le Mynni Blog',
+    link: '/devblog'
+  },
+  {
+    name: 'Bibliothèque',
+    link: '/library'
   }
 ];

@@ -16,13 +16,16 @@ interface SuccessBadge {
 export class HomeComponent implements OnInit {
   private readonly apiService = inject(ApiService);
 
+  readonly discordConnectionMessageUrl =
+    'https://discord.com/channels/1501267746128662538/1522726643293098005/1523422547771916432';
+
   readonly guildDescription =
     'Initiative rassemble des aventuriers de Kourial qui aiment avancer ensemble : sorties donjons, missions de guilde, songes infinis et tout le tralala. Et bien sur, bonne humeur entre deux combats tendus.';
 
   readonly newsletter = signal<NewsletterMessage>({
     title: 'Infos pratiques',
     date: '',
-    content: "\nSi vous n'êtes pas connecté, rendez-vous sur le channel #site-web-initiative sur notre serveur Discord. Vous y trouverez toutes les infos necessaires."
+    content: "Si vous n'êtes pas connecté, rendez-vous sur le channel #site-web-initiative sur notre serveur Discord. Vous y trouverez toutes les infos nécessaires."
   });
   readonly successBadges = signal<SuccessBadge[]>([]);
   readonly successBadgesLoading = signal(true);
@@ -78,7 +81,7 @@ export class HomeComponent implements OnInit {
       this.newsletter.set({
         title: 'Infos pratiques',
         date: '',
-        content: "\nSi vous n'êtes pas connecté, rendez-vous sur le channel #site-web-initiative sur notre serveur Discord. Vous y trouverez toutes les infos necessaires."
+        content: "Si vous n'êtes pas connecté, rendez-vous sur le channel #site-web-initiative sur notre serveur Discord. Vous y trouverez toutes les infos nécessaires."
       });
     }
   }
