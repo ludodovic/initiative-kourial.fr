@@ -1,16 +1,22 @@
-# Development image only; it is not intended for production deployment.
-FROM node:22-bookworm-slim
+FROM node:22-alpine AS build
 
 WORKDIR /app
 
 COPY package.json package-lock.json ./
 RUN npm ci
 
-COPY . ./
+COPY angular.json tsconfig.json tsconfig.app.json tsconfig.spec.json ./
+COPY scripts ./scripts
+COPY src ./src
+COPY assets ./assets
 
-EXPOSE 4200
+RUN npm run build
 
-# Keep installed dependencies available when the project directory is bind-mounted.
-VOLUME ["/app/node_modules"]
+FROM nginx:1.27-alpine
 
-CMD ["npm", "run", "start:docker", "--", "--host", "0.0.0.0", "--poll", "1000"]
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/dist/initiative-kourial/browser /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]

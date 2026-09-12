@@ -1,0 +1,195 @@
+.public-profile {
+  background:
+    linear-gradient(rgba(1, 22, 56, 0.68), rgba(1, 22, 56, 0.76)),
+    url('/assets/osavora_background.png') center / cover fixed;
+  color: #011638;
+  min-height: calc(100vh - 4rem);
+  padding: 2rem;
+}
+
+.public-profile__shell {
+  margin: 0 auto;
+  max-width: 1120px;
+}
+
+.public-profile__back {
+  color: #fff;
+  display: inline-block;
+  font-weight: 800;
+  margin-bottom: 1.25rem;
+  text-decoration: none;
+}
+
+.public-profile__back:hover {
+  text-decoration: underline;
+}
+
+.public-profile__hero,
+.public-profile__panel,
+.public-profile__state {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(145, 46, 166, 0.18);
+  border-radius: 12px;
+  box-shadow: 0 22px 60px rgba(1, 22, 56, 0.26);
+}
+
+.public-profile__hero {
+  align-items: center;
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+  padding: 2rem;
+}
+
+.public-profile__picture {
+  background: #f7f4f8;
+  border: 3px solid rgba(145, 46, 166, 0.3);
+  border-radius: 50%;
+  height: 10rem;
+  object-fit: cover;
+  width: 10rem;
+}
+
+.public-profile__picture--class-icon {
+  object-fit: contain;
+  padding: 1.25rem;
+}
+
+.public-profile__eyebrow {
+  color: #912ea6;
+  font-size: 0.78rem;
+  font-weight: 800;
+  margin: 0 0 0.35rem;
+  text-transform: uppercase;
+}
+
+.public-profile h1 {
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  margin: 0 0 0.75rem;
+}
+
+.public-profile__role {
+  background: var(--role-color);
+  border: 1px solid var(--role-color);
+  border-radius: 999px;
+  display: inline-block;
+  font-size: 0.82rem;
+  font-weight: 900;
+  padding: 0.4rem 0.75rem;
+}
+
+.public-profile__grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: 2fr 1fr;
+}
+
+.public-profile__panel {
+  padding: 1.5rem;
+}
+
+.public-profile__panel h2 {
+  font-size: 1.25rem;
+  margin: 0 0 1rem;
+}
+
+.public-profile__presentation p,
+.public-profile__birthday p {
+  line-height: 1.75;
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.public-profile__main-class {
+  align-items: center;
+  display: flex;
+  gap: 0.75rem;
+}
+
+.public-profile__main-class img,
+.public-profile__classes img {
+  height: 2.5rem;
+  object-fit: contain;
+  width: 2.5rem;
+}
+
+.public-profile__main-class div {
+  display: flex;
+  flex-direction: column;
+}
+
+.public-profile__main-class span,
+.public-profile__panel h3 {
+  color: #4575a5;
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.public-profile__panel h3 {
+  margin: 1.25rem 0 0.6rem;
+  text-transform: uppercase;
+}
+
+.public-profile__classes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.public-profile__classes span {
+  align-items: center;
+  background: rgba(212, 153, 185, 0.14);
+  border: 1px solid rgba(145, 46, 166, 0.22);
+  border-radius: 999px;
+  display: flex;
+  font-size: 0.8rem;
+  font-weight: 800;
+  gap: 0.35rem;
+  padding: 0.3rem 0.65rem;
+}
+
+.public-profile__classes img {
+  height: 1.5rem;
+  width: 1.5rem;
+}
+
+.public-profile__birthday {
+  grid-column: 1 / -1;
+}
+
+.public-profile__birthday strong {
+  color: #912ea6;
+  display: block;
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.public-profile__state {
+  padding: 2rem;
+  text-align: center;
+}
+
+.public-profile__state--error {
+  color: #8a3045;
+}
+
+@media (max-width: 720px) {
+  .public-profile {
+    background-attachment: scroll;
+    padding: 1rem;
+  }
+
+  .public-profile__hero {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .public-profile__picture {
+    height: 8rem;
+    width: 8rem;
+  }
+
+  .public-profile__grid {
+    grid-template-columns: 1fr;
+  }
+}

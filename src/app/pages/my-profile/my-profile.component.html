@@ -1,0 +1,328 @@
+<main class="profile">
+  <section class="profile-header" aria-labelledby="profile-title">
+    <div class="profile-header__content">
+      <p class="profile-header__eyebrow">Mon espace personnel</p>
+      <h1 id="profile-title">Editer mon profil</h1>
+    </div>
+  </section>
+
+  <!-- Top Container: Picture, Description, Classes -->
+  <section class="profile-top-container" aria-label="Section principale du profil">
+    <article class="panel profile-top-panel">
+      <!-- Left: Profile Picture -->
+      <div class="profile-top-left">
+        <div class="profile-picture-section">
+          <h3>Photo de profil</h3>
+          <div class="profile-picture-container">
+            @if (displayedPicture(); as pictureUrl) {
+              <img [src]="pictureUrl" alt="Ma photo de profil" class="profile-picture">
+            } @else {
+              <div class="profile-picture-placeholder">
+                <img src="/assets/class_icons/NoClass.png" alt="Pas de photo de profil" class="profile-picture-placeholder-icon">
+                <p>Aucune image</p>
+              </div>
+            }
+          </div>
+          <input
+            #pictureInput
+            class="profile-file-input"
+            type="file"
+            accept="image/png,image/jpeg,.png,.jpg,.jpeg"
+            (change)="onPictureSelected($event)"
+          >
+          <button
+            class="profile-edit-picture-btn"
+            type="button"
+            [disabled]="isUpdatingPicture()"
+            (click)="pictureInput.click()"
+          >
+            <span class="profile-edit-picture-icon">📷</span>
+            {{ profilePicture() ? 'Modifier' : 'Choisir une photo' }}
+          </button>
+          @if (pendingPicture()) {
+            <div class="profile-actions">
+              <button class="profile-submit-btn" type="button" [disabled]="isUpdatingPicture()" (click)="uploadPicture()">
+                {{ isUpdatingPicture() ? 'Envoi...' : 'Envoyer' }}
+              </button>
+              <button class="profile-cancel-btn" type="button" [disabled]="isUpdatingPicture()" (click)="cancelPictureSelection()">
+                Annuler
+              </button>
+            </div>
+          } @else if (profilePicture()) {
+            <button class="profile-delete-btn" type="button" [disabled]="isUpdatingPicture()" (click)="deletePicture()">
+              Supprimer la photo
+            </button>
+          }
+          @if (pictureStatus()) {
+            <p class="profile-form-status" aria-live="polite">{{ pictureStatus() }}</p>
+          }
+        </div>
+      </div>
+
+      <!-- Middle: Description (takes most space) -->
+      <div class="profile-top-middle">
+        <div class="profile-description-section">
+          <h3>Un petit mot sur moi</h3>
+          
+          @if (presentationLoaded() && !savedPresentation()) {
+          <div class="profile-description-help">
+            <p><strong>Si tu n'as pas d'idée :</strong></p>
+            <ul>
+              <li>Qu'est ce que j'aime faire sur le jeu.</li>
+              <li>Quels sont mes objectifs.</li>
+              <li>Qu'est ce qui m'a fait rejoindre Initiative.</li>
+              <li>Je suis plutôt casu ou tryhard.</li>
+              <li>Dofus est toute ma vie, je ne prends pas de douche sauf si elle est en anomalie.</li>
+            </ul>
+          </div>
+          }
+
+          <textarea
+            class="profile-presentation-textarea"
+            rows="8"
+            placeholder="Ecrivez votre presentation ici..."
+            maxlength="2000"
+            [value]="presentation()"
+            (input)="presentation.set($any($event.target).value); presentationStatus.set('')"
+          ></textarea>
+          @if (isPresentationChanged()) {
+            <button class="profile-submit-btn profile-submit-btn--self" type="button" [disabled]="isUpdatingPresentation()" (click)="savePresentation()">
+              {{ isUpdatingPresentation() ? 'Envoi...' : 'Envoyer' }}
+            </button>
+          }
+          @if (presentationStatus()) {
+            <p class="profile-form-status" aria-live="polite">{{ presentationStatus() }}</p>
+          }
+        </div>
+      </div>
+
+      <!-- Right: Class Selector -->
+      <div class="profile-top-right">
+        <div class="profile-class-section">
+          <h3>Mes classes</h3>
+          
+          <!-- Main Class -->
+          <div class="profile-class-subsection">
+            <label>Classe principale</label>
+            <div class="profile-class-dropdown" [class.profile-class-dropdown--open]="isClassMenuOpen() === 'main'">
+              <button
+                class="profile-class-trigger"
+                type="button"
+                [attr.aria-expanded]="isClassMenuOpen() === 'main'"
+                aria-haspopup="menu"
+                (click)="toggleClassMenu('main')"
+              >
+                @if (selectedClass(); as currentClass) {
+                  <img [src]="currentClass.icon" [alt]="currentClass.name">
+                  <span>{{ currentClass.name }}</span>
+                } @else {
+                  <img src="/assets/class_icons/NoClass.png" alt="Classe non selectionnee">
+                  <span>Selectionner</span>
+                }
+                <span class="profile-class-trigger-arrow" aria-hidden="true">▼</span>
+              </button>
+
+              @if (isClassMenuOpen() === 'main') {
+                <div class="profile-class-menu" role="menu" aria-label="Choisir une classe principale">
+                  @for (option of classOptions; track option.name) {
+                    <button
+                      class="profile-class-option"
+                      type="button"
+                      role="menuitem"
+                      [class.profile-class-option--selected]="isClassSelected(option)"
+                      [disabled]="isUpdatingClass()"
+                      (click)="selectClass(option, false)"
+                    >
+                      <img [src]="option.icon" [alt]="option.name">
+                      <span>{{ option.name }}</span>
+                    </button>
+                  }
+                </div>
+              }
+            </div>
+            @if (isMainClassChanged()) {
+              <button class="profile-submit-btn profile-submit-btn--self" type="button" [disabled]="isUpdatingClass()" (click)="saveMainClass()">
+                {{ isUpdatingClass() ? 'Envoi...' : 'Envoyer' }}
+              </button>
+            }
+          </div>
+
+          <!-- Secondary Classes -->
+          <div class="profile-class-subsection">
+            <div class="profile-class-header">
+              <label>Classes secondaires</label>
+              <div class="profile-secondary-picker">
+                <button
+                  class="profile-add-secondary-btn"
+                  type="button"
+                  [attr.aria-expanded]="isClassMenuOpen() === 'secondary'"
+                  aria-haspopup="menu"
+                  (click)="toggleClassMenu('secondary')"
+                >
+                  + Ajouter
+                </button>
+
+                @if (isClassMenuOpen() === 'secondary') {
+                  <div class="profile-class-menu profile-class-menu--secondary" role="menu" aria-label="Choisir une classe secondaire">
+                    @for (option of classOptions; track option.name) {
+                      <button
+                        class="profile-class-option"
+                        type="button"
+                        role="menuitemcheckbox"
+                        [attr.aria-checked]="isSecondaryClassSelected(option)"
+                        [class.profile-class-option--selected]="isSecondaryClassSelected(option)"
+                        [disabled]="isUpdatingClass() || isClassSelected(option)"
+                        (click)="selectClass(option, true)"
+                      >
+                        <img [src]="option.icon" [alt]="option.name">
+                        <span>{{ option.name }}</span>
+                      </button>
+                    }
+                  </div>
+                }
+              </div>
+            </div>
+
+            <!-- Display selected secondary classes -->
+            @if (selectedSecondaryClasses().length > 0) {
+              <div class="profile-secondary-classes">
+                @for (secondaryClass of selectedSecondaryClasses(); track secondaryClass.name) {
+                  <div class="profile-secondary-class-badge">
+                    <img [src]="secondaryClass.icon" [alt]="secondaryClass.name">
+                    <span>{{ secondaryClass.name }}</span>
+                    <button
+                      class="profile-secondary-class-remove"
+                      type="button"
+                      [attr.aria-label]="'Retirer ' + secondaryClass.name"
+                      (click)="selectClass(secondaryClass, true)"
+                    >
+                      ×
+                    </button>
+                  </div>
+                }
+              </div>
+            } @else {
+              <p class="profile-secondary-placeholder">Aucune classe secondaire</p>
+            }
+            @if (classStatus()) {
+              <p class="profile-form-status" aria-live="polite">{{ classStatus() }}</p>
+            }
+          </div>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <!-- Bottom Container: Anniversary, Successes, Tickets -->
+  <section class="profile-bottom-container" aria-label="Sections complementaires">
+    <!-- First Row: Anniversary -->
+    <article class="panel profile-bottom-panel" aria-labelledby="birthday-title">
+      <div class="panel__header">
+        <h2 id="birthday-title">Anniversaire</h2>
+      </div>
+
+      <div class="profile-birthday-row">
+        <div class="profile-birthday-date">
+          <span class="profile-birthday-label">Jour et mois de naissance</span>
+          <div class="profile-birthday-selects">
+            <label>
+              <span class="profile-visually-hidden">Jour</span>
+              <select [value]="birthdayDay()" (change)="birthdayDay.set($any($event.target).value); birthdayStatus.set('')">
+                <option value="">Jour</option>
+                @for (day of availableDays(); track day) {
+                  <option [value]="day">{{ day }}</option>
+                }
+              </select>
+            </label>
+            <label>
+              <span class="profile-visually-hidden">Mois</span>
+              <select [value]="birthdayMonth()" (change)="birthdayMonth.set($any($event.target).value); onBirthdayMonthChange()">
+                <option value="">Mois</option>
+                @for (month of months; track month.value) {
+                  <option [value]="month.value">{{ month.label }}</option>
+                }
+              </select>
+            </label>
+          </div>
+        </div>
+
+        <div class="profile-birthday-wish">
+          <label class="profile-birthday-label">
+            Une petite attention raisonnable qui me ferait plaisir
+            <textarea
+              rows="3"
+              placeholder="Exemple: Un cadeau Dofus, un message special..."
+              maxlength="200"
+              [value]="birthdayWish()"
+              (input)="birthdayWish.set($any($event.target).value); birthdayStatus.set('')"
+            ></textarea>
+          </label>
+        </div>
+      </div>
+      @if (isBirthdayChanged()) {
+        <button class="profile-submit-btn profile-submit-btn--birthday" type="button" [disabled]="isUpdatingBirthday()" (click)="saveBirthday()">
+          {{ isUpdatingBirthday() ? 'Envoi...' : 'Envoyer' }}
+        </button>
+      }
+      @if (birthdayStatus()) {
+        <p class="profile-form-status" aria-live="polite">{{ birthdayStatus() }}</p>
+      }
+    </article>
+
+    <!-- Second Row: Successes and Tickets -->
+    <div class="profile-stats-row">
+      <!-- Successes Block -->
+      <article class="panel profile-stats-panel" aria-labelledby="successes-title">
+        <div class="panel__header">
+          <h2 id="successes-title">
+            <a routerLink="/succes" class="profile-link-to-page">Mes succès</a>
+          </h2>
+        </div>
+
+        <div class="profile-successes-count">
+          <span class="profile-successes-count-number">{{ unlockedSuccessesCount() }} / {{ totalSuccesses() }}</span>
+          <span class="profile-successes-count-label">Succès débloqués</span>
+        </div>
+
+        @if (successBadgesLoading()) {
+          <p class="profile-successes-state">Chargement des succès...</p>
+        } @else if (successBadges().length > 0) {
+          <div class="badge-list profile-badge-list" aria-label="Succès acquis">
+            @for (success of successBadges(); track success.id) {
+              <a
+                class="badge-link"
+                [href]="iconPath(success.icon)"
+                target="_blank"
+                rel="noopener"
+                [attr.aria-label]="'Ouvrir le badge ' + success.name"
+              >
+                <img [src]="iconPath(success.icon)" [alt]="success.name">
+                <span class="badge-popover" role="tooltip">{{ success.name }}</span>
+              </a>
+            }
+          </div>
+        } @else {
+          <p class="profile-successes-state">Aucun succès débloqué pour le moment.</p>
+        }
+      </article>
+
+      <!-- Tickets Block -->
+      <article class="panel profile-stats-panel" aria-labelledby="tickets-title">
+        <div class="panel__header">
+          <h2 id="tickets-title">
+            <a routerLink="/succes_saison-2" class="profile-link-to-page">Mes tickets</a>
+          </h2>
+        </div>
+
+        <div class="profile-tickets-count">
+          <span class="profile-tickets-count-number">{{ ticketCount() }} / {{ totalPossibleTickets() }}</span>
+          <img src="assets/lottery_ticket.png" alt="Ticket" class="profile-tickets-icon">
+        </div>
+
+        <p class="profile-tickets-description">
+          Tickets obtenus grâce aux succès de la saison 2.
+        </p>
+      </article>
+    </div>
+  </section>
+</main>

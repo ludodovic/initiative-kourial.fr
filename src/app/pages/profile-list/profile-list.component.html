@@ -1,0 +1,39 @@
+<main class="profile-list">
+  <section class="profile-list__header" aria-labelledby="profile-list-title">
+    <p>Les membres d'Initiative avec un profil à jour.</p>
+    <h1 id="profile-list-title">Liste des profils</h1>
+  </section>
+
+  @if (isLoading()) {
+    <p class="profile-list__state">Chargement des profils...</p>
+  } @else if (error()) {
+    <p class="profile-list__state profile-list__state--error">{{ error() }}</p>
+  } @else if (profiles().length) {
+    <section class="profile-list__grid" aria-label="Profils des joueurs">
+      @for (player of profiles(); track player.dofus_username) {
+        <a
+          class="profile-card"
+          [routerLink]="['/profil', player.dofus_username]"
+          [attr.aria-label]="'Voir le profil de ' + player.dofus_username"
+        >
+          <img
+            class="profile-card__picture"
+            [class.profile-card__picture--class-icon]="!player.profile_picture_url"
+            [src]="picture(player)"
+            [alt]="'Photo de profil de ' + player.dofus_username"
+          >
+          <h2>{{ player.dofus_username }}</h2>
+          <span
+            class="profile-card__role"
+            [style.--role-color]="highestRole(player).color"
+            [style.color]="highestRole(player).textColor"
+          >
+            {{ highestRole(player).name }}
+          </span>
+        </a>
+      }
+    </section>
+  } @else {
+    <p class="profile-list__state">Aucun profil public pour le moment.</p>
+  }
+</main>

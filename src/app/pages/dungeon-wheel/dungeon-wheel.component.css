@@ -60,7 +60,7 @@
   box-shadow: 0 12px 28px rgba(1, 22, 56, 0.22);
   cursor: pointer;
   background: #fff;
-  transition: transform 0.01s linear, filter 0.2s ease;
+  transition: filter 0.2s ease;
 }
 
 .wheel-labels {
@@ -115,22 +115,88 @@
   border-top: 16px solid #ff4444;
 }
 
-.selected-result {
-  background: rgba(255, 255, 255, 0.92);
-  border: 1px solid rgba(145, 46, 166, 0.18);
-  border-radius: 8px;
-  box-shadow: 0 12px 28px rgba(1, 22, 56, 0.12);
-  padding: 1.5rem;
-  text-align: center;
-  min-width: 300px;
-  margin-top: 1rem;
+.selected-result-backdrop {
+  align-items: center;
+  animation: result-backdrop-in 320ms ease-out both;
+  background: rgba(1, 22, 56, 0.58);
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  padding: 1rem;
+  position: fixed;
+  z-index: 200;
 }
 
-.selected-result h3 {
+.selected-result {
+  animation: result-dialog-in 420ms cubic-bezier(0.2, 0.85, 0.3, 1.15) both;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(145, 46, 166, 0.18);
+  border-radius: 12px;
+  box-shadow: 0 24px 70px rgba(1, 22, 56, 0.38);
+  max-width: 32rem;
+  padding: 2rem;
+  position: relative;
+  text-align: center;
+  width: 100%;
+}
+
+.selected-result h2 {
   color: #011638;
-  margin-bottom: 1rem;
-  font-size: 1.1rem;
-  font-weight: 600;
+  font-size: clamp(1.5rem, 5vw, 2.25rem);
+  margin: 0 0 1.25rem;
+}
+
+.selected-result__eyebrow {
+  color: #912EA6;
+  font-size: 0.76rem;
+  font-weight: 900;
+  margin: 0 0 0.35rem;
+  text-transform: uppercase;
+}
+
+.selected-result__close {
+  align-items: center;
+  background: rgba(145, 46, 166, 0.1);
+  border: 0;
+  border-radius: 50%;
+  color: #011638;
+  cursor: pointer;
+  display: flex;
+  font-size: 1.4rem;
+  height: 2rem;
+  justify-content: center;
+  line-height: 1;
+  position: absolute;
+  right: 0.75rem;
+  top: 0.75rem;
+  width: 2rem;
+}
+
+.selected-result__close:hover,
+.selected-result__close:focus-visible {
+  background: rgba(145, 46, 166, 0.2);
+  outline: 2px solid rgba(145, 46, 166, 0.35);
+}
+
+.selected-result .boss-img {
+  height: 6rem;
+  width: 6rem;
+}
+
+@keyframes result-backdrop-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes result-dialog-in {
+  from {
+    opacity: 0;
+    transform: scale(0.55);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .boss-images {
@@ -242,6 +308,43 @@
   font-size: 0.875rem;
 }
 
+.item-weight-controls {
+  align-items: center;
+  display: flex;
+  flex: 0 0 auto;
+  gap: 0.35rem;
+}
+
+.weight-step-btn {
+  align-items: center;
+  background: rgba(145, 46, 166, 0.1);
+  border: 1px solid rgba(145, 46, 166, 0.22);
+  border-radius: 50%;
+  color: #912EA6;
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 900;
+  height: 1.75rem;
+  justify-content: center;
+  line-height: 1;
+  padding: 0;
+  width: 1.75rem;
+}
+
+.weight-step-btn:hover:not(:disabled),
+.weight-step-btn:focus-visible:not(:disabled) {
+  background: rgba(145, 46, 166, 0.2);
+  outline: 2px solid rgba(145, 46, 166, 0.25);
+}
+
+.weight-step-btn:disabled,
+.remove-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.35;
+}
+
 .remove-btn {
   background: transparent;
   border: none;
@@ -254,8 +357,15 @@
   transition: opacity 0.2s;
 }
 
-.remove-btn:hover {
+.remove-btn:hover:not(:disabled) {
   opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .selected-result-backdrop,
+  .selected-result {
+    animation-duration: 1ms;
+  }
 }
 
 /* Dungeon picker */

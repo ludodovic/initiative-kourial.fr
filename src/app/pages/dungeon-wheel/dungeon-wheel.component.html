@@ -30,18 +30,6 @@
         </div>
       </div>
 
-      <!-- Selected dungeon result -->
-      <div *ngIf="finalSelectedDungeon()" class="selected-result">
-        <h3>Donjon sélectionné : {{ finalSelectedDungeon()!.dungeon.name }}</h3>
-        <div class="boss-images">
-          <img 
-            *ngFor="let img of finalSelectedDungeon()!.dungeon.imgs"
-            [src]="getImageUrl(img)"
-            alt="Boss"
-            class="boss-img"
-          />
-        </div>
-      </div>
       <div *ngIf="!finalSelectedDungeon() && selectedDungeons().length > 0" class="spin-hint">
         Cliquez sur la roue pour la faire tourner !
       </div>
@@ -70,9 +58,31 @@
                 />
               </div>
               <span class="item-name">{{ sd.dungeon.name }}</span>
-              <span class="item-weight">x{{ sd.weight }}</span>
+              <div class="item-weight-controls" [attr.aria-label]="'Poids de ' + sd.dungeon.name">
+                <button
+                  type="button"
+                  class="weight-step-btn"
+                  [disabled]="sd.weight <= 1 || isSpinning()"
+                  [attr.aria-label]="'Réduire le poids de ' + sd.dungeon.name"
+                  (click)="adjustDungeonWeight(sd.dungeon.name, -1)"
+                >−</button>
+                <span class="item-weight" aria-live="polite">x{{ sd.weight }}</span>
+                <button
+                  type="button"
+                  class="weight-step-btn"
+                  [disabled]="isSpinning()"
+                  [attr.aria-label]="'Augmenter le poids de ' + sd.dungeon.name"
+                  (click)="adjustDungeonWeight(sd.dungeon.name, 1)"
+                >+</button>
+              </div>
             </div>
-            <button class="remove-btn" (click)="removeSelectedDungeon(sd.dungeon.name)">
+            <button
+              type="button"
+              class="remove-btn"
+              [disabled]="isSpinning()"
+              [attr.aria-label]="'Supprimer ' + sd.dungeon.name"
+              (click)="removeSelectedDungeon(sd.dungeon.name)"
+            >
               &times;
             </button>
           </li>
@@ -147,6 +157,7 @@
             class="weight-input"
             placeholder="Poids"
             min="1"
+            [disabled]="isSpinning()"
             [ngModel]="weightInput()"
             (ngModelChange)="setWeightInput($event)"
           />
@@ -154,12 +165,44 @@
           <button 
             class="add-btn"
             (click)="addDungeon()"
-            [disabled]="!selectedDungeonForInput() || !((weightInput() || '') + '').trim()"
+            [disabled]="isSpinning() || !selectedDungeonForInput() || !((weightInput() || '') + '').trim()"
           >
             Ajouter
           </button>
         </div>
       </div>
     </div>
+  </div>
+
+  <div
+    *ngIf="finalSelectedDungeon() as result"
+    class="selected-result-backdrop"
+    (click)="closeResult()"
+  >
+    <section
+      class="selected-result"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="selected-result-title"
+      (click)="$event.stopPropagation()"
+    >
+      <button
+        type="button"
+        class="selected-result__close"
+        aria-label="Fermer le résultat"
+        autofocus
+        (click)="closeResult()"
+      >&times;</button>
+      <p class="selected-result__eyebrow">La roue a choisi</p>
+      <h2 id="selected-result-title">{{ result.dungeon.name }}</h2>
+      <div class="boss-images">
+        <img
+          *ngFor="let img of result.dungeon.imgs"
+          [src]="getImageUrl(img)"
+          [alt]="'Boss du donjon ' + result.dungeon.name"
+          class="boss-img"
+        />
+      </div>
+    </section>
   </div>
 </div>

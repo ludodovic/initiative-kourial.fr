@@ -181,6 +181,64 @@
   margin: 1rem 0;
 }
 
+.newsletter__content {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 1rem;
+}
+
+.newsletter__content > p {
+  white-space: pre-line;
+}
+
+.newsletter__notice-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.newsletter .newsletter__notice {
+  background: rgba(69, 117, 165, 0.07);
+  border-left: 3px solid #4575A5;
+  border-radius: 0 6px 6px 0;
+  font-weight: 700;
+  padding: 0.85rem 1rem;
+}
+
+.newsletter__notice--discord {
+  background: rgba(145, 46, 166, 0.08);
+  border-left-color: #912EA6;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.newsletter__discord-link {
+  align-items: center;
+  background: #912EA6;
+  border-radius: 6px;
+  color: #fff;
+  display: inline-flex;
+  font-size: 0.9rem;
+  font-weight: 800;
+  justify-content: center;
+  justify-self: start;
+  padding: 0.6rem 0.9rem;
+  text-decoration: none;
+  transition: background 160ms ease, transform 160ms ease;
+}
+
+.newsletter__discord-link:hover,
+.newsletter__discord-link:focus-visible {
+  background: #762489;
+  outline: 3px solid rgba(145, 46, 166, 0.22);
+  transform: translateY(-1px);
+}
+
+.newsletter__notice--discord small {
+  color: #4575A5;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
 @media (max-width: 780px) {
   .home {
     background-attachment: scroll;

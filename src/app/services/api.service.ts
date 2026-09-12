@@ -77,6 +77,52 @@ export interface UserProfile {
   class: string;
 }
 
+export interface ProfilePictureResponse {
+  picture_url: string | null;
+  message?: string;
+}
+
+export interface UserBirthday {
+  birthday: string | null;
+  wish: string | null;
+}
+
+export interface UserBirthdayResponse extends UserBirthday {
+  message?: string;
+}
+
+export interface UserPresentation {
+  presentation: string | null;
+}
+
+export interface UserPresentationResponse extends UserPresentation {
+  message?: string;
+}
+
+export interface UserClasses {
+  main_class: string;
+  secondary_classes: string[];
+}
+
+export interface UserClassesResponse extends UserClasses {
+  message?: string;
+}
+
+export interface TotalTicketsResponse {
+  total: number;
+}
+
+export interface PublicPlayerProfile {
+  dofus_username: string;
+  class: string;
+  profile_picture_url: string | null;
+  birthday: string | null;
+  wish: string | null;
+  presentation: string;
+  secondary_classes: string[];
+  roles: string[];
+}
+
 export interface Season2Success {
   donjon: string;
   nom: string;
@@ -287,102 +333,89 @@ export class ApiService {
     );
   }
 
-  getCompanionDraftAccess(): Promise<CompanionDraftAccess> {
-    return firstValueFrom(this.http.get<CompanionDraftAccess>(apiUrl('/api/companion-drafts/access')));
-  }
-
-  getCompanionDraftUsers(): Promise<CompanionDraftUser[]> {
-    return firstValueFrom(this.http.get<CompanionDraftUser[]>(apiUrl('/api/companion-drafts/roster')));
-  }
-
-  tossCompanionDraftCoin(id: string, version: number): Promise<CompanionDraftState> {
+  getProfilePicture(): Promise<ProfilePictureResponse> {
     return firstValueFrom(
-      this.http.post<CompanionDraftState>(apiUrl(`/api/companion-drafts/${id}/coin-toss`), { version })
+      this.http.get<ProfilePictureResponse>(apiUrl('/api/user/picture'))
     );
   }
 
-  resetCompanionDraft(id: string, version: number): Promise<CompanionDraftState> {
-    return firstValueFrom(this.http.post<CompanionDraftState>(
-      apiUrl(`/api/companion-drafts/${id}/reset`), { version }
-    ));
-  }
+  updateProfilePicture(picture: File): Promise<ProfilePictureResponse> {
+    const formData = new FormData();
+    formData.append('picture', picture, picture.name);
 
-  performCompanionDraftAction(
-    id: string,
-    action: CompanionDraftActionType,
-    request: CompanionDraftActionRequest
-  ): Promise<CompanionDraftState> {
     return firstValueFrom(
-      this.http.post<CompanionDraftState>(apiUrl(`/api/companion-drafts/${id}/${action}`), request)
+      this.http.post<ProfilePictureResponse>(apiUrl('/api/user/picture'), formData)
     );
   }
 
-  getCompanionTournaments(): Promise<CompanionTournamentState[]> {
-    return firstValueFrom(this.http.get<CompanionTournamentState[]>(apiUrl('/api/companion-tournaments')));
+  deleteProfilePicture(): Promise<ProfilePictureResponse> {
+    return firstValueFrom(
+      this.http.delete<ProfilePictureResponse>(apiUrl('/api/user/picture'))
+    );
   }
 
-  createCompanionTournament(request: CreateCompanionTournamentRequest): Promise<CompanionTournamentState> {
-    return firstValueFrom(this.http.post<CompanionTournamentState>(apiUrl('/api/companion-tournaments'), request));
+  getUserBirthday(): Promise<UserBirthday> {
+    return firstValueFrom(this.http.get<UserBirthday>(apiUrl('/api/user/birthday')));
   }
 
-  registerCompanionTournamentParticipant(tournamentId: string, userId: number): Promise<CompanionTournamentState> {
-    return firstValueFrom(this.http.post<CompanionTournamentState>(
-      apiUrl(`/api/companion-tournaments/${tournamentId}/participants`), { userId }
-    ));
+  updateUserBirthday(birthday: string | null, wish: string | null): Promise<UserBirthdayResponse> {
+    return firstValueFrom(
+      this.http.post<UserBirthdayResponse>(apiUrl('/api/user/birthday'), { birthday, wish })
+    );
   }
 
-  removeCompanionTournamentParticipant(tournamentId: string, userId: number): Promise<CompanionTournamentState> {
-    return firstValueFrom(this.http.delete<CompanionTournamentState>(
-      apiUrl(`/api/companion-tournaments/${tournamentId}/participants/${userId}`)
-    ));
+  getUserPresentation(): Promise<UserPresentation> {
+    return firstValueFrom(
+      this.http.get<UserPresentation>(apiUrl('/api/user/presentation'))
+    );
   }
 
-  lockCompanionTournamentRegistration(tournamentId: string): Promise<CompanionTournamentState> {
-    return firstValueFrom(this.http.post<CompanionTournamentState>(
-      apiUrl(`/api/companion-tournaments/${tournamentId}/lock-registration`), {}
-    ));
+  updateUserPresentation(presentation: string): Promise<UserPresentationResponse> {
+    return firstValueFrom(
+      this.http.post<UserPresentationResponse>(apiUrl('/api/user/presentation'), { presentation })
+    );
   }
 
-  addCompanionTournamentTeam(tournamentId: string, request: CompanionTournamentTeamRequest): Promise<CompanionTournamentState> {
-    return firstValueFrom(this.http.post<CompanionTournamentState>(
-      apiUrl(`/api/companion-tournaments/${tournamentId}/teams`), request
-    ));
+  getUserClasses(): Promise<UserClasses> {
+    return firstValueFrom(this.http.get<UserClasses>(apiUrl('/api/user/classes')));
   }
 
-  removeCompanionTournamentTeam(tournamentId: string, teamId: string): Promise<CompanionTournamentState> {
-    return firstValueFrom(this.http.delete<CompanionTournamentState>(
-      apiUrl(`/api/companion-tournaments/${tournamentId}/teams/${teamId}`)
-    ));
+  updateUserSecondaryClasses(secondaryClasses: string[]): Promise<UserClassesResponse> {
+    return firstValueFrom(
+      this.http.post<UserClassesResponse>(apiUrl('/api/user/classes'), {
+        secondary_classes: secondaryClasses
+      })
+    );
   }
 
-  generateCompanionTournamentBracket(tournamentId: string): Promise<CompanionTournamentState> {
-    return firstValueFrom(this.http.post<CompanionTournamentState>(
-      apiUrl(`/api/companion-tournaments/${tournamentId}/generate`), {}
-    ));
+  addUserSecondaryClass(className: string): Promise<UserClassesResponse> {
+    return firstValueFrom(
+      this.http.post<UserClassesResponse>(apiUrl('/api/user/classes/add'), {
+        class_name: className
+      })
+    );
   }
 
-  resetCompanionTournament(tournamentId: string, version: number): Promise<CompanionTournamentState> {
-    return firstValueFrom(this.http.post<CompanionTournamentState>(
-      apiUrl(`/api/companion-tournaments/${tournamentId}/reset`), { version }
-    ));
+  removeUserSecondaryClass(className: string): Promise<UserClassesResponse> {
+    return firstValueFrom(
+      this.http.post<UserClassesResponse>(apiUrl('/api/user/classes/remove'), {
+        class_name: className
+      })
+    );
   }
 
-  resetCompanionTournamentRegistration(tournamentId: string, version: number): Promise<CompanionTournamentState> {
-    return firstValueFrom(this.http.post<CompanionTournamentState>(
-      apiUrl(`/api/companion-tournaments/${tournamentId}/reset-registration`), { version }
-    ));
+  getPublicProfiles(): Promise<PublicPlayerProfile[]> {
+    return firstValueFrom(
+      this.http.get<PublicPlayerProfile[]>(apiUrl('/api/profiles'))
+    );
   }
 
-  recordCompanionTournamentWinner(
-    tournamentId: string,
-    matchId: string,
-    winnerTeamId: string,
-    version: number
-  ): Promise<CompanionTournamentState> {
-    return firstValueFrom(this.http.post<CompanionTournamentState>(
-      apiUrl(`/api/companion-tournaments/${tournamentId}/matches/${matchId}/winner`),
-      { winnerTeamId, version }
-    ));
+  getPublicProfile(dofusUsername: string): Promise<PublicPlayerProfile> {
+    return firstValueFrom(
+      this.http.get<PublicPlayerProfile>(
+        apiUrl(`/api/profiles/${encodeURIComponent(dofusUsername)}`)
+      )
+    );
   }
 
   getSeason2Successes(): Promise<Season2Success[]> {
@@ -408,6 +441,12 @@ export class ApiService {
 
   getSeason2Unlocks(): Promise<Season2UnlockResponse> {
     return firstValueFrom(this.http.get<Season2UnlockResponse>(apiUrl('/api/succes/unlock')));
+  }
+
+  getTotalPossibleTickets(): Promise<TotalTicketsResponse> {
+    return firstValueFrom(
+      this.http.get<TotalTicketsResponse>(apiUrl('/api/succes2/total-tickets'))
+    );
   }
 
   submitSeason2SuccessClaim(request: Season2SuccessClaimRequest): Promise<Season2SuccessClaimResponse> {
