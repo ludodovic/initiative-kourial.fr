@@ -7,7 +7,7 @@ COMPOSE_PROJECT ?= initiative-frontend-prod
 COMPOSE_FILE ?= compose.frontend.yml
 SERVICE ?= initiative-frontend
 UPLOADS_VOLUME ?= initiative-api-prod_initiative_uploads
-FRONTEND_PORT ?= 8080
+FRONTEND_PORT ?= 4200
 HEALTH_URL ?= http://127.0.0.1:$(FRONTEND_PORT)/
 
 export FRONTEND_PORT UPLOADS_VOLUME
