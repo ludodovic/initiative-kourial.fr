@@ -29,20 +29,22 @@
             @if (openNavMenu() === item.name) {
               <div class="navbar-menu__panel" role="menu" [attr.aria-label]="item.name">
                 @for (child of item.children; track child.link) {
-                  <a
-                    class="navbar-menu__item"
-                    role="menuitem"
-                    [routerLink]="child.link"
-                    routerLinkActive="navbar-menu__item--active"
-                    (click)="closeNavMenu()"
-                  >
-                    {{ child.name }}
-                  </a>
+                  @if (canShowItem(child.adminOnly, child.draftAccess)) {
+                    <a
+                      class="navbar-menu__item"
+                      role="menuitem"
+                      [routerLink]="child.link"
+                      routerLinkActive="navbar-menu__item--active"
+                      (click)="closeNavMenu()"
+                    >
+                      {{ child.name }}
+                    </a>
+                  }
                 }
               </div>
             }
           </div>
-        } @else if (item.link) {
+        } @else if (canShowItem(item.adminOnly, item.draftAccess) && item.link) {
           <a
             class="navbar__link"
             [routerLink]="item.link"

@@ -1,6 +1,8 @@
 .angular
 .git
+.gitignore
 dist
 node_modules
-out-tsc
-npm-debug.log
+npm-debug.log*
+coverage
+AGENTS.md

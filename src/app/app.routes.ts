@@ -1,4 +1,5 @@
 import { Routes, UrlMatchResult, UrlSegment } from '@angular/router';
+import { companionDraftAccessGuard } from './guards/companion-draft-access.guard';
 
 export function libraryRouteMatcher(segments: UrlSegment[]): UrlMatchResult | null {
   if (segments[0]?.path !== 'library') {

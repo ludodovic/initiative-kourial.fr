@@ -4,7 +4,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs';
 
 import { NAVBAR_ITEMS } from '../../config/navbar.config';
-import { ApiService, UserProfile } from '../../services/api.service';
+import { ApiService, CompanionDraftAccess, UserProfile } from '../../services/api.service';
 import { AuthTokenService } from '../../services/auth-token.service';
 
 @Component({
