@@ -12,4 +12,4 @@ services:
 volumes:
   initiative-uploads:
     external: true
-    name: initiative-api-prod_initiative_uploads
+    name: ${UPLOADS_VOLUME:-initiative-api-prod_initiative_uploads}

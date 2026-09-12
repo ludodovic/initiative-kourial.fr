@@ -44,8 +44,12 @@ export function normalizeProfilePictureUrl(pictureUrl: string | null | undefined
   }
 
   const path = value.startsWith('/') ? value : `/${value}`;
-  if (path.startsWith('/profile_pictures/')) {
-    return `/uploads${path}`;
+  if (path.startsWith('/uploads/profile_pictures/')) {
+    return path.replace('/uploads/profile_pictures/', '/uploads/profile-pictures/');
+  }
+
+  if (path.startsWith('/profile_pictures/') || path.startsWith('/profile-pictures/')) {
+    return `/uploads/profile-pictures/${path.split('/').slice(2).join('/')}`;
   }
 
   return path;
