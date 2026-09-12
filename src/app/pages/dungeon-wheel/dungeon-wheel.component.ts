@@ -1,4 +1,4 @@
-import { Component, HostListener, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, computed, effect } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ApiService, Dungeon } from '../../services/api.service';
@@ -23,7 +23,7 @@ interface WheelSegment {
   templateUrl: './dungeon-wheel.component.html',
   styleUrl: './dungeon-wheel.component.css'
 })
-export class DungeonWheelComponent implements OnInit, OnDestroy {
+export class DungeonWheelComponent implements OnInit {
   private readonly apiService = inject(ApiService);
 
   // State
@@ -90,16 +90,15 @@ export class DungeonWheelComponent implements OnInit, OnDestroy {
 
   // Animation
   private animationFrameId: number | null = null;
-  private spinStartedAt = 0;
-  private spinDuration = 0;
-  private spinStartRotation = 0;
-  private spinTargetRotation = 0;
+  private velocity = 0;
+  private friction = 0.985;
+  private minVelocity = 0.1;
 
   async ngOnInit(): Promise<void> {
     try {
       const dungeons = await this.apiService.getDungeons();
-      this.allDungeons.set([...dungeons].reverse());
-    } catch {
+      this.allDungeons.set(dungeons);
+    } catch (err) {
       this.error.set('Impossible de charger la liste des donjons.');
     } finally {
       this.isLoading.set(false);
@@ -107,16 +106,9 @@ export class DungeonWheelComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.animationFrameId !== null) {
+    if (this.animationFrameId) {
       cancelAnimationFrame(this.animationFrameId);
-      this.animationFrameId = null;
     }
-  }
-
-  @HostListener('document:keydown.escape')
-  closeOverlaysOnEscape(): void {
-    this.closeDropdown();
-    this.closeResult();
   }
 
   // Dropdown and selection
@@ -144,8 +136,6 @@ export class DungeonWheelComponent implements OnInit, OnDestroy {
   }
 
   addDungeon(): void {
-    if (this.isSpinning()) return;
-
     const dungeon = this.selectedDungeonForInput();
     const weightStr = String(this.weightInput() || '').trim();
     
@@ -178,28 +168,9 @@ export class DungeonWheelComponent implements OnInit, OnDestroy {
   }
 
   removeSelectedDungeon(dungeonName: string): void {
-    if (this.isSpinning()) return;
-
     this.selectedDungeons.update(selected => 
       selected.filter(sd => sd.dungeon.name !== dungeonName)
     );
-    this.finalSelectedDungeon.set(null);
-  }
-
-  adjustDungeonWeight(dungeonName: string, delta: number): void {
-    if (this.isSpinning() || delta === 0) return;
-
-    this.selectedDungeons.update(selected =>
-      selected.map(selectedDungeon =>
-        selectedDungeon.dungeon.name === dungeonName
-          ? { ...selectedDungeon, weight: Math.max(1, selectedDungeon.weight + delta) }
-          : selectedDungeon
-      )
-    );
-    this.finalSelectedDungeon.set(null);
-  }
-
-  closeResult(): void {
     this.finalSelectedDungeon.set(null);
   }
 
@@ -209,57 +180,66 @@ export class DungeonWheelComponent implements OnInit, OnDestroy {
 
     this.isSpinning.set(true);
     this.finalSelectedDungeon.set(null);
-    this.spinStartedAt = performance.now();
-    this.spinDuration = 12_000 + Math.random() * 3_000;
-    this.spinStartRotation = this.rotation();
-
-    const fullTurns = 9 + Math.floor(Math.random() * 4);
-    const randomLandingAngle = Math.random() * 360;
-    this.spinTargetRotation = this.spinStartRotation + fullTurns * 360 + randomLandingAngle;
-
-    this.animationFrameId = requestAnimationFrame((timestamp) => this.animateWheel(timestamp));
+    this.rotation.set(0);
+    
+    // Initial velocity with some randomness
+    this.velocity = 15 + Math.random() * 10;
+    
+    this.animateWheel();
   }
 
-  private animateWheel(timestamp: number): void {
+  private animateWheel(): void {
     const segments = this.wheelSegments();
     if (segments.length === 0) {
       this.isSpinning.set(false);
-      this.animationFrameId = null;
       return;
     }
 
-    const progress = Math.min((timestamp - this.spinStartedAt) / this.spinDuration, 1);
-    // Ease-out cubic: most of the distance is covered early, leaving a long suspenseful slowdown.
-    const easedProgress = 1 - Math.pow(1 - progress, 3);
-    const nextRotation = this.spinStartRotation
-      + (this.spinTargetRotation - this.spinStartRotation) * easedProgress;
-    this.rotation.set(nextRotation);
-
-    if (progress >= 1) {
-      this.finishSpin(segments);
+    // Update rotation
+    this.rotation.update(rot => rot + this.velocity);
+    
+    // Apply friction
+    this.velocity *= this.friction;
+    
+    // Stop if velocity is too low
+    if (this.velocity < this.minVelocity) {
+      this.velocity = 0;
+      this.isSpinning.set(false);
+      
+      // Determine which segment is at the top (12 o'clock = 0 degrees, but CSS rotation is clockwise)
+      // Normalize rotation to [0, 360)
+      const normalizedRotation = this.rotation() % 360;
+      const adjustedRotation = normalizedRotation < 0 ? normalizedRotation + 360 : normalizedRotation;
+      
+      // Find segment that contains the top position (0 degrees)
+      // The wheel is rotated, so we need to find where 0 degrees falls
+      // Actually, we want the segment that is aligned with the top indicator
+      // The top is at -rotation (because the wheel is rotated by rotation degrees)
+      // So we need to find which segment contains -rotation mod 360
+      
+      // Let's think differently: after spinning, rotation is some value.
+      // The top of the wheel (12 o'clock) corresponds to angle 0 in our segment definitions.
+      // But the wheel has been rotated by `rotation` degrees clockwise.
+      // So the segment that is at the top has its startAngle and endAngle shifted by rotation.
+      // We need to find the segment where (startAngle - rotation) mod 360 <= 0 <= (endAngle - rotation) mod 360
+      
+      // Simpler: normalize rotation and find which segment contains it
+      const stopPosition = 360 - (adjustedRotation % 360);
+      
+      for (const segment of segments) {
+        if (segment.startAngle <= stopPosition && stopPosition < segment.endAngle) {
+          this.finalSelectedDungeon.set({
+            dungeon: segment.dungeon,
+            weight: segment.weight
+          });
+          break;
+        }
+      }
+      
       return;
     }
 
-    this.animationFrameId = requestAnimationFrame((nextTimestamp) =>
-      this.animateWheel(nextTimestamp)
-    );
-  }
-
-  private finishSpin(segments: WheelSegment[]): void {
-    this.rotation.set(this.spinTargetRotation);
-    this.isSpinning.set(false);
-    this.animationFrameId = null;
-
-    const adjustedRotation = ((this.spinTargetRotation % 360) + 360) % 360;
-    const stopPosition = (360 - adjustedRotation) % 360;
-    const selectedSegment = segments.find(
-      (segment) => segment.startAngle <= stopPosition && stopPosition < segment.endAngle
-    ) ?? segments[segments.length - 1];
-
-    this.finalSelectedDungeon.set({
-      dungeon: selectedSegment.dungeon,
-      weight: selectedSegment.weight
-    });
+    this.animationFrameId = requestAnimationFrame(() => this.animateWheel());
   }
 
   // Helper to get image URL
@@ -282,7 +262,7 @@ export class DungeonWheelComponent implements OnInit, OnDestroy {
   }
 
   // Get segment label style for displaying dungeon names on wheel
-  getSegmentLabelStyle(segment: WheelSegment): Record<string, string> {
+  getSegmentLabelStyle(segment: WheelSegment): any {
     const radius = 120; // Distance from center for labels
     const midAngle = (segment.startAngle + segment.endAngle) / 2;
     

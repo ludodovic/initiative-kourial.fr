@@ -74,30 +74,12 @@ export const routes: Routes = [
       )
   },
   {
-    path: 'mon-profil',
+    path: 'outils/draft-compagnons',
+    canActivate: [companionDraftAccessGuard],
     loadComponent: () =>
-      import('./pages/my-profile/my-profile.component').then(
-        (component) => component.MyProfileComponent
+      import('./pages/companion-draft/companion-draft.component').then(
+        (component) => component.CompanionDraftComponent
       )
-  },
-  {
-    path: 'liste-profil',
-    loadComponent: () =>
-      import('./pages/profile-list/profile-list.component').then(
-        (component) => component.ProfileListComponent
-      )
-  },
-  {
-    path: 'profil/:dofus_username',
-    loadComponent: () =>
-      import('./pages/profile/profile.component').then(
-        (component) => component.ProfileComponent
-      )
-  },
-  {
-    path: 'profil',
-    redirectTo: 'liste-profil',
-    pathMatch: 'full'
   },
   {
     path: '**',

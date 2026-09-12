@@ -42,7 +42,7 @@ export class LibraryComponent implements OnInit, OnDestroy {
     const parts = node?.path ? node.path.split('/') : [];
 
     return [
-      { name: 'Bibliothèque', link: ['/library'] },
+      { name: 'Bibliotheque', link: ['/library'] },
       ...parts.map((part, index) => ({
         name: part,
         link: ['/library', ...parts.slice(0, index + 1)]
@@ -60,7 +60,7 @@ export class LibraryComponent implements OnInit, OnDestroy {
         this.syncCurrentNode(segments);
       });
     } catch {
-      this.error.set('Impossible de charger la bibliothèque pour le moment.');
+      this.error.set('Impossible de charger la bibliotheque pour le moment.');
     } finally {
       this.isLoading.set(false);
     }
